@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://student-dropout-predictor-z59d.onrender.com/',
+        target: 'https://student-dropout-predictor-z59d.onrender.com',
         changeOrigin: true,
         secure: false,
       }
