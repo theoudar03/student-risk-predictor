@@ -25,7 +25,7 @@ const Students = () => {
         setLoading(true);
         try {
             console.log("Fetching students...");
-            const res = await axios.get('http://localhost:5000/api/students');
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`);
             console.log("Got data:", res.data);
             if (Array.isArray(res.data)) {
                 setStudents(res.data);
@@ -48,7 +48,7 @@ const Students = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/students', formData);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/students`, formData);
             setShowModal(false);
             fetchStudents();
         } catch (error) { alert('Error adding student'); }
