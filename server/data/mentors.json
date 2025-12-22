@@ -1,0 +1,50 @@
+[
+  {
+    "email": "sarah.jones@edu.com",
+    "phone": "1234567890",
+    "password": "pass",
+    "name": "Sarah Jones",
+    "role": "Senior Mentor",
+    "department": "Computer Science"
+  },
+  {
+    "email": "david.lee@edu.com",
+    "phone": "1234567809",
+    "password": "pass",
+    "name": "David Lee",
+    "role": "Mentor",
+    "department": "Mechanical Engineering"
+  },
+  {
+    "email": "priya.patel@edu.com",
+    "phone": "1234567890",
+    "password": "pass",
+    "name": "Priya Patel",
+    "role": "Mentor",
+    "department": "Data Science"
+  },
+  {
+    "email": "michael.chang@edu.com",
+    "phone": "2134567890",
+    "password": "pass",
+    "name": "Michael Chang",
+    "role": "Counselor",
+    "department": "Student Affairs"
+  },
+  {
+    "email": "theoudar07@gmail.com",
+    "phone": "8807432703",
+    "password": "theo",
+    "name": "TheouDar",
+    "role": "Admin",
+    "department": "IT"
+  },
+  {
+    "email": "kaithiofficialff@gmail.com",
+    "phone": "8807432546",
+    "password": "kaithi",
+    "name": "Kaithi",
+    "role": "Mentor",
+    "department": "AIML"
+  }
+]
