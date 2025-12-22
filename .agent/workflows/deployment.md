@@ -37,7 +37,7 @@ We will deploy the backend first to get the API URL.
 
 ---
 
-## Part 2: Deploy the Frontend (Vercel)
+## Part 2: Deploy the Frontend (Option A: Vercel - Recommended)
 
 Now we deploy the React client and connect it to the backend.
 
@@ -52,6 +52,27 @@ Now we deploy the React client and connect it to the backend.
    - Value: The Render URL you copied earlier (e.g., `https://student-risk-api.onrender.com`).  
      _(Do not include a trailing slash `/`)_.
 5. Click **Deploy**.
+
+---
+
+## Part 2.5: Deploy the Frontend (Option B: Render)
+
+If you prefer to keep everything on Render:
+
+1. **Log in to Render** and click **New +** -> **Static Site**.
+2. **Connect your GitHub repository**.
+3. Configure the service:
+   - **Name**: `student-risk-client`
+   - **Root Directory**: `client`
+   - **Build Command**: `npm install; npm run build`
+   - **Publish Directory**: `dist`
+4. **Environment Variables**:
+   - Key: `VITE_API_URL`
+   - Value: Your backend URL.
+5. **Rewrites** (Crucial for React Router):
+   - Go to the **Redirects/Rewrites** tab.
+   - Add Rule: Source `/*`, Destination `/index.html`, Action `Rewrite`.
+6. Click **Create Static Site**.
 
 ---
 
