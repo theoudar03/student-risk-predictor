@@ -12,7 +12,7 @@ const Alerts = () => {
 
     const fetchAlerts = async () => {
         try {
-            const res = await axios.get('/api/students/data/alerts');
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students/data/alerts`);
             setAlerts(res.data);
         } catch (error) {
             console.error(error);
@@ -21,7 +21,7 @@ const Alerts = () => {
 
     const resolveAlert = async (id) => {
         try {
-            const res = await axios.post(`/api/students/data/alerts/${id}/resolve`);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/students/data/alerts/${id}/resolve`);
             setAlerts(alerts.map(a => a._id === id ? res.data : a));
         } catch (error) {
             console.error(error);

@@ -16,7 +16,7 @@ const Attendance = () => {
 
     const fetchStudents = async () => {
         try {
-            const res = await axios.get('/api/students');
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`);
             setStudents(res.data);
             // Initialize mock attendance based on their average
             const initial = {};
@@ -39,7 +39,7 @@ const Attendance = () => {
     // Download Handler
     const downloadAttendance = async () => {
         try {
-            const response = await axios.get(`/api/export/attendance?date=${currentDate}`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/export/attendance?date=${currentDate}`, {
                 responseType: 'blob', // Important for file handling
             });
             

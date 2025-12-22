@@ -15,7 +15,7 @@ const StudentProfile = () => {
 
   const fetchStudent = async () => {
     try {
-        const res = await axios.get(`/api/students/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students/${id}`);
         setStudent(res.data);
     } catch (error) { console.error(error); }
   };

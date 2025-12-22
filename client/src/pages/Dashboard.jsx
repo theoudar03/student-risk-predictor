@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get('/api/students/stats');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students/stats`);
       setStats(res.data);
     } catch (error) {
       console.error("Using fallback data");
