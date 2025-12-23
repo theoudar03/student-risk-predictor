@@ -25,6 +25,7 @@ axios.defaults.baseURL = 'http://localhost:5000';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   // Check Local Storage for session
   useEffect(() => {
@@ -108,7 +109,7 @@ function App() {
       }
   };
 
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+
 
   return (
     <Router>
