@@ -15,6 +15,11 @@ app.use(express.json());
 // Routes
 app.use('/api/students', studentRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/portal', require('./routes/portal'));
+app.use('/api/interventions', require('./routes/interventions'));
+app.use('/api/logs', require('./services/logger').router);
+app.use('/api/messages', require('./routes/messages'));
+app.use('/api/admin', require('./routes/admin'));
 app.use('/api/export', require('./routes/export'));
 
 app.get('/', (req, res) => {

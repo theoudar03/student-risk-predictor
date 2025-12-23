@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
-import { FaUserGraduate, FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaUserGraduate, FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';
 
 const Login = ({ onLogin }) => {
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value });
 
@@ -15,20 +17,19 @@ const Login = ({ onLogin }) => {
         setError('');
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials)
-            });
-            const data = await response.json();
+            // Using relative path, assuming baseURL is set in App.jsx
+            const response = await axios.post('/api/auth/login', credentials);
+            const data = response.data;
             
             if (data.success) {
-                onLogin(data.user);
+                // Pass full data including token and user
+                onLogin(data);
             } else {
                 setError(data.message || 'Login failed');
             }
         } catch (err) {
-            setError('Server error. Please try again.');
+            console.error(err);
+            setError(err.response?.data?.message || 'Server error. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -51,13 +52,13 @@ const Login = ({ onLogin }) => {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-4">
                             <div className="input-group">
-                                <span className="input-group-text bg-light border-end-0"><FaEnvelope className="text-muted" /></span>
+                                <span className="input-group-text bg-light border-end-0"><FaUser className="text-muted" /></span>
                                 <Form.Control 
-                                    type="email" 
-                                    name="email" 
-                                    placeholder="Email Address" 
+                                    type="text" 
+                                    name="username" 
+                                    placeholder="Username" 
                                     className="bg-light border-start-0 py-3" 
-                                    value={credentials.email}
+                                    value={credentials.username}
                                     onChange={handleChange}
                                     required 
                                 />
@@ -68,14 +69,21 @@ const Login = ({ onLogin }) => {
                              <div className="input-group">
                                 <span className="input-group-text bg-light border-end-0"><FaLock className="text-muted" /></span>
                                 <Form.Control 
-                                    type="password" 
+                                    type={showPassword ? "text" : "password"} 
                                     name="password" 
                                     placeholder="Password" 
-                                    className="bg-light border-start-0 py-3" 
+                                    className="bg-light border-start-0 border-end-0 py-3" 
                                     value={credentials.password}
                                     onChange={handleChange}
                                     required 
                                 />
+                                <span 
+                                    className="input-group-text bg-light border-start-0" 
+                                    onClick={() => setShowPassword(!showPassword)} 
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    {showPassword ? <FaEyeSlash className="text-muted" /> : <FaEye className="text-muted" />}
+                                </span>
                             </div>
                         </Form.Group>
 
@@ -89,12 +97,8 @@ const Login = ({ onLogin }) => {
                         </Button>
                     </Form>
                     
-                    <div className="text-center mt-4 pt-3 border-top">
-                        <small className="text-muted">Don't have an account? <a href="#" className="fw-bold text-decoration-none">Contact Admin</a></small>
-                    </div>
-                    <div className="text-center mt-3">
-                        <small className="text-muted fst-italic">Demo: sarah.jones@edu.com / pass</small>
-                    </div>
+
+
                 </div>
             </Container>
         </div>

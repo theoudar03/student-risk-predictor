@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Row, Col, ProgressBar, Button, Badge } from 'react-bootstrap';
 import { FaArrowLeft, FaEnvelope, FaCalendarAlt, FaRobot, FaExclamationTriangle, FaCheckCircle, FaMoneyBillWave, FaBookOpen } from 'react-icons/fa';
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts';
+import InterventionPanel from '../components/InterventionPanel';
 
 const StudentProfile = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const StudentProfile = () => {
 
   const fetchStudent = async () => {
     try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students/${id}`);
+        const res = await axios.get(`/api/students/${id}`);
         setStudent(res.data);
     } catch (error) { console.error(error); }
   };
@@ -151,6 +152,15 @@ const StudentProfile = () => {
                  </div>
              </Col>
           </Row>
+          
+          <div className="mt-4">
+               <InterventionPanel 
+                  studentId={student.studentId} 
+                  riskScore={student.riskScore}
+                  riskLevel={student.riskLevel}
+                  onUpdate={fetchStudent}
+               />
+          </div>
         </Col>
       </Row>
     </div>

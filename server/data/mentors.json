@@ -1,50 +1,42 @@
 [
   {
-    "email": "sarah.jones@edu.com",
+    "mentorId": "M2024101",
+    "email": "punitha@edu.com",
     "phone": "1234567890",
-    "password": "pass",
-    "name": "Sarah Jones",
-    "role": "Senior Mentor",
-    "department": "Computer Science"
+    "name": "Dr. V Punitha",
+    "role": "Mentor",
+    "department": "CSE"
   },
   {
-    "email": "david.lee@edu.com",
+    "mentorId": "M2024102",
+    "email": "krishnakumar@edu.com",
     "phone": "1234567809",
-    "password": "pass",
-    "name": "David Lee",
+    "name": "Dr. C Krishnakumar",
     "role": "Mentor",
-    "department": "Mechanical Engineering"
+    "department": "EEE"
   },
   {
-    "email": "priya.patel@edu.com",
-    "phone": "1234567890",
-    "password": "pass",
-    "name": "Priya Patel",
-    "role": "Mentor",
-    "department": "Data Science"
-  },
-  {
-    "email": "michael.chang@edu.com",
+    "mentorId": "M2024103",
+    "email": "santhi@edu.com",
     "phone": "2134567890",
-    "password": "pass",
-    "name": "Michael Chang",
+    "name": "Dr. M Santhi",
     "role": "Counselor",
-    "department": "Student Affairs"
+    "department": "ECE"
   },
   {
-    "email": "theoudar07@gmail.com",
-    "phone": "8807432703",
-    "password": "theo",
-    "name": "TheouDar",
-    "role": "Admin",
+    "mentorId": "M2024104",
+    "email": "thillaikarasi@edu.com",
+    "phone": "1234567890",
+    "name": "Dr. R Thillaikarasi",
+    "role": "Mentor",
     "department": "IT"
   },
   {
-    "email": "kaithiofficialff@gmail.com",
+    "mentorId": "M2024105",
+    "email": "ravimaran@edu.com",
     "phone": "8807432546",
-    "password": "kaithi",
-    "name": "Kaithi",
+    "name": "Dr. S Ravimaran",
     "role": "Mentor",
-    "department": "AIML"
+    "department": "AIDS"
   }
 ]

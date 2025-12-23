@@ -25,7 +25,7 @@ const Students = () => {
         setLoading(true);
         try {
             console.log("Fetching students...");
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`);
+            const res = await axios.get(`/api/students`);
             console.log("Got data:", res.data);
             if (Array.isArray(res.data)) {
                 setStudents(res.data);
@@ -48,7 +48,7 @@ const Students = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/students`, formData);
+            await axios.post(`/api/students`, formData);
             setShowModal(false);
             fetchStudents();
         } catch (error) { alert('Error adding student'); }
@@ -83,10 +83,9 @@ const Students = () => {
     return (
         <div style={{opacity: 1}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold fs-3">Student Registry</h2>
+                <h2 className="fw-bold fs-3">My Students</h2>
                 <div className="d-flex gap-2">
-                    <Button variant="outline-dark" onClick={exportCSV} disabled={students.length === 0}><FaDownload className="me-2" /> Export</Button>
-                    <Button variant="primary" onClick={() => setShowModal(true)}><FaPlus className="me-2" /> Add Student</Button>
+                    <Button variant="outline-dark" onClick={exportCSV} disabled={students.length === 0}><FaDownload className="me-2" /> Export Report</Button>
                 </div>
             </div>
 
@@ -121,7 +120,7 @@ const Students = () => {
                     <tbody>
                         {filtered.length === 0 ? (
                             <tr>
-                                <td colSpan="7" className="text-center p-5 text-muted">No students found.</td>
+                                <td colSpan="7" className="text-center p-5 text-muted">No students found assigned to your department.</td>
                             </tr>
                         ) : filtered.map(s => (
                             <tr key={s._id}>
@@ -148,52 +147,12 @@ const Students = () => {
                                     </div>
                                 </td>
                                 <td><span className={`status-badge badge-${(s.riskLevel || 'low').toLowerCase()}`}>{s.riskLevel}</span></td>
-                                <td><Link to={`/students/${s._id}`} className="btn btn-sm btn-outline-primary">View</Link></td>
+                                <td><Link to={`/mentor/students/${s._id}`} className="btn btn-sm btn-outline-primary">View</Link></td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
             </div>
-
-             {/* Add Student Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
-                <Modal.Header closeButton className="border-0">
-                    <Modal.Title className="fw-bold">New Student Enrollment</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <h6 className="text-muted text-uppercase small fw-bold mb-3">Basic Info</h6>
-                        <Row className="mb-3">
-                            <Col md={6}><Form.Control placeholder="Full Name" name="name" required onChange={handleInputChange} className="mb-3" /></Col>
-                            <Col md={6}><Form.Control placeholder="Student ID" name="studentId" required onChange={handleInputChange} className="mb-3" /></Col>
-                            <Col md={12}><Form.Control placeholder="Email Address" name="email" type="email" required onChange={handleInputChange} /></Col>
-                        </Row>
-                        <h6 className="text-primary text-uppercase small fw-bold mb-3 mt-4">Performance Metrics (For AI)</h6>
-                        <Row>
-                            <Col md={6} className="mb-3">
-                                <Form.Label className="small">Attendance %</Form.Label>
-                                <Form.Control type="number" name="attendancePercentage" max="100" required onChange={handleInputChange} />
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Label className="small">CGPA (0-10)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="cgpa" max="10" required onChange={handleInputChange} />
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Label className="small">Fee Delay (Days)</Form.Label>
-                                <Form.Control type="number" name="feeDelayDays" onChange={handleInputChange} />
-                            </Col>
-                             <Col md={6} className="mb-3">
-                                <Form.Label className="small">Participation Score (1-10)</Form.Label>
-                                <Form.Control type="number" max="10" name="classParticipationScore" onChange={handleInputChange} />
-                            </Col>
-                        </Row>
-                        <div className="d-flex justify-content-end gap-2 mt-4">
-                            <Button variant="light" onClick={() => setShowModal(false)}>Cancel</Button>
-                            <Button variant="primary" type="submit">Enroll & Analyze Risk</Button>
-                        </div>
-                    </Form>
-                </Modal.Body>
-            </Modal>
         </div>
     );
 };

@@ -10,7 +10,7 @@ const RiskAnalysis = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`);
+                const res = await axios.get(`/api/students`);
                 setStudents(res.data);
             } catch (err) {
                 console.error(err);
@@ -21,7 +21,7 @@ const RiskAnalysis = () => {
 
     const downloadReport = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/export/risk-report`, {
+            const response = await axios.get(`/api/export/risk-report`, {
                 responseType: 'blob'
             });
             const url = window.URL.createObjectURL(new Blob([response.data]));

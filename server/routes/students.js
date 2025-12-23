@@ -2,90 +2,105 @@ const express = require('express');
 const router = express.Router();
 const { readData, writeData } = require('../utils/db');
 const { predictRisk } = require('../utils/mlService');
+const { authenticateToken, authorizeRole } = require('../middleware/authMiddleware');
 
 const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
+// Secure all routes in this file
+router.use(authenticateToken);
+router.use(authorizeRole(['mentor', 'admin']));
+
 // --- Students Endpoints ---
 
-// Get All
+// Get Students (Filtered by Department for Mentors)
 router.get('/', (req, res) => {
     try {
-        console.log("Fetching all students...");
         const students = readData('students');
-        console.log(`Found ${students.length} students.`);
-        res.json(students.sort((a,b) => b.riskScore - a.riskScore));
+        
+        if (req.user.role === 'mentor') {
+            const mentors = readData('mentors');
+            const currentUser = mentors.find(m => m.email === req.user.email);
+            
+            console.log(`[StudentFilter] Mentor: ${req.user.email}, Found Profile: ${!!currentUser}, Dept: ${currentUser?.department}`);
+
+            if (currentUser && currentUser.department) {
+                // Filter students by course matching mentor's department
+                const deptStudents = students.filter(s => s.course === currentUser.department);
+                console.log(`[StudentFilter] Matched ${deptStudents.length} students for ${currentUser.department}`);
+                return res.json(deptStudents.sort((a,b) => b.riskScore - a.riskScore));
+            } else {
+                console.log("[StudentFilter] No department found for mentor.");
+                return res.json([]); 
+            }
+        }
+
+        // Admin sees all
+        if (req.user.role === 'admin') {
+             return res.json(students.sort((a,b) => b.riskScore - a.riskScore));
+        }
+        
+        res.json([]);
     } catch (e) {
         console.error("Error fetching students:", e);
         res.status(500).json({ error: "Failed to fetch students" });
     }
 });
 
-// Stats
+// Stats (Filtered for Mentors)
 router.get('/stats', (req, res) => {
-    const students = readData('students');
-    const alerts = readData('alerts').filter(a => a.status === 'Active');
-    
-    const stats = {
-        total: students.length,
-        highRisk: students.filter(s => s.riskLevel === 'High').length,
-        mediumRisk: students.filter(s => s.riskLevel === 'Medium').length,
-        lowRisk: students.filter(s => s.riskLevel === 'Low').length,
-        activeAlerts: alerts.length
-    };
-    res.json(stats);
-});
+    try {
+        const students = readData('students');
+        const alerts = readData('alerts').filter(a => a.status === 'Active');
 
-// Add Student
-router.post('/', (req, res) => {
-    const { name, studentId, email, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted } = req.body;
-    
-    // AI Analysis
-    const analysis = predictRisk(
-        Number(attendancePercentage), 
-        Number(cgpa), 
-        Number(feeDelayDays), 
-        Number(classParticipationScore),
-        Number(assignmentsCompleted || 85)
-    );
-    
-    const newStudent = {
-        _id: generateId(),
-        ...req.body,
-        assignmentsCompleted: Number(assignmentsCompleted || 85),
-        riskScore: analysis.score,
-        riskLevel: analysis.level,
-        riskFactors: analysis.factors,
-        createdAt: new Date().toISOString()
-    };
-    
-    const students = readData('students');
-    students.push(newStudent);
-    writeData('students', students);
-    
-    // Auto-Generate Alert if High Risk
-    if (analysis.level === 'High') {
-        const alerts = readData('alerts');
-        alerts.push({
-            _id: generateId(),
-            studentId: newStudent._id,
-            studentName: newStudent.name,
-            severity: 'High',
-            message: `High dropout risk detected (${analysis.score}/100). Factors: ${analysis.factors.join(', ')}`,
-            status: 'Active',
-            date: new Date().toISOString()
-        });
-        writeData('alerts', alerts);
+        let myStudents = students;
+
+        if (req.user.role === 'mentor') {
+            const mentors = readData('mentors');
+            const currentUser = mentors.find(m => m.email === req.user.email);
+            if (currentUser && currentUser.department) {
+                myStudents = students.filter(s => s.course === currentUser.department);
+            } else {
+                myStudents = [];
+            }
+        }
         
-
+        const stats = {
+            total: myStudents.length,
+            highRisk: myStudents.filter(s => s.riskLevel === 'High').length,
+            mediumRisk: myStudents.filter(s => s.riskLevel === 'Medium').length,
+            lowRisk: myStudents.filter(s => s.riskLevel === 'Low').length,
+            activeAlerts: alerts.filter(a => myStudents.some(s => s._id === a.studentId)).length
+        };
+        res.json(stats);
+    } catch (e) {
+        console.error("Error fetching stats:", e);
+        res.status(500).json({ error: "Server Error" });
     }
-    
-    res.status(201).json(newStudent);
 });
 
 // --- Alerts Feature (Must be before /:id to avoid collision) ---
 router.get('/data/alerts', (req, res) => {
     try {
-        const alerts = readData('alerts');
+        let alerts = readData('alerts');
+
+        if (req.user.role === 'mentor') {
+            const mentors = readData('mentors');
+            const students = readData('students');
+            const currentUser = mentors.find(m => m.email === req.user.email);
+
+            if (currentUser && currentUser.department) {
+                // Filter alerts: Only show if the linked student belongs to the mentor's department
+                alerts = alerts.filter(alert => {
+                    // Match alert's studentId to student's _id (or studentId field as fallback)
+                    const student = students.find(s => s._id === alert.studentId || s.studentId === alert.studentId);
+                    return student && student.course === currentUser.department;
+                });
+            } else {
+                // If mentor has no department/profile, show nothing
+                return res.json([]);
+            }
+        }
+
         res.json(alerts.sort((a,b) => new Date(b.date) - new Date(a.date)));
     } catch (e) {
         console.error("Error fetching alerts:", e);

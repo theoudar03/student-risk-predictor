@@ -10,13 +10,32 @@ const getMockStatus = (seed, probability) => {
     return random < probability ? 'Present' : 'Absent';
 };
 
+const { authenticateToken } = require('../middleware/authMiddleware');
+
+router.use(authenticateToken);
+
+// Helper to filter students for the requesting mentor
+const filterStudentsForMentor = (req, students) => {
+    if (req.user.role === 'admin') return students;
+    if (req.user.role === 'mentor') {
+        const mentors = readData('mentors');
+        // Find mentor by email from token
+        const currentUser = mentors.find(m => m.email === req.user.email);
+        if (currentUser && currentUser.department) {
+            return students.filter(s => s.course === currentUser.department);
+        }
+    }
+    return []; // Fallback for safety
+};
+
 // GET /api/export/attendance?date=YYYY-MM-DD
 router.get('/attendance', (req, res) => {
     try {
         const { date } = req.query;
         if (!date) return res.status(400).send("Date is required");
 
-        const students = readData('students');
+        const allStudents = readData('students');
+        const students = filterStudentsForMentor(req, allStudents);
         
         // Transform data for Excel
         const data = students.map(s => {
@@ -58,7 +77,8 @@ router.get('/attendance', (req, res) => {
 // GET /api/export/risk-report
 router.get('/risk-report', (req, res) => {
     try {
-        const students = readData('students');
+        const allStudents = readData('students');
+        const students = filterStudentsForMentor(req, allStudents);
         
         // Filter for Medium and High Risk
         const riskStudents = students.filter(s => s.riskLevel === 'High' || s.riskLevel === 'Medium')
