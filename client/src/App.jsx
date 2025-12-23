@@ -108,14 +108,47 @@ function App() {
       }
   };
 
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+
   return (
     <Router>
       <div className="d-flex" style={{ overflowX: 'hidden' }}>
-        <Sidebar onLogout={handleLogout} user={user} />
-        <div className="flex-grow-1 p-4" style={{ minHeight: '100vh', marginLeft: '260px', background: '#f0f2f5' }}>
-          <TopBar user={user} />
+        <Sidebar 
+            mobileOpen={showMobileSidebar} 
+            setMobileOpen={setShowMobileSidebar} 
+            onLogout={handleLogout} 
+            user={user} 
+        />
+        
+        {/* Main Content Area */}
+        <div 
+            className="flex-grow-1 p-3 p-md-4" 
+            style={{ 
+                minHeight: '100vh', 
+                background: '#f0f2f5',
+                marginLeft: '0', 
+                transition: 'margin-left 0.3s'
+            }}
+        >
+          {/* Responsive Margin Helper */}
+          <style>{`
+            @media (min-width: 768px) {
+                .flex-grow-1 { margin-left: 260px !important; }
+            }
+          `}</style>
+
+          <TopBar user={user} onToggleSidebar={() => setShowMobileSidebar(!showMobileSidebar)} />
           {getRoutes()}
         </div>
+        
+        {/* Mobile Overlay */}
+        {showMobileSidebar && (
+            <div 
+                className="d-md-none position-fixed top-0 start-0 w-100 h-100 bg-dark opacity-50"
+                style={{ zIndex: 999 }}
+                onClick={() => setShowMobileSidebar(false)}
+            />
+        )}
       </div>
     </Router>
   );

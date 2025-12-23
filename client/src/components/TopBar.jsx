@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, Badge } from 'react-bootstrap';
-import { FaBell, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
+import { Dropdown, Badge, Button } from 'react-bootstrap';
+import { FaBell, FaExclamationTriangle, FaCheckCircle, FaBars } from 'react-icons/fa';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const TopBar = ({ user }) => {
+const TopBar = ({ user, onToggleSidebar }) => {
     const [alerts, setAlerts] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
@@ -32,9 +32,16 @@ const TopBar = ({ user }) => {
 
     return (
         <div className="d-flex justify-content-between align-items-center mb-4 pb-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-            <div>
-                <h4 className="fw-bold mb-0 text-dark">Welcome, {user?.name || 'Mentor'}</h4>
-                <small className="text-muted">{user?.department || 'Department'} Dashboard</small>
+            <div className="d-flex align-items-center">
+                {/* Mobile Menu Button */}
+                <Button variant="link" className="d-md-none me-2 p-0 text-dark" onClick={onToggleSidebar}>
+                    <FaBars size={24} />
+                </Button>
+
+                <div>
+                    <h4 className="fw-bold mb-0 text-dark">Welcome, {user?.name || 'Mentor'}</h4>
+                    <small className="text-muted">{user?.department || 'Department'} Dashboard</small>
+                </div>
             </div>
             
             <div className="d-flex align-items-center gap-3">
