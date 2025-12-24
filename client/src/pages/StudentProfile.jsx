@@ -50,7 +50,9 @@ const StudentProfile = () => {
             </div>
             
             <div className="d-grid gap-2">
-                <Button variant="outline-primary"><FaEnvelope className="me-2" /> Email Assessment</Button>
+                <a href={`mailto:${student.email}`} className="btn btn-outline-primary d-block">
+                    <FaEnvelope className="me-2" /> Email Assessment
+                </a>
             </div>
           </div>
 

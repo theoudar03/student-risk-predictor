@@ -35,7 +35,7 @@ const Sidebar = ({ onLogout, user, mobileOpen, setMobileOpen }) => {
 
       <div className="d-flex align-items-center justify-content-between mb-4 px-2">
         <Link to="/" className="d-flex align-items-center link-dark text-decoration-none">
-            <span className="fs-4 fw-bold" style={{color: '#4361EE'}}>Edu<span style={{color: '#F72585'}}>Risk</span>AI</span>
+            <img src="/logo.jpg" alt="EduRiskAI Logo" className="img-fluid" style={{ maxHeight: '60px', width: 'auto', objectFit: 'contain' }} />
         </Link>
         {/* Mobile Close Button */}
         <button className="btn btn-link link-dark d-md-none p-0" onClick={() => setMobileOpen(false)}>

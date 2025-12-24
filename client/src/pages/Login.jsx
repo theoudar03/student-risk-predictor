@@ -100,6 +100,10 @@ const Login = ({ onLogin }) => {
 
 
                 </div>
+                <div className="text-center mt-3 text-white">
+                    <small style={{ opacity: 0.8 }}>Demo Credentials:</small><br/>
+                    <small className="fw-bold">Username & Password: M2024101</small>
+                </div>
             </Container>
         </div>
     );

@@ -63,8 +63,8 @@ const Dashboard = () => {
            <h2 className="fw-bold fs-3">Overview</h2>
            <p className="text-muted">Welcome back, Admin</p>
         </div>
-        <Button variant="outline-primary" onClick={() => fetchStats()}>
-             <FaChartLine className="me-2" /> Refresh Data
+        <Button variant="outline-primary" onClick={() => window.location.reload()} >
+             <FaChartLine className="me-2" /> Refresh Dashboard
         </Button>
       </div>
       

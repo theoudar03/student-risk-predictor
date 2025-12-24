@@ -1,7 +1,7 @@
 [
   {
     "_id": "ALT17663332093741",
-    "studentId": "102",
+    "studentId": "S2024102",
     "studentName": "Liam Chen",
     "severity": "High",
     "message": "Critical Dropout Risk detected (100/100). Primary factor: Low Attendance (35%).",
@@ -11,7 +11,7 @@
   },
   {
     "_id": "ALT17663332093742",
-    "studentId": "103",
+    "studentId": "S2024103",
     "studentName": "Sofia Rodriguez",
     "severity": "High",
     "message": "Critical Dropout Risk detected (90/100). Primary factor: Low Attendance (40%).",
@@ -20,7 +20,7 @@
   },
   {
     "_id": "ALT17663332093743",
-    "studentId": "104",
+    "studentId": "S2024104",
     "studentName": "Noah Kim",
     "severity": "High",
     "message": "Critical Dropout Risk detected (94/100). Primary factor: Low Attendance (38%).",
@@ -29,7 +29,7 @@
   },
   {
     "_id": "mjfyky9x04ihklzlw0gm",
-    "studentId": "mjfyky9k6qonpdsv5yo",
+    "studentId": "272115",
     "studentName": "Theoudar Doss D",
     "severity": "High",
     "message": "High dropout risk detected (100/100). Factors: Low Attendance (55%), Fee Payment Overdue (100 days), Low Class Participation",
@@ -38,7 +38,7 @@
   },
   {
     "_id": "mjfz6n66lkabwu4ql0h",
-    "studentId": "mjfz6n3tfagi2nb1id",
+    "studentId": "272120",
     "studentName": "vidhya",
     "severity": "High",
     "message": "High dropout risk detected (83/100). Factors: Low CGPA (3), Fee Payment Overdue (50 days), Low Class Participation",
