@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Row, Col, Button, Card, Form } from 'react-bootstrap';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
-import { FaChartLine, FaDownload } from 'react-icons/fa';
+import { Row, Col, Button, Form } from 'react-bootstrap';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { FaDownload } from 'react-icons/fa';
 
 const RiskAnalysis = () => {
     const [students, setStudents] = useState([]);

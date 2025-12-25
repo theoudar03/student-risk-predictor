@@ -1,3 +1,28 @@
 [
-  
+  {
+    "id": "MSG_TEST_1766673374627",
+    "senderId": "u_s_101",
+    "senderName": "Emma Thompson",
+    "senderRole": "student",
+    "receiverId": "M2024101",
+    "receiverName": "Dr. V Punitha",
+    "agenda": "Project Doubt",
+    "preferredDate": "2025-01-10",
+    "preferredTime": "10:00 AM",
+    "status": "Pending",
+    "timestamp": "2025-12-25T14:36:14.627Z"
+  },
+  {
+    "id": "MSG_RESTORE_1766673433340",
+    "senderId": "u_s_101",
+    "senderName": "Emma Thompson",
+    "senderRole": "student",
+    "receiverId": "M2024101",
+    "receiverName": "Dr. V Punitha",
+    "agenda": "Research Project",
+    "preferredDate": "2025-01-20",
+    "preferredTime": "11:00 AM",
+    "status": "Pending",
+    "timestamp": "2025-12-25T14:37:13.340Z"
+  }
 ]

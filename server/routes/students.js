@@ -21,15 +21,14 @@ router.get('/', (req, res) => {
             const mentors = readData('mentors');
             const currentUser = mentors.find(m => m.email === req.user.email);
             
-            console.log(`[StudentFilter] Mentor: ${req.user.email}, Found Profile: ${!!currentUser}, Dept: ${currentUser?.department}`);
+
 
             if (currentUser && currentUser.department) {
                 // Filter students by course matching mentor's department
                 const deptStudents = students.filter(s => s.course === currentUser.department);
-                console.log(`[StudentFilter] Matched ${deptStudents.length} students for ${currentUser.department}`);
+
                 return res.json(deptStudents.sort((a,b) => b.riskScore - a.riskScore));
             } else {
-                console.log("[StudentFilter] No department found for mentor.");
                 return res.json([]); 
             }
         }

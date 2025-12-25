@@ -29,9 +29,10 @@ function App() {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   // Check Local Storage for session
+  // Check Session Storage for session (Persists on refresh, clears on tab close)
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const storedUser = sessionStorage.getItem('user');
+    const token = sessionStorage.getItem('token');
     if (storedUser && token) {
         setUser(JSON.parse(storedUser));
         setIsAuthenticated(true);
@@ -42,16 +43,16 @@ function App() {
   const handleLogin = (data) => {
       setIsAuthenticated(true);
       setUser(data.user);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('token', data.token);
+      sessionStorage.setItem('user', JSON.stringify(data.user));
+      sessionStorage.setItem('token', data.token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
   };
 
   const handleLogout = () => {
       setIsAuthenticated(false);
       setUser(null);
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
   };
 

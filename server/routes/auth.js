@@ -4,23 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { readData } = require('../utils/db');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_production';
 
 // Helper to read users from JSON file
-const getUsers = () => {
-    try {
-        const filePath = path.join(__dirname, '../data/users.json');
-        if (!fs.existsSync(filePath)) {
-            return [];
-        }
-        const data = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error("Error reading users data:", error);
-        return [];
-    }
-};
+// Helper to read users from JSON file (using cached readData)
+const getUsers = () => readData('users');
 
 router.post('/login', async (req, res) => {
     try {
@@ -53,7 +43,7 @@ router.post('/login', async (req, res) => {
 
         // 2. Student Login (ID based)
         // Username == Student ID, Password == Student ID
-        const students = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/students.json'), 'utf8'));
+        const students = readData('students');
         const student = students.find(s => s.studentId === username);
         
         if (student) {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { FaUserGraduate, FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 

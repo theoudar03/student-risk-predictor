@@ -27,7 +27,7 @@ const trainModel = () => {
     try {
         model = new MultivariateLinearRegression(trainX, trainY);
         ready = true;
-        console.log('Advanced Risk Model Trained');
+
     } catch (error) {
         console.error('Model Training Failed:', error);
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, Button, Modal, Form, Badge, InputGroup, ProgressBar, Alert, Row, Col } from 'react-bootstrap';
-import { FaSearch, FaPlus, FaFilter, FaDownload, FaExclamationCircle } from 'react-icons/fa';
+import { Table, Button, InputGroup, Form } from 'react-bootstrap';
+import { FaSearch, FaDownload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Students = () => {
@@ -11,11 +11,6 @@ const Students = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [filterRisk, setFilterRisk] = useState('All');
-    const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({
-        name: '', studentId: '', email: '', course: 'Computer Science', 
-        attendancePercentage: 75, cgpa: 7.5, feeDelayDays: 0, classParticipationScore: 5
-    });
 
     useEffect(() => {
         fetchStudents();
@@ -24,9 +19,8 @@ const Students = () => {
     const fetchStudents = async () => {
         setLoading(true);
         try {
-            console.log("Fetching students...");
+
             const res = await axios.get(`/api/students`);
-            console.log("Got data:", res.data);
             if (Array.isArray(res.data)) {
                 setStudents(res.data);
                 setError(null);
@@ -40,18 +34,6 @@ const Students = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    // 2. Helper Functions
-    const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post(`/api/students`, formData);
-            setShowModal(false);
-            fetchStudents();
-        } catch (error) { alert('Error adding student'); }
     };
 
     const exportCSV = () => {
