@@ -10,13 +10,14 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_pr
 
 // Helper to read users from JSON file
 // Helper to read users from JSON file (using cached readData)
-const getUsers = () => readData('users');
+// Helper to read users from JSON file (using cached readData)
+// const getUsers = () => readData('users');
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         
-        const users = getUsers();
+        const users = await readData('users');
         
         // 1. Check for Admin or existing user maps
         let user = users.find(u => u.username === username || u.mentorId === username);
@@ -43,7 +44,7 @@ router.post('/login', async (req, res) => {
 
         // 2. Student Login (ID based)
         // Username == Student ID, Password == Student ID
-        const students = readData('students');
+        const students = await readData('students');
         const student = students.find(s => s.studentId === username);
         
         if (student) {

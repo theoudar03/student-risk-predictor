@@ -51,14 +51,14 @@ const getInsightsAndRecommendations = (student) => {
 // --- Student Endpoints ---
 
 // Get My Profile (Student View)
-router.get('/student/profile', authorizeRole('student'), (req, res) => {
+router.get('/student/profile', authorizeRole('student'), async (req, res) => {
     try {
         const studentId = req.user.studentId;
         if (!studentId) {
             return res.status(400).json({ message: "Student ID not linked to user account." });
         }
 
-        const students = readData('students');
+        const students = await readData('students');
         // Flexible lookup: checks internal _id OR official studentId
         const student = students.find(s => s._id === studentId || s.studentId === studentId);
 
@@ -91,9 +91,9 @@ router.get('/student/profile', authorizeRole('student'), (req, res) => {
 });
 
 // List Mentors for Selection
-router.get('/list-mentors', authorizeRole('student'), (req, res) => {
+router.get('/list-mentors', authorizeRole('student'), async (req, res) => {
     try {
-        const users = readData('users');
+        const users = await readData('users');
         const mentors = users.filter(u => u.role === 'mentor').map(m => ({
             id: m.id,
             name: m.name,
@@ -107,7 +107,7 @@ router.get('/list-mentors', authorizeRole('student'), (req, res) => {
 });
 
 // Submit Self-Assessment Survey
-router.post('/student/survey', authorizeRole('student'), (req, res) => {
+router.post('/student/survey', authorizeRole('student'), async (req, res) => {
     try {
         const { stressLevel, learningDifficulty, motivation, notes, mentorId } = req.body;
         const studentId = req.user.studentId;
@@ -123,9 +123,9 @@ router.post('/student/survey', authorizeRole('student'), (req, res) => {
             timestamp: new Date().toISOString()
         };
 
-        const surveys = readData('student_surveys');
+        const surveys = await readData('student_surveys');
         surveys.push(surveyData);
-        writeData('student_surveys', surveys);
+        await writeData('student_surveys', surveys);
 
         res.json({ success: true, message: "Survey submitted successfully." });
     } catch (error) {
@@ -135,11 +135,11 @@ router.post('/student/survey', authorizeRole('student'), (req, res) => {
 });
 
 // Get Mentor's Assessment Inbox
-router.get('/mentor/assessments', authorizeRole('mentor'), (req, res) => {
+router.get('/mentor/assessments', authorizeRole('mentor'), async (req, res) => {
     try {
         const mentorId = req.user.id;
-        const surveys = readData('student_surveys');
-        const students = readData('students');
+        const surveys = await readData('student_surveys');
+        const students = await readData('students');
 
         // Filter surveys for this mentor
         const mySurveys = surveys.filter(s => s.mentorId === mentorId);
@@ -165,14 +165,14 @@ router.get('/mentor/assessments', authorizeRole('mentor'), (req, res) => {
 // --- Parent Endpoints ---
 
 // Get Child Profile (Parent View)
-router.get('/parent/child-profile', authorizeRole('parent'), (req, res) => {
+router.get('/parent/child-profile', authorizeRole('parent'), async (req, res) => {
     try {
         const studentId = req.user.studentId;
         if (!studentId) {
             return res.status(400).json({ message: "Student ID not linked to parent account." });
         }
 
-        const students = readData('students');
+        const students = await readData('students');
         const student = students.find(s => s._id === studentId || s.studentId === studentId);
 
         if (!student) {
@@ -193,7 +193,7 @@ router.get('/parent/child-profile', authorizeRole('parent'), (req, res) => {
         }
 
         // Find assigned mentor based on Department
-        const mentors = readData('mentors');
+        const mentors = await readData('mentors');
         const course = student.course || student.department || 'CSE';
         const assignedMentor = mentors.find(m => m.department === course) || mentors[0];
 

@@ -8,16 +8,16 @@ const generateId = () => Date.now().toString(36) + Math.random().toString(36).su
 router.use(authenticateToken);
 
 // Get Meeting Requests (Mentor View - Scoped)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const messages = readData('messages');
-        const students = readData('students');
+        const messages = await readData('messages');
+        const students = await readData('students');
         const userId = req.user.id;
         
         let myRequests = [];
 
         if (req.user.role === 'mentor') {
-            const mentors = readData('mentors');
+            const mentors = await readData('mentors');
             const currentUser = mentors.find(m => m.email === req.user.email);
             
             if (currentUser && currentUser.department) {
@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
 });
 
 // Request a Meeting (Student/Parent -> Mentor)
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { receiverId, receiverName, agenda, date, time } = req.body;
         
@@ -70,9 +70,9 @@ router.post('/', (req, res) => {
             timestamp: new Date().toISOString()
         };
 
-        const messages = readData('messages');
+        const messages = await readData('messages');
         messages.push(newRequest);
-        writeData('messages', messages);
+        await writeData('messages', messages);
 
         res.status(201).json(newRequest);
     } catch (e) {
@@ -82,7 +82,7 @@ router.post('/', (req, res) => {
 });
 
 // Update Request Status (Mentor Only)
-router.patch('/:id/status', (req, res) => {
+router.patch('/:id/status', async (req, res) => {
     try {
         const { status } = req.body;
         const validStatuses = ['Viewed', 'Accepted', 'Declined'];
@@ -91,16 +91,16 @@ router.patch('/:id/status', (req, res) => {
             return res.status(400).json({ error: "Invalid status" });
         }
 
-        const messages = readData('messages');
+        const messages = await readData('messages');
         const msg = messages.find(m => m.id === req.params.id);
         
         // Find current mentor profile to check mentorId match
-        const mentors = readData('mentors');
+        const mentors = await readData('mentors');
         const currentUser = mentors.find(m => m.email === req.user.email);
 
         if (msg && (msg.receiverId === req.user.id || (currentUser && msg.receiverId === currentUser.mentorId))) {
             msg.status = status;
-            writeData('messages', messages);
+            await writeData('messages', messages);
             res.json({ success: true, status });
         } else {
             res.status(404).json({ error: "Request not found or unauthorized" });

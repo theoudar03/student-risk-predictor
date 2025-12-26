@@ -13,12 +13,12 @@ router.use(authorizeRole(['mentor', 'admin']));
 // --- Students Endpoints ---
 
 // Get Students (Filtered by Department for Mentors)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const students = readData('students');
+        const students = await readData('students');
         
         if (req.user.role === 'mentor') {
-            const mentors = readData('mentors');
+            const mentors = await readData('mentors');
             const currentUser = mentors.find(m => m.email === req.user.email);
             
 
@@ -46,15 +46,16 @@ router.get('/', (req, res) => {
 });
 
 // Stats (Filtered for Mentors)
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
     try {
-        const students = readData('students');
-        const alerts = readData('alerts').filter(a => a.status === 'Active');
+        const students = await readData('students');
+        const allAlerts = await readData('alerts');
+        const alerts = allAlerts.filter(a => a.status === 'Active');
 
         let myStudents = students;
 
         if (req.user.role === 'mentor') {
-            const mentors = readData('mentors');
+            const mentors = await readData('mentors');
             const currentUser = mentors.find(m => m.email === req.user.email);
             if (currentUser && currentUser.department) {
                 myStudents = students.filter(s => s.course === currentUser.department);
@@ -78,13 +79,13 @@ router.get('/stats', (req, res) => {
 });
 
 // --- Alerts Feature (Must be before /:id to avoid collision) ---
-router.get('/data/alerts', (req, res) => {
+router.get('/data/alerts', async (req, res) => {
     try {
-        let alerts = readData('alerts');
-
+        let alerts = await readData('alerts');
+        
         if (req.user.role === 'mentor') {
-            const mentors = readData('mentors');
-            const students = readData('students');
+            const mentors = await readData('mentors');
+            const students = await readData('students');
             const currentUser = mentors.find(m => m.email === req.user.email);
 
             if (currentUser && currentUser.department) {
@@ -107,13 +108,13 @@ router.get('/data/alerts', (req, res) => {
     }
 });
 
-router.post('/data/alerts/:id/resolve', (req, res) => {
-    let alerts = readData('alerts');
+router.post('/data/alerts/:id/resolve', async (req, res) => {
+    let alerts = await readData('alerts');
     const index = alerts.findIndex(a => a._id === req.params.id);
     if (index !== -1) {
         alerts[index].status = 'Resolved';
         alerts[index].resolvedAt = new Date().toISOString();
-        writeData('alerts', alerts);
+        await writeData('alerts', alerts);
         res.json(alerts[index]);
     } else {
         res.status(404).send('Alert not found');
@@ -121,8 +122,8 @@ router.post('/data/alerts/:id/resolve', (req, res) => {
 });
 
 // Get Single Student
-router.get('/:id', (req, res) => {
-    const students = readData('students');
+router.get('/:id', async (req, res) => {
+    const students = await readData('students');
     const student = students.find(s => s._id === req.params.id);
     if (!student) return res.status(404).json({message: 'Not found'});
     res.json(student);
