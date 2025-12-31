@@ -21,7 +21,7 @@ import AdminMentors from './pages/admin/AdminMentors';
 
 // Set global base URL for Axios
 // Use environment variable for production, fallback to localhost for dev
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
+axios.defaults.baseURL = 'http://localhost:5005';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

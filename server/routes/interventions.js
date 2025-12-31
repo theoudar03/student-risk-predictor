@@ -1,55 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const { readData, writeData } = require('../utils/db');
+const Intervention = require('../models/Intervention');
+const Alert = require('../models/Alert');
+const Student = require('../models/Student');
+const MLFeedback = require('../models/MLFeedback');
 const { authenticateToken, authorizeRole } = require('../middleware/authMiddleware');
 
-const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
-
 router.use(authenticateToken);
-router.use(authorizeRole('mentor')); // Only mentors manage interventions
+router.use(authorizeRole('mentor'));
 
 // Get Interventions for a Student
-router.get('/:studentId', (req, res) => {
+router.get('/:studentId', async (req, res) => {
     try {
-        const interventions = readData('interventions');
-        const studentInterventions = interventions.filter(i => i.studentId === req.params.studentId);
-        res.json(studentInterventions.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)));
+        const interventions = await Intervention.find({ studentId: req.params.studentId }).sort({ createdAt: -1 });
+        res.json(interventions);
     } catch (e) {
-        console.error("Error fetching interventions:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });
 
 // Create New Intervention
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { studentId, riskScoreAtTime, riskLevel, actionTaken, notes, followUpDate } = req.body;
         
-        const newIntervention = {
-            id: generateId(),
+        const newIntervention = new Intervention({
             studentId,
             riskScoreAtTime,
             riskLevel,
             actionTaken,
             notes,
             followUpDate,
-            outcome: 'Pending',
             createdBy: req.user.name,
-            timestamp: new Date().toISOString()
-        };
+        });
 
-        const interventions = readData('interventions');
-        interventions.push(newIntervention);
-        writeData('interventions', interventions);
+        await newIntervention.save();
 
         // Update Alert Status if exists
-        const alerts = readData('alerts');
-        const activeAlert = alerts.find(a => a.studentId === studentId && a.status === 'Active');
-        if (activeAlert) {
-            activeAlert.status = 'Action Taken';
-            activeAlert.lastAction = actionTaken;
-            writeData('alerts', alerts);
-        }
+        // Find active alert for this student
+        // Note: studentId in Alert is ObjectId link. 
+        // req.body.studentId might be "S2024101" or ObjectId?
+        // Let's assume frontend sends the _id or we need to look it up.
+        // Existing logic used consistent ID.
+        // We try to find Alert by studentId (if it's ObjectId) OR we query student to get ObjectId.
+        
+        // Simpler: Try to find alert assuming input studentId matches Alert's studentId field format.
+        // If Alert uses ObjectId, and input is "S2024101", we need conversion.
+        // But if frontend calls this from StudentProfile, it likely has the `_id`.
+        
+        await Alert.updateMany(
+            { studentId: studentId, status: 'Active' }, 
+            { status: 'Action Taken', lastAction: actionTaken }
+        );
 
         res.status(201).json(newIntervention);
 
@@ -59,71 +61,53 @@ router.post('/', (req, res) => {
     }
 });
 
-// Update Outcome (Close the loop & Feed AI)
-router.patch('/:id/outcome', (req, res) => {
+// Update Outcome
+router.patch('/:id/outcome', async (req, res) => {
     try {
         const { outcome, resolveAlert } = req.body;
-        const interventions = readData('interventions');
-        const idx = interventions.findIndex(i => i.id === req.params.id);
+        const intervention = await Intervention.findById(req.params.id);
 
-        if (idx === -1) return res.status(404).json({ error: "Intervention not found" });
+        if (!intervention) return res.status(404).json({ error: "Intervention not found" });
 
-        const intervention = interventions[idx];
         const studentId = intervention.studentId;
-
-        // 1. Fetch current student state
-        const students = readData('students');
-        const student = students.find(s => s._id === studentId || s.studentId === studentId);
         
-        let currentRiskScore = intervention.riskScoreAtTime; // fallback
+        // 1. Fetch current student state
+        const student = await Student.findOne({ $or: [{ _id: studentId }, { studentId: studentId }] });
+        
+        let currentRiskScore = intervention.riskScoreAtTime; 
         if (student) {
             currentRiskScore = student.riskScore;
         }
 
         // 2. Update Intervention Record
-        interventions[idx].outcome = outcome;
-        interventions[idx].riskScoreAfter = currentRiskScore;
-        interventions[idx].closedAt = new Date().toISOString();
-        writeData('interventions', interventions);
+        intervention.outcome = outcome;
+        intervention.riskScoreAfter = currentRiskScore;
+        intervention.closedAt = new Date();
+        await intervention.save();
 
         // 3. Resolve Alert if requested
         if (resolveAlert) {
-             const alerts = readData('alerts');
-             const alertIdx = alerts.findIndex(a => a.studentId === studentId && a.status !== 'Resolved');
-             if (alertIdx !== -1) {
-                 alerts[alertIdx].status = 'Resolved';
-                 alerts[alertIdx].resolvedAt = new Date().toISOString();
-                 writeData('alerts', alerts);
-             }
+             await Alert.updateMany(
+                 { studentId: studentId, status: { $ne: 'Resolved' } },
+                 { status: 'Resolved', resolvedAt: new Date() }
+             );
         }
 
-        // 4. ML FEEDBACK LOOP (Store data for future training)
-        // Only store if we have a valid outcome
+        // 4. ML FEEDBACK LOOP
         if (outcome === 'Effective' || outcome === 'No Change') {
-            const feedbackData = {
-                id: generateId(),
+            await MLFeedback.create({
                 studentId,
                 actionTaken: intervention.actionTaken,
                 initialRisk: intervention.riskScoreAtTime,
                 finalRisk: currentRiskScore,
                 riskReduction: intervention.riskScoreAtTime - currentRiskScore,
-                outcome, // Label
-                timestamp: new Date().toISOString()
-            };
-
-            try {
-                const mlData = readData('ml_feedback_loop');
-                mlData.push(feedbackData);
-                writeData('ml_feedback_loop', mlData);
-                console.log("ML Feedback Loop: Data point captured for retraining.");
-            } catch (err) {
-                console.error("Failed to write to ML feedback loop:", err);
-            }
+                outcome
+            });
         }
 
-        res.json(interventions[idx]);
+        res.json(intervention);
     } catch (e) {
-        console.error("Error updating intervention outcome:", e);
+        console.error("Error updating outcome:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { readData, writeData } = require('../utils/db');
+const Student = require('../models/Student');
+const User = require('../models/User');
+const Alert = require('../models/Alert');
 const { predictRisk } = require('../utils/mlService');
 const { authenticateToken, authorizeRole } = require('../middleware/authMiddleware');
-
-const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
 router.use(authenticateToken);
 router.use(authorizeRole('admin'));
@@ -12,31 +12,30 @@ router.use(authorizeRole('admin'));
 // --- Dashboard Stats ---
 router.get('/stats', async (req, res) => {
     try {
-        const students = await readData('students');
-        const users = await readData('users');
-        const mentors = users.filter(u => u.role === 'mentor');
-        const allAlerts = await readData('alerts');
-        const alerts = allAlerts.filter(a => a.status === 'Active');
+        const totalStudents = await Student.countDocuments();
+        const totalMentors = await User.countDocuments({ role: 'mentor' });
+        const highRiskCount = await Student.countDocuments({ riskLevel: 'High' });
+        const activeAlerts = await Alert.countDocuments({ status: 'Active' });
 
         const stats = {
-            totalStudents: students.length,
-            totalMentors: mentors.length,
-            highRiskCount: students.filter(s => s.riskLevel === 'High').length,
-            activeAlerts: alerts.length
+            totalStudents,
+            totalMentors,
+            highRiskCount,
+            activeAlerts
         };
         res.json(stats);
     } catch (e) {
+        console.error("Stats Error:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });
 
 // --- Student Management ---
 
-// Add Student (Admin Only)
-// --- Student Management ---
-
-const generateStudentId = (students) => {
-    // pattern: 272xxx
+const generateStudentId = async () => {
+    // Attempting to maintain '272xxx' pattern or fallback to S2024xxx max
+    // Efficiency: Retrieve only studentIds
+    const students = await Student.find({}, 'studentId');
     const ids = students
         .map(s => parseInt(s.studentId))
         .filter(id => !isNaN(id) && id >= 272000);
@@ -46,15 +45,36 @@ const generateStudentId = (students) => {
 };
 
 // Add Student (Admin Only)
+// Add Student (Admin Only)
 router.post('/students', async (req, res) => {
     try {
-        const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted } = req.body;
+        const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted, mentorId, studentId } = req.body;
         
-        const students = await readData('students');
-        const newId = generateStudentId(students); // Sequential ID
+        // Validate Course & Mentor
+        if (!course) return res.status(400).json({ error: "Course is required" });
+        if (!mentorId) return res.status(400).json({ error: "Mentor is required" });
+
+        // Verify Mentor exists and matches course
+        const mentor = await User.findOne({ mentorId: mentorId, role: 'mentor' });
+        if (!mentor) {
+            return res.status(400).json({ error: "Selected mentor not found" });
+        }
+        if (mentor.department !== course) {
+            return res.status(400).json({ error: `Mentor ${mentor.name} does not belong to ${course}` });
+        }
+
+        // Determine Student ID (Manual Input or Auto-Generated)
+        let newId;
+        if (studentId) {
+            const existing = await Student.findOne({ studentId });
+            if (existing) return res.status(400).json({ error: "Student ID already exists" });
+            newId = studentId;
+        } else {
+            newId = await generateStudentId(); 
+        }
 
         // AI Analysis
-        const analysis = predictRisk(
+        const analysis = await predictRisk(
             Number(attendancePercentage), 
             Number(cgpa), 
             Number(feeDelayDays), 
@@ -62,12 +82,12 @@ router.post('/students', async (req, res) => {
             Number(assignmentsCompleted || 85)
         );
         
-        const newStudent = {
-            _id: generateId(), // Internal DB ID (guid)
-            studentId: newId,   // Official Sequential ID
+        const newStudent = new Student({
+            studentId: newId,   // Official ID
             name, 
             email, 
             course,
+            assignedMentorId: mentorId, // Explicit Assignment
             enrollmentYear: new Date().getFullYear(),
             attendancePercentage: Number(attendancePercentage), 
             cgpa: Number(cgpa), 
@@ -77,17 +97,33 @@ router.post('/students', async (req, res) => {
             riskScore: analysis.score,
             riskLevel: analysis.level,
             riskFactors: analysis.factors,
-            createdAt: new Date().toISOString()
-        };
+        });
         
-        students.push(newStudent);
-        await writeData('students', students);
+        await newStudent.save();
+
+        // 1. Create Student User Account
+        await User.create({
+            username: newId,
+            password: newId, // Default password = Student ID
+            role: 'student',
+            name: name,
+            email: email,
+            studentId: newId
+        });
+
+        // 2. Create Parent User Account
+        await User.create({
+            username: `p_${newId}`,
+            password: `p_${newId}`, // Default = p_StudentId
+            role: 'parent',
+            name: `Parent of ${name}`,
+            email: `parent.${email}`, // Mock email or ask user input if available
+            studentId: newId
+        });
         
         // Auto-Generate Alert if High Risk
         if (analysis.level === 'High') {
-            const alerts = await readData('alerts');
-            alerts.push({
-                _id: generateId(),
+            await Alert.create({
                 studentId: newStudent._id,
                 studentName: newStudent.name,
                 severity: 'High',
@@ -95,11 +131,8 @@ router.post('/students', async (req, res) => {
                 status: 'Active',
                 date: new Date().toISOString()
             });
-            await writeData('alerts', alerts);
         }
 
-        // Check for users linkage (optional for now, can create user account later)
-        
         res.status(201).json(newStudent);
     } catch (e) {
         console.error(e);
@@ -111,13 +144,9 @@ router.post('/students', async (req, res) => {
 router.put('/students/:id', async (req, res) => {
     try {
         const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted } = req.body;
-        const students = await readData('students');
-        const index = students.findIndex(s => s._id === req.params.id);
         
-        if (index === -1) return res.status(404).json({ error: "Student not found" });
-
         // AI Analysis Refresh
-        const analysis = predictRisk(
+        const analysis = await predictRisk(
             Number(attendancePercentage), 
             Number(cgpa), 
             Number(feeDelayDays), 
@@ -125,8 +154,7 @@ router.put('/students/:id', async (req, res) => {
             Number(assignmentsCompleted || 85)
         );
 
-        students[index] = {
-            ...students[index],
+        const updatedStudent = await Student.findByIdAndUpdate(req.params.id, {
             name, 
             email, 
             course,
@@ -138,25 +166,37 @@ router.put('/students/:id', async (req, res) => {
             riskScore: analysis.score,
             riskLevel: analysis.level,
             riskFactors: analysis.factors
-        };
+        }, { new: true });
+
+        if (!updatedStudent) return res.status(404).json({ error: "Student not found" });
         
-        await writeData('students', students);
-        res.json(students[index]);
+        res.json(updatedStudent);
     } catch (e) {
+        console.error("Update Student Error:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });
 
 // Delete Student
+// Delete Student
 router.delete('/students/:id', async (req, res) => {
     try {
-        const students = await readData('students');
-        const newStudents = students.filter(s => s._id !== req.params.id);
-        if (students.length === newStudents.length) return res.status(404).json({ error: "Student not found" });
+        const student = await Student.findById(req.params.id);
+        if (!student) return res.status(404).json({ error: "Student not found" });
         
-        await writeData('students', newStudents);
+        // 1. Delete Student Profile
+        await Student.findByIdAndDelete(req.params.id);
+
+        // 2. Delete Linked Users (Student Login & Parent Login)
+        // We look for users linked to this studentId
+        await User.deleteMany({ studentId: student.studentId });
+        
+        // 3. Delete associated alerts
+        await Alert.deleteMany({ studentId: req.params.id }); 
+
         res.json({ success: true });
     } catch (e) {
+        console.error("Delete Error:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });
@@ -167,15 +207,16 @@ router.delete('/students/:id', async (req, res) => {
 // Get All Mentors
 router.get('/mentors', async (req, res) => {
     try {
-        const mentors = await readData('mentors');
+        const mentors = await User.find({ role: 'mentor' });
         res.json(mentors);
     } catch (e) {
         res.status(500).json({ error: "Server Error" });
     }
 });
 
-const generateMentorId = (mentors) => {
+const generateMentorId = async () => {
     // pattern: M2024xxx
+    const mentors = await User.find({ role: 'mentor' }, 'mentorId');
     const ids = mentors
         .map(m => parseInt(m.mentorId?.replace('M2024', '') || '0'))
         .filter(id => !isNaN(id));
@@ -187,39 +228,37 @@ const generateMentorId = (mentors) => {
 // Add Mentor
 router.post('/mentors', async (req, res) => {
     try {
-        const { name, email, department, phone } = req.body;
-        const mentors = await readData('mentors');
-        const users = await readData('users');
-
-        if (users.find(u => u.email === email)) {
+        const { name, email, department, phone, mentorId } = req.body;
+        
+        const existing = await User.findOne({ email });
+        if (existing) {
             return res.status(400).json({ error: "User already exists" });
         }
 
-        const newMentorId = generateMentorId(users.filter(u => u.role === 'mentor'));
+        let newMentorId;
+        if (mentorId) {
+            // Check if provided ID already exists
+            const existingId = await User.findOne({ mentorId });
+            if (existingId) return res.status(400).json({ error: "Mentor ID already exists" });
+            newMentorId = mentorId;
+        } else {
+             newMentorId = await generateMentorId();
+        }
 
-        const newMentor = {
-            id: generateId(),
-            name, email, department, phone, role: 'Mentor',
-            mentorId: newMentorId
-        };
-        
-        // Add to mentors.json
-        mentors.push(newMentor);
-        await writeData('mentors', mentors);
-
-        // Add to users.json for login
-        users.push({
-            id: newMentor.id,
-            mentorId: newMentorId, // Authentication ID
+        const newMentor = await User.create({
+            mentorId: newMentorId,
             role: 'mentor',
-            name: name,
-            email: email
-            // No username/password fields for mentors anymore
+            name, email, department, 
+            phone, // Ensure phone is saved if schema supports, assuming yes or just generic
+            // In original code, password logic was implicit or separate. 
+            // We set default password same as ID for uniformity with legacy system.
+            password: newMentorId, 
+            username: newMentorId 
         });
-        await writeData('users', users);
-
+        
         res.status(201).json(newMentor);
     } catch (e) {
+        console.error(e);
         res.status(500).json({ error: "Server Error" });
     }
 });
@@ -230,44 +269,47 @@ router.put('/mentors/:email', async (req, res) => {
         const { name, email, department, phone } = req.body;
         const targetEmail = req.params.email;
         
-        let mentors = await readData('mentors');
-        let users = await readData('users');
-
-        const mIndex = mentors.findIndex(m => m.email === targetEmail);
-        const uIndex = users.findIndex(u => u.mentorId === mentors[mIndex]?.mentorId); // Look up by ID to be safe or email
+        const updatedUser = await User.findOneAndUpdate(
+            { email: targetEmail },
+            { name, email, department },
+            { new: true }
+        );
         
-        if (mIndex === -1) return res.status(404).json({ error: "Mentor not found" });
-
-        mentors[mIndex] = { ...mentors[mIndex], name, email, department, phone };
+        if (!updatedUser) return res.status(404).json({ error: "Mentor not found" });
         
-        if (uIndex !== -1) {
-            users[uIndex] = { ...users[uIndex], name, email };
-        }
-        
-        await writeData('mentors', mentors);
-        await writeData('users', users);
-        
-        res.json(mentors[mIndex]);
+        res.json(updatedUser);
     } catch (e) {
         res.status(500).json({ error: "Server Error" });
     }
 });
 
 // Delete Mentor
+// Delete Mentor
 router.delete('/mentors/:email', async (req, res) => {
     try {
         const email = req.params.email;
-        let mentors = await readData('mentors');
-        let users = await readData('users');
+        
+        // 1. Find the mentor to identify department
+        const mentor = await User.findOne({ email: email, role: 'mentor' });
+        if (!mentor) return res.status(404).json({ error: "Mentor not found" });
 
-        mentors = mentors.filter(m => m.email !== email);
-        users = users.filter(u => u.username !== email); // Assuming username is email
+        // 2. Check coverage for this department
+        const count = await User.countDocuments({ role: 'mentor', department: mentor.department });
 
-        await writeData('mentors', mentors);
-        await writeData('users', users);
+        if (count <= 1) {
+            return res.status(400).json({ 
+                success: false,
+                error: "MIN_MENTOR_REQUIRED", 
+                message: "At least one mentor should be in a course" 
+            });
+        }
+
+        // 3. Proceed with deletion
+        await User.findOneAndDelete({ email: email });
 
         res.json({ success: true });
     } catch (e) {
+        console.error("Delete Mentor Error:", e);
         res.status(500).json({ error: "Server Error" });
     }
 });

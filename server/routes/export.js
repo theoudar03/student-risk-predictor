@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const xlsx = require('xlsx');
-const { readData } = require('../utils/db');
+const Student = require('../models/Student');
+const User = require('../models/User');
+const { authenticateToken } = require('../middleware/authMiddleware');
+
+router.use(authenticateToken);
 
 // Helper to generate a consistent random-ish status based on seed
 const getMockStatus = (seed, probability) => {
@@ -10,37 +14,35 @@ const getMockStatus = (seed, probability) => {
     return random < probability ? 'Present' : 'Absent';
 };
 
-const { authenticateToken } = require('../middleware/authMiddleware');
-
-router.use(authenticateToken);
-
-// Helper to filter students for the requesting mentor
-const filterStudentsForMentor = (req, students) => {
-    if (req.user.role === 'admin') return students;
-    if (req.user.role === 'mentor') {
-        const mentors = readData('mentors');
-        // Find mentor by email from token
-        const currentUser = mentors.find(m => m.email === req.user.email);
+// Helper: Build Mongo Filter based on User Role
+const getStudentFilter = async (user) => {
+    let filter = {};
+    if (user.role === 'mentor') {
+        const currentUser = await User.findOne({ email: user.email });
         if (currentUser && currentUser.department) {
-            return students.filter(s => s.course === currentUser.department);
+            filter.course = currentUser.department;
+        } else {
+            // Mentor with no department sees nothing? Or all? 
+            // Existing logic implied empty array.
+            filter._id = null; // Forces empty result
         }
     }
-    return []; // Fallback for safety
-};
+    // Admin sees all (empty filter)
+    return filter;
+}
 
 // GET /api/export/attendance?date=YYYY-MM-DD
-router.get('/attendance', (req, res) => {
+router.get('/attendance', async (req, res) => {
     try {
         const { date } = req.query;
         if (!date) return res.status(400).send("Date is required");
 
-        const allStudents = readData('students');
-        const students = filterStudentsForMentor(req, allStudents);
+        const filter = await getStudentFilter(req.user);
+        const students = await Student.find(filter);
         
         // Transform data for Excel
         const data = students.map(s => {
             // Create a seed based on Date string + Student ID to make it consistent for the same date request
-            // This way, if they download twice for same date, they get same "random" results
             const seed = date.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) + 
                          s.studentId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
             
@@ -75,14 +77,14 @@ router.get('/attendance', (req, res) => {
 });
 
 // GET /api/export/risk-report
-router.get('/risk-report', (req, res) => {
+router.get('/risk-report', async (req, res) => {
     try {
-        const allStudents = readData('students');
-        const students = filterStudentsForMentor(req, allStudents);
-        
+        const filter = await getStudentFilter(req.user);
         // Filter for Medium and High Risk
-        const riskStudents = students.filter(s => s.riskLevel === 'High' || s.riskLevel === 'Medium')
-                                     .sort((a,b) => b.riskScore - a.riskScore);
+        // Merge with existing filter
+        const riskFilter = { ...filter, riskLevel: { $in: ['High', 'Medium'] } };
+
+        const riskStudents = await Student.find(riskFilter).sort({ riskScore: -1 });
 
         const data = riskStudents.map(s => ({
             "Student Name": s.name,

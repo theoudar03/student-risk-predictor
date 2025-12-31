@@ -11,10 +11,10 @@ const AdminMentors = () => {
     const [showModal, setShowModal] = useState(false);
     
     // Departments
-    const departments = ["CSE", "ECE", "EEE", "IT", "AIDS"];
+    const departments = ["AI&DS", "AIML", "CIVIL", "CSBS", "CSE", "ECE", "EEE", "ICE", "IT", "MBA", "MECH"];
 
     const [formData, setFormData] = useState({
-        name: '', email: '', phone: '', department: 'CSE', password: 'password123'
+        name: '', email: '', phone: '', department: '', password: 'password123', mentorId: ''
     });
 
     useEffect(() => {
@@ -38,6 +38,7 @@ const AdminMentors = () => {
             email: mentor.email,
             phone: mentor.phone,
             department: mentor.department,
+            mentorId: mentor.mentorId, // Populate existing ID
             password: '' // Not editable here
         });
         setShowModal(true);
@@ -62,10 +63,25 @@ const AdminMentors = () => {
         try {
             await axios.delete(`/api/admin/mentors/${email}`);
             fetchMentors();
-        } catch(e) { alert("Failed to delete"); }
+        } catch(e) { 
+            if (e.response && e.response.data && e.response.data.error === "MIN_MENTOR_REQUIRED") {
+                alert("At least one mentor should be in a course");
+            } else {
+                alert("Failed to delete mentor");
+            }
+        }
     };
 
+    const [sortType, setSortType] = useState('name');
+
+    // Filter & Sort
     const filtered = mentors.filter(m => m.name.toLowerCase().includes(search.toLowerCase()) || m.department.toLowerCase().includes(search.toLowerCase()));
+    
+    const sorted = [...filtered].sort((a, b) => {
+        if (sortType === 'name') return a.name.localeCompare(b.name);
+        if (sortType === 'department') return a.department.localeCompare(b.department);
+        return 0;
+    });
 
     return (
         <div>
@@ -74,11 +90,15 @@ const AdminMentors = () => {
                 <Button variant="primary" onClick={() => setShowModal(true)}><FaPlus className="me-2" /> Add Mentor</Button>
             </div>
 
-            <div className="glass-card mb-4 p-3">
-                 <InputGroup style={{ maxWidth: 400 }}>
+            <div className="glass-card mb-4 p-3 d-flex gap-3">
+                 <InputGroup>
                     <InputGroup.Text><FaSearch /></InputGroup.Text>
                     <Form.Control placeholder="Search mentors..." value={search} onChange={e => setSearch(e.target.value)} />
                 </InputGroup>
+                <Form.Select style={{ maxWidth: '200px' }} value={sortType} onChange={e => setSortType(e.target.value)}>
+                    <option value="name">Sort by Name (A-Z)</option>
+                    <option value="department">Sort by Department</option>
+                </Form.Select>
             </div>
 
             <Table hover responsive className="bg-white shadow-sm rounded">
@@ -91,7 +111,7 @@ const AdminMentors = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map(m => (
+                    {sorted.map(m => (
                         <tr key={m.id || m.email}>
                             <td className="ps-3 fw-bold">{m.name}</td>
                             <td><Badge bg="info" text="white">{m.department}</Badge></td>
@@ -109,16 +129,18 @@ const AdminMentors = () => {
             </Table>
 
             {/* Add/Edit Mentor Modal */}
-            <Modal show={showModal} onHide={() => { setShowModal(false); setEditEmail(null); setFormData({ name: '', email: '', phone: '', department: 'Computer Science', password: 'password123' }); }} size="lg">
+            <Modal show={showModal} onHide={() => { setShowModal(false); setEditEmail(null); setFormData({ name: '', email: '', phone: '', department: '', password: 'password123', mentorId: '' }); }} size="lg">
                 <Modal.Header closeButton><Modal.Title>{editEmail ? 'Edit Mentor' : 'Add New Mentor'}</Modal.Title></Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <Col md={6}><Form.Control placeholder="Full Name" name="name" value={formData.name} required onChange={handleInputChange} className="mb-3" /></Col>
+                            <Col md={6}><Form.Control placeholder="Mentor ID" name="mentorId" value={formData.mentorId} disabled={!!editEmail} required onChange={handleInputChange} className="mb-3" /></Col>
                             <Col md={6}><Form.Control placeholder="Email" name="email" type="email" value={formData.email} disabled={!!editEmail} required onChange={handleInputChange} className="mb-3" /></Col>
-                            <Col md={6}><Form.Control placeholder="Phone" name="phone" value={formData.phone} required onChange={handleInputChange} /></Col>
+                            <Col md={6}><Form.Control placeholder="Phone" name="phone" value={formData.phone} required onChange={handleInputChange} className="mb-3" /></Col>
                             <Col md={6}>
-                                <Form.Select name="department" onChange={handleInputChange} value={formData.department}>
+                                <Form.Select name="department" onChange={handleInputChange} value={formData.department} required>
+                                    <option value="">Select Department</option>
                                     {departments.map(d => <option key={d} value={d}>{d}</option>)}
                                 </Form.Select>
                             </Col>

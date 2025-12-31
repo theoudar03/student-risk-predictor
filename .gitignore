@@ -28,3 +28,7 @@ server/data
 functions/data
 *.sqlite
 *.db
+
+# Secrets
+serviceAccountKey.json
+**/serviceAccountKey.json

@@ -1,51 +1,73 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { readData } = require('../utils/db');
+const User = require('../models/User');
+const Student = require('../models/Student');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_production';
-
-// Helper to read users from JSON file
-// Helper to read users from JSON file (using cached readData)
-// Helper to read users from JSON file (using cached readData)
-// const getUsers = () => readData('users');
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        
-        const users = await readData('users');
-        
-        // 1. Check for Admin or existing user maps
-        let user = users.find(u => u.username === username || u.mentorId === username);
+
+        // 1. Check for Admin or Mentor (User Collection)
+        // Check username or verify if mentorId is being used as username
+        const user = await User.findOne({
+            $or: [{ username: username }, { mentorId: username }]
+        });
         
         if (user) {
              let isMatch = false;
 
-             // Admin (Legacy / Special) - keeps password
              if (user.role === 'admin') {
+                 // Simple password check (In production use bcrypt)
                  isMatch = user.password === password;
              } 
-             // Mentor - ID based auth (Username=ID, Password=ID)
              else if (user.role === 'mentor') {
-                 isMatch = (user.mentorId === username) && (password === username);
-                 // Fallback if they try logging in with undefined mentorId but valid legacy username mechanism (should transition to ID)
+                 // Mentor Logic: Password equals Username (Legacy)
+                 // Or check real password if available
+                 isMatch = (user.mentorId === username || user.username === username) && (password === username);
+             }
+             else if (user.role === 'student') {
+                 // Student Logic
+                 isMatch = user.password === password;
+             }
+             else if (user.role === 'parent') {
+                 // Parent Logic
+                 isMatch = user.password === password;
              }
              
              if (!isMatch) return res.status(401).json({ success: false, message: 'Invalid credentials' });
              
-             // Issue token
-             const token = jwt.sign({ id: user.id, role: user.role, name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
-             return res.json({ success: true, token, user: { id: user.id, name: user.name, role: user.role, email: user.email } });
+             // Construct Token Payload
+             const payload = {
+                 id: user._id,
+                 role: user.role,
+                 name: user.name,
+                 email: user.email
+             };
+
+             // Add role-specific fields
+             if (user.role === 'student') {
+                 payload.studentId = user.username; // Assuming username matches studentId
+             } else if (user.role === 'parent') {
+                 payload.studentId = user.studentId;
+             } else if (user.role === 'mentor') {
+                 payload.mentorId = user.mentorId;
+             }
+
+             const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
+             
+             return res.json({ 
+                 success: true, 
+                 token, 
+                 user: payload 
+             });
         }
 
-        // 2. Student Login (ID based)
-        // Username == Student ID, Password == Student ID
-        const students = await readData('students');
-        const student = students.find(s => s.studentId === username);
+        // 2. Student Login
+        const student = await Student.findOne({ studentId: username });
         
         if (student) {
             if (password !== username) return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -54,11 +76,10 @@ router.post('/login', async (req, res) => {
             return res.json({ success: true, token, user: { id: student._id, name: student.name, role: 'student', studentId: student.studentId } });
         }
 
-        // 3. Parent Login (Derived from Student ID)
-        // Username starts with p_, then student ID. Password same.
+        // 3. Parent Login
         if (username.startsWith('p_')) {
-            const targetStudentId = username.substring(2); // remove p_
-            const targetStudent = students.find(s => s.studentId === targetStudentId);
+            const targetStudentId = username.substring(2);
+            const targetStudent = await Student.findOne({ studentId: targetStudentId });
             
             if (targetStudent) {
                 if (password !== username) return res.status(401).json({ success: false, message: 'Invalid credentials' });

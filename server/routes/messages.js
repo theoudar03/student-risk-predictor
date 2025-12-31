@@ -1,46 +1,58 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
-const { readData, writeData } = require('../utils/db');
+const Message = require('../models/Message');
+const Student = require('../models/Student');
+const User = require('../models/User');
 const { authenticateToken } = require('../middleware/authMiddleware');
-
-const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
 router.use(authenticateToken);
 
 // Get Meeting Requests (Mentor View - Scoped)
 router.get('/', async (req, res) => {
     try {
-        const messages = await readData('messages');
-        const students = await readData('students');
         const userId = req.user.id;
         
-        let myRequests = [];
+        let messages = [];
 
         if (req.user.role === 'mentor') {
-            const mentors = await readData('mentors');
-            const currentUser = mentors.find(m => m.email === req.user.email);
+            const currentUser = await User.findOne({ email: req.user.email });
             
             if (currentUser && currentUser.department) {
                 // Return requests where:
                 // 1. Receiver is ME (explicitly assigned)
                 // 2. Sender is a student from MY department (scoped visibility)
                 
-                myRequests = messages.filter(m => {
-                    // Direct message check (Internal ID or Public Mentor ID)
-                    if (m.receiverId === userId || m.receiverId === currentUser.mentorId) return true;
+                // Get IDs of students in my department
+                const deptStudents = await Student.find({ course: currentUser.department }, '_id');
+                const deptStudentIds = deptStudents.map(s => s._id.toString());
+                
+                messages = await Message.find({
+                    $or: [
+                        { receiverId: userId },
+                        { receiverId: currentUser.mentorId },
+                        { senderId: { $in: deptStudentIds } } 
+                    ]
+                }).sort({ createdAt: -1 });
 
-                    // Check if sender is a student in my department (Department Scoping)
-                    const senderStudent = students.find(s => s._id === m.senderId);
-                    return senderStudent && senderStudent.course === currentUser.department;
-                });
             }
         } else {
-            // Student/Parent/Admin logic (unchanged)
-            myRequests = messages.filter(m => m.receiverId === userId || m.senderId === userId);
+            // Student/Parent/Admin logic
+            messages = await Message.find({
+                $or: [
+                    { receiverId: userId },
+                    { senderId: userId }
+                ]
+            }).sort({ createdAt: -1 });
         }
         
-        // Sort by date desc
-        res.json(myRequests.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)));
+        const safeMessages = messages.map(m => ({
+            ...m.toObject(),
+            id: m._id,
+            preferredDate: m.preferredDate || m.createdAt // Fallback to createdAt if no date preference
+        }));
+        
+        res.json(safeMessages);
     } catch (e) {
         console.error("Error fetching messages:", e);
         res.status(500).json({ error: "Server Error" });
@@ -50,14 +62,17 @@ router.get('/', async (req, res) => {
 // Request a Meeting (Student/Parent -> Mentor)
 router.post('/', async (req, res) => {
     try {
+        if (req.user.role !== 'parent') {
+            return res.status(403).json({ error: "Only parents can request meetings." });
+        }
+
         const { receiverId, receiverName, agenda, date, time } = req.body;
         
         if (!receiverId || !agenda || !date) {
             return res.status(400).json({ error: "Mentor, agenda, and preferred date are required" });
         }
 
-        const newRequest = {
-            id: generateId(),
+        const newRequest = new Message({
             senderId: req.user.id,
             senderName: req.user.name,
             senderRole: req.user.role,
@@ -66,13 +81,10 @@ router.post('/', async (req, res) => {
             agenda, 
             preferredDate: date,
             preferredTime: time || 'Flexible',
-            status: 'Pending', // Pending, Viewed, Accepted, Declined
-            timestamp: new Date().toISOString()
-        };
+            status: 'Pending'
+        });
 
-        const messages = await readData('messages');
-        messages.push(newRequest);
-        await writeData('messages', messages);
+        await newRequest.save();
 
         res.status(201).json(newRequest);
     } catch (e) {
@@ -91,19 +103,25 @@ router.patch('/:id/status', async (req, res) => {
             return res.status(400).json({ error: "Invalid status" });
         }
 
-        const messages = await readData('messages');
-        const msg = messages.find(m => m.id === req.params.id);
-        
-        // Find current mentor profile to check mentorId match
-        const mentors = await readData('mentors');
-        const currentUser = mentors.find(m => m.email === req.user.email);
+        // Check ownership
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: "Invalid Request ID" });
+        }
+        const msg = await Message.findById(req.params.id);
+        if (!msg) return res.status(404).json({ error: "Request not found" });
 
-        if (msg && (msg.receiverId === req.user.id || (currentUser && msg.receiverId === currentUser.mentorId))) {
+        const currentUser = await User.findOne({ email: req.user.email });
+
+        // Authorization Check
+        const isAuthorized = (msg.receiverId === req.user.id) || 
+                             (currentUser && msg.receiverId === currentUser.mentorId);
+
+        if (isAuthorized) {
             msg.status = status;
-            await writeData('messages', messages);
+            await msg.save();
             res.json({ success: true, status });
         } else {
-            res.status(404).json({ error: "Request not found or unauthorized" });
+            res.status(403).json({ error: "Unauthorized" });
         }
     } catch (e) {
         res.status(500).json({ error: "Server Error" });

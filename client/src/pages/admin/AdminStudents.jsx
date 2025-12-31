@@ -5,22 +5,33 @@ import { FaSearch, FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
 
 const AdminStudents = () => {
     const [students, setStudents] = useState([]);
+    const [mentors, setMentors] = useState([]); // Add this
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [editId, setEditId] = useState(null);
 
-    // Departments for selection
-    const departments = ["CSE", "ECE", "EEE", "IT", "AIDS"];
+    // Departments for selection (Alphabetical Order)
+    const departments = ["AI&DS", "AIML", "CIVIL", "CSBS", "CSE", "ECE", "EEE", "ICE", "IT", "MBA", "MECH"];
 
     const [formData, setFormData] = useState({
-        name: '', studentId: '', email: '', course: 'CSE', 
+        name: '', studentId: '', email: '', course: '', mentorId: '', 
         attendancePercentage: 75, cgpa: 7.5, feeDelayDays: 0, classParticipationScore: 5
     });
 
     useEffect(() => {
         fetchStudents();
+        fetchMentors();
     }, []);
+
+    const fetchMentors = async () => {
+        try {
+            const res = await axios.get(`/api/admin/mentors`);
+            setMentors(res.data);
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     const fetchStudents = async () => {
         try {
@@ -42,7 +53,7 @@ const AdminStudents = () => {
             name: student.name,
             studentId: student.studentId,
             email: student.email,
-            course: student.course || 'CSE',
+            course: student.course || '',
             attendancePercentage: student.attendancePercentage,
             cgpa: student.cgpa,
             feeDelayDays: student.feeDelayDays || 0,
@@ -59,7 +70,9 @@ const AdminStudents = () => {
                 await axios.put(`/api/admin/students/${editId}`, formData);
             } else {
                 // Add Mode
-                await axios.post(`/api/admin/students`, formData);
+                const res = await axios.post(`/api/admin/students`, formData);
+                const newId = res.data.studentId;
+                alert(`✅ Student Registered Successfully!\n\n🎓 Student Login:\nUsername: ${newId}\nPassword: ${newId}\n\n👨‍👩‍👧 Parent Login:\nUsername: p_${newId}\nPassword: p_${newId}`);
             }
             setShowModal(false);
             setEditId(null);
@@ -75,7 +88,20 @@ const AdminStudents = () => {
         } catch(e) { alert("Failed to delete"); }
     };
 
+    const [sortType, setSortType] = useState('name');
+
+    // ... existing derived vars ...
+    const courseMentors = mentors.filter(m => m.department === formData.course);
+    
+    // Filter & Sort Logic
     const filtered = students.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
+    
+    const sorted = [...filtered].sort((a, b) => {
+        if (sortType === 'name') return a.name.localeCompare(b.name);
+        if (sortType === 'course') return (a.course || "").localeCompare(b.course || "");
+        if (sortType === 'risk') return (b.riskScore || 0) - (a.riskScore || 0); // High to Low
+        return 0;
+    });
 
     return (
         <div>
@@ -84,11 +110,16 @@ const AdminStudents = () => {
                 <Button variant="primary" onClick={() => setShowModal(true)}><FaPlus className="me-2" /> Register Student</Button>
             </div>
 
-            <div className="glass-card mb-4 p-3">
-                 <InputGroup style={{ maxWidth: 400 }}>
+            <div className="glass-card mb-4 p-3 d-flex gap-3">
+                 <InputGroup>
                     <InputGroup.Text><FaSearch /></InputGroup.Text>
                     <Form.Control placeholder="Search students..." value={search} onChange={e => setSearch(e.target.value)} />
                 </InputGroup>
+                <Form.Select style={{ maxWidth: '200px' }} value={sortType} onChange={e => setSortType(e.target.value)}>
+                    <option value="name">Sort by Name (A-Z)</option>
+                    <option value="course">Sort by Course</option>
+                    <option value="risk">Sort by Risk (High-Low)</option>
+                </Form.Select>
             </div>
 
             <Table hover responsive className="bg-white shadow-sm rounded">
@@ -101,7 +132,7 @@ const AdminStudents = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map(s => (
+                    {sorted.map(s => (
                         <tr key={s._id}>
                             <td className="ps-3">
                                 <div className="fw-bold">{s.name}</div>
@@ -119,7 +150,7 @@ const AdminStudents = () => {
             </Table>
 
             {/* Add/Edit Student Modal */}
-            <Modal show={showModal} onHide={() => { setShowModal(false); setEditId(null); setFormData({ name: '', studentId: '', email: '', course: 'CSE', attendancePercentage: 75, cgpa: 7.5, feeDelayDays: 0, classParticipationScore: 5 }); }} size="lg">
+            <Modal show={showModal} onHide={() => { setShowModal(false); setEditId(null); setFormData({ name: '', studentId: '', email: '', course: '', mentorId: '', attendancePercentage: 75, cgpa: 7.5, feeDelayDays: 0, classParticipationScore: 5 }); }} size="lg">
                 <Modal.Header closeButton><Modal.Title>{editId ? 'Edit Student' : 'Register New Student'}</Modal.Title></Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
@@ -128,9 +159,33 @@ const AdminStudents = () => {
                             <Col md={6}><Form.Control placeholder="Student ID" name="studentId" value={formData.studentId} disabled={!!editId} required onChange={handleInputChange} className="mb-3" /></Col>
                             <Col md={6}><Form.Control placeholder="Email" name="email" value={formData.email} required onChange={handleInputChange} /></Col>
                             <Col md={6}>
-                                <Form.Select name="course" onChange={handleInputChange} value={formData.course}>
+                                <Form.Select name="course" onChange={handleInputChange} value={formData.course} required>
+                                    <option value="">Select Course</option>
                                     {departments.map(d => <option key={d} value={d}>{d}</option>)}
                                 </Form.Select>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col md={12}>
+                                <Form.Group>
+                                    <Form.Label className="small text-muted">Assign Mentor (Required)</Form.Label>
+                                    <Form.Select 
+                                        name="mentorId" 
+                                        value={formData.mentorId} 
+                                        onChange={handleInputChange} 
+                                        required 
+                                        disabled={!formData.course}
+                                    >
+                                        <option value="">{formData.course ? "Select Mentor" : "Select Course First"}</option>
+                                        {courseMentors.length > 0 ? (
+                                            courseMentors.map(m => (
+                                                <option key={m.mentorId} value={m.mentorId}>{m.name} ({m.mentorId})</option>
+                                            ))
+                                        ) : (
+                                            formData.course && <option disabled>No mentors available for {formData.course}</option>
+                                        )}
+                                    </Form.Select>
+                                </Form.Group>
                             </Col>
                         </Row>
                         <h6 className="mt-3">Initial Metrics</h6>

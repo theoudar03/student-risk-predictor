@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { readData, writeData } = require('../utils/db');
-const { predictRisk } = require('../utils/mlService');
+const Student = require('../models/Student');
+const User = require('../models/User');
+const Alert = require('../models/Alert');
 const { authenticateToken, authorizeRole } = require('../middleware/authMiddleware');
-
-const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
 // Secure all routes in this file
 router.use(authenticateToken);
@@ -15,30 +14,24 @@ router.use(authorizeRole(['mentor', 'admin']));
 // Get Students (Filtered by Department for Mentors)
 router.get('/', async (req, res) => {
     try {
-        const students = await readData('students');
-        
+        let filter = {};
+
         if (req.user.role === 'mentor') {
-            const mentors = await readData('mentors');
-            const currentUser = mentors.find(m => m.email === req.user.email);
+            const currentUser = await User.findOne({ email: req.user.email });
             
-
-
             if (currentUser && currentUser.department) {
                 // Filter students by course matching mentor's department
-                const deptStudents = students.filter(s => s.course === currentUser.department);
-
-                return res.json(deptStudents.sort((a,b) => b.riskScore - a.riskScore));
+                filter = { course: currentUser.department };
             } else {
                 return res.json([]); 
             }
         }
 
-        // Admin sees all
-        if (req.user.role === 'admin') {
-             return res.json(students.sort((a,b) => b.riskScore - a.riskScore));
-        }
+        // Admin sees all (filter remains empty)
         
-        res.json([]);
+        const students = await Student.find(filter).sort({ riskScore: -1 });
+        res.json(students);
+
     } catch (e) {
         console.error("Error fetching students:", e);
         res.status(500).json({ error: "Failed to fetch students" });
@@ -48,28 +41,36 @@ router.get('/', async (req, res) => {
 // Stats (Filtered for Mentors)
 router.get('/stats', async (req, res) => {
     try {
-        const students = await readData('students');
-        const allAlerts = await readData('alerts');
-        const alerts = allAlerts.filter(a => a.status === 'Active');
-
-        let myStudents = students;
+        let studentFilter = {};
 
         if (req.user.role === 'mentor') {
-            const mentors = await readData('mentors');
-            const currentUser = mentors.find(m => m.email === req.user.email);
+            const currentUser = await User.findOne({ email: req.user.email });
             if (currentUser && currentUser.department) {
-                myStudents = students.filter(s => s.course === currentUser.department);
+                studentFilter = { course: currentUser.department };
             } else {
-                myStudents = [];
+                return res.json({
+                    total: 0, highRisk: 0, mediumRisk: 0, lowRisk: 0, activeAlerts: 0
+                });
             }
         }
+
+        // We could use aggregations, but for simplicity/consistency:
+        const students = await Student.find(studentFilter);
         
+        // Find active alerts for these students
+        // Create list of student IDs
+        const studentIds = students.map(s => s._id);
+        const activeAlertsCount = await Alert.countDocuments({ 
+            studentId: { $in: studentIds },
+            status: 'Active'
+        });
+
         const stats = {
-            total: myStudents.length,
-            highRisk: myStudents.filter(s => s.riskLevel === 'High').length,
-            mediumRisk: myStudents.filter(s => s.riskLevel === 'Medium').length,
-            lowRisk: myStudents.filter(s => s.riskLevel === 'Low').length,
-            activeAlerts: alerts.filter(a => myStudents.some(s => s._id === a.studentId)).length
+            total: students.length,
+            highRisk: students.filter(s => s.riskLevel === 'High').length,
+            mediumRisk: students.filter(s => s.riskLevel === 'Medium').length,
+            lowRisk: students.filter(s => s.riskLevel === 'Low').length,
+            activeAlerts: activeAlertsCount
         };
         res.json(stats);
     } catch (e) {
@@ -78,30 +79,25 @@ router.get('/stats', async (req, res) => {
     }
 });
 
-// --- Alerts Feature (Must be before /:id to avoid collision) ---
+// --- Alerts Feature ---
 router.get('/data/alerts', async (req, res) => {
     try {
-        let alerts = await readData('alerts');
-        
+        let alertFilter = {};
+
         if (req.user.role === 'mentor') {
-            const mentors = await readData('mentors');
-            const students = await readData('students');
-            const currentUser = mentors.find(m => m.email === req.user.email);
+            const currentUser = await User.findOne({ email: req.user.email });
 
             if (currentUser && currentUser.department) {
-                // Filter alerts: Only show if the linked student belongs to the mentor's department
-                alerts = alerts.filter(alert => {
-                    // Match alert's studentId to student's _id (or studentId field as fallback)
-                    const student = students.find(s => s._id === alert.studentId || s.studentId === alert.studentId);
-                    return student && student.course === currentUser.department;
-                });
+                // Get all students in this department
+                const studentIds = await Student.find({ course: currentUser.department }).distinct('_id');
+                alertFilter = { studentId: { $in: studentIds } };
             } else {
-                // If mentor has no department/profile, show nothing
                 return res.json([]);
             }
         }
 
-        res.json(alerts.sort((a,b) => new Date(b.date) - new Date(a.date)));
+        const alerts = await Alert.find(alertFilter).sort({ date: -1 });
+        res.json(alerts);
     } catch (e) {
         console.error("Error fetching alerts:", e);
         res.json([]);
@@ -109,24 +105,37 @@ router.get('/data/alerts', async (req, res) => {
 });
 
 router.post('/data/alerts/:id/resolve', async (req, res) => {
-    let alerts = await readData('alerts');
-    const index = alerts.findIndex(a => a._id === req.params.id);
-    if (index !== -1) {
-        alerts[index].status = 'Resolved';
-        alerts[index].resolvedAt = new Date().toISOString();
-        await writeData('alerts', alerts);
-        res.json(alerts[index]);
-    } else {
-        res.status(404).send('Alert not found');
+    try {
+        const alert = await Alert.findByIdAndUpdate(
+            req.params.id, 
+            { 
+                status: 'Resolved',
+                resolvedAt: new Date().toISOString()
+            },
+            { new: true }
+        );
+        
+        if (alert) {
+            res.json(alert);
+        } else {
+            res.status(404).send('Alert not found');
+        }
+    } catch (e) {
+        console.error("Error resolving alert:", e);
+        res.status(500).send("Server Error");
     }
 });
 
 // Get Single Student
 router.get('/:id', async (req, res) => {
-    const students = await readData('students');
-    const student = students.find(s => s._id === req.params.id);
-    if (!student) return res.status(404).json({message: 'Not found'});
-    res.json(student);
+    try {
+        const student = await Student.findById(req.params.id);
+        if (!student) return res.status(404).json({message: 'Not found'});
+        res.json(student);
+    } catch (e) {
+        // If ID is invalid ObjectId, findById throws error
+        res.status(404).json({message: 'Not found'});
+    }
 });
 
 module.exports = router;
