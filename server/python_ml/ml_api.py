@@ -1,8 +1,18 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
+import joblib
+import pandas as pd
+import numpy as np
 
 app = FastAPI()
+
+# Load the trained model
+try:
+    model = joblib.load('risk_model.pkl')
+    print("ML Model loaded successfully")
+except:
+    print("Error loading ML Model. Ensure 'risk_model.pkl' exists.")
 
 class StudentData(BaseModel):
     attendancePercentage: float
@@ -13,52 +23,27 @@ class StudentData(BaseModel):
 
 @app.post("/predict-risk")
 def predict_risk(data: StudentData):
-    # ML Logic (Simple Weighted Rule-based for now, extendable to Scikit-Learn)
-    # Weights based on assumed importance
-    risk_score = 0
+    # Prepare Input for Model
+    input_df = pd.DataFrame([{
+        'attendance': data.attendancePercentage,
+        'cgpa': data.cgpa,
+        'fee_delay': data.feeDelayDays,
+        'participation': data.classParticipationScore,
+        'assignments': data.assignmentsCompleted
+    }])
     
-    # 1. Attendance (High Impact) - Weight 35%
-    # < 75% starts adding risk rapidly
-    if data.attendancePercentage < 50:
-        risk_score += 35
-    elif data.attendancePercentage < 75:
-        risk_score += 20
-    elif data.attendancePercentage < 85:
-        risk_score += 5
-        
-    # 2. CGPA (High Impact) - Weight 30%
-    # < 5.0 is critical
-    if data.cgpa < 4.0:
-        risk_score += 30
-    elif data.cgpa < 6.0:
-        risk_score += 20
-    elif data.cgpa < 7.5:
-        risk_score += 5
-        
-    # 3. Fee Delay (Medium Impact) - Weight 15%
-    if data.feeDelayDays > 60:
-        risk_score += 15
-    elif data.feeDelayDays > 30:
-        risk_score += 10
-    elif data.feeDelayDays > 7:
-        risk_score += 5
-        
-    # 4. Assignments (Low-Medium Impact) - Weight 10%
-    if data.assignmentsCompleted < 50:
-        risk_score += 10
-    elif data.assignmentsCompleted < 80:
-        risk_score += 5
-        
-    # 5. Class Participation (Low Impact) - Weight 10%
-    if data.classParticipationScore < 3:
-        risk_score += 10
-    elif data.classParticipationScore < 5:
-        risk_score += 5
-
-    # Cap score at 100
-    risk_score = min(100, risk_score)
+    # Predict using the loaded .pkl model
+    try:
+        prediction = model.predict(input_df)
+        risk_score = float(prediction[0])
+    except Exception as e:
+        print(f"Prediction Error: {e}")
+        risk_score = 0
     
-    # Determined Risk Level
+    # Cap score at 0-100
+    risk_score = max(0, min(100, risk_score))
+    
+    # Determine Level
     risk_level = "Low"
     if risk_score >= 70:
         risk_level = "High"
@@ -66,7 +51,7 @@ def predict_risk(data: StudentData):
         risk_level = "Medium"
 
     return {
-        "riskScore": risk_score,
+        "riskScore": round(risk_score),
         "riskLevel": risk_level
     }
 
