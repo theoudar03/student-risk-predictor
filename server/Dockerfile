@@ -2,9 +2,12 @@ FROM nikolaik/python-nodejs:python3.11-nodejs18
 
 WORKDIR /app
 
-# 1. Install Python Dependencies
+# 1. Install System Dependencies
+RUN apt-get update && apt-get install -y build-essential
+
+# 2. Install Python Dependencies
 COPY python_ml/requirements.txt ./python_ml/
-RUN pip install -r python_ml/requirements.txt
+RUN pip install --no-cache-dir -r python_ml/requirements.txt
 
 # 2. Install Node Dependencies
 COPY package*.json ./
