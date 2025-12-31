@@ -32,3 +32,8 @@ functions/data
 # Secrets
 serviceAccountKey.json
 **/serviceAccountKey.json
+
+# ML Data
+ml/*.json
+ml/*.csv
+server/python_ml/*.json
