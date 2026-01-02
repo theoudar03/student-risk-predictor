@@ -10,12 +10,9 @@ services:
       - key: PORT
         value: 10000
       - key: MONGO_URI
-        fromConnectionString: mongodb_connection_string
+        sync: false
       - key: ML_SERVICE_URL
-        fromService:
-          type: web
-          name: student-risk-ml-service
-          property: url
+        value: http://student-risk-ml-service:10000
 
   # 2. Python ML Microservice
   - type: web
