@@ -1,0 +1,29 @@
+services:
+  # 1. Node.js Backend Service
+  - type: web
+    name: student-risk-backend
+    env: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        fromConnectionString: mongodb_connection_string
+      - key: ML_SERVICE_URL
+        fromService:
+          type: web
+          name: student-risk-ml-service
+          property: url
+
+  # 2. Python ML Microservice
+  - type: web
+    name: student-risk-ml-service
+    env: python
+    plan: free
+    buildCommand: cd server/python_ml && pip install -r requirements.txt
+    startCommand: cd server/python_ml && uvicorn ml_api:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PORT
+        value: 10000
