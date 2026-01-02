@@ -136,6 +136,9 @@ router.post('/students', async (req, res) => {
         res.status(201).json(newStudent);
     } catch (e) {
         console.error(e);
+        if (e.message === 'ML_SERVICE_UNAVAILABLE') {
+            return res.status(503).json({ error: "Risk Analysis Service is offline. Cannot save student data without risk score." });
+        }
         res.status(500).json({ error: "Server Error" });
     }
 });
@@ -173,6 +176,9 @@ router.put('/students/:id', async (req, res) => {
         res.json(updatedStudent);
     } catch (e) {
         console.error("Update Student Error:", e);
+        if (e.message === 'ML_SERVICE_UNAVAILABLE') {
+            return res.status(503).json({ error: "Risk Analysis Service is offline. Cannot update student data." });
+        }
         res.status(500).json({ error: "Server Error" });
     }
 });

@@ -2,8 +2,9 @@ const axios = require('axios');
 
 const predictRisk = async (attendance, cgpa, feeDelay, participation, assignments = 80) => {
     // Call Python ML Service
+    const mlUrl = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8001';
     try {
-        const response = await axios.post('http://127.0.0.1:8000/predict-risk', {
+        const response = await axios.post(`${mlUrl}/predict-risk`, {
             attendancePercentage: attendance,
             cgpa: cgpa,
             feeDelayDays: feeDelay,
@@ -30,8 +31,8 @@ const predictRisk = async (attendance, cgpa, feeDelay, participation, assignment
         }
     } catch (error) {
         console.error("⚠️ Python ML Service unavailable:", error.message);
-        // Fallback to safe default if service is down, to prevent app crash
-        return { score: 0, level: 'Low', factors: ['ML Service Unavailable'] };
+        // Requirement: No fake/default scores. Fail gracefully by notifying caller.
+        throw new Error("ML_SERVICE_UNAVAILABLE");
     }
 };
 

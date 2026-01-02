@@ -24,8 +24,9 @@ WORKDIR /app
 # 5. Build/Prep (if needed)
 
 # Expose Node.js Port
-EXPOSE 5005
+# Expose Node.js Port
+EXPOSE 5000
 
 # 6. Start both services
 # We use a shell command to start uvicorn in background and then node
-CMD bash -c "cd python_ml && uvicorn ml_api:app --host 127.0.0.1 --port 8000 & npm start"
+CMD bash -c "cd python_ml && uvicorn ml_api:app --host 127.0.0.1 --port 8001 & npm start"

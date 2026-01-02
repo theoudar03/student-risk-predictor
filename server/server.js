@@ -1,59 +1,59 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
 const connectDB = require('./utils/db');
 
-const studentRoutes = require('./routes/students');
-const authRoutes = require('./routes/auth');
-
+// Initialize Express App
 const app = express();
-const PORT = process.env.PORT || 5005;
+
+// Connect to Database
+connectDB();
 
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:5173', 
-    'http://localhost:5174', 
-    'http://localhost:5175', 
-    'http://localhost:5176',
-    'https://stayontrack-edu.web.app',
-    'https://stayontrack-edu.firebaseapp.com'
-  ],
-  credentials: true
-}));
-app.use(express.json());
+app.use(cors());
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-// Routes
-app.use('/api/students', studentRoutes);
+// Import Routes
+const authRoutes = require('./routes/auth');
+const studentRoutes = require('./routes/students');
+const adminRoutes = require('./routes/admin');
+const messageRoutes = require('./routes/messages');
+const interventionRoutes = require('./routes/interventions');
+const exportRoutes = require('./routes/export');
+const portalRoutes = require('./routes/portal');
+const mlRoutes = require('./routes/ml');
+const attendanceRoutes = require('./routes/attendance');
+
+// Mount Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/portal', require('./routes/portal'));
-app.use('/api/interventions', require('./routes/interventions'));
-app.use('/api/logs', require('./services/logger').router);
-app.use('/api/messages', require('./routes/messages'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/export', require('./routes/export'));
-app.use('/api/student-risk', require('./routes/ml'));
+app.use('/api/students', studentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/interventions', interventionRoutes);
+app.use('/api/export', exportRoutes);
+app.use('/api/portal', portalRoutes);
+app.use('/api/ml', mlRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
+// Health Check Route
 app.get('/', (req, res) => {
-  res.send('Student Risk Predictor API is Running (MongoDB Mode)');
+    res.send('Student Risk Predictor API is running...');
+});
+
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ 
+        success: false, 
+        message: 'Internal Server Error',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
 });
 
 // Start Server
-connectDB().then(() => {
-  const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log('MongoDB Mode Active');
-  });
-
-  server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-      console.error(`\n❌ Error: Port ${PORT} is already in use.`);
-      console.error(`   Please stop the other server instance or change the PORT in .env\n`);
-      process.exit(1);
-    } else {
-      throw err;
-    }
-  });
-}).catch(err => {
-    console.error("Failed to connect to DB", err);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });

@@ -7,16 +7,38 @@ const Student = require('../models/Student');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_production';
 
+// 10. Router Definition
 router.post('/login', async (req, res) => {
+    console.time('LoginRequest'); // Performance monitoring
     try {
         const { username, password } = req.body;
 
-        // 1. Check for Admin or Mentor (User Collection)
-        // Check username or verify if mentorId is being used as username
-        const user = await User.findOne({
+        // Optimization: Execute queries in parallel to reduce latency
+        // 1. User Query (Admin/Mentor)
+        const userPromise = User.findOne({
             $or: [{ username: username }, { mentorId: username }]
         });
-        
+
+        // 2. Student Query
+        const studentPromise = Student.findOne({ studentId: username });
+
+        // 3. Parent Query (Conditional)
+        let parentStudentPromise = Promise.resolve(null);
+        if (username.startsWith('p_')) {
+            const targetStudentId = username.substring(2);
+            parentStudentPromise = Student.findOne({ studentId: targetStudentId });
+        }
+
+        // Await all DB operations simultaneously
+        const [user, student, targetStudent] = await Promise.all([
+            userPromise, 
+            studentPromise, 
+            parentStudentPromise
+        ]);
+
+        console.log(`Debug: UserFound: ${!!user}, StudentFound: ${!!student}, ParentTargetFound: ${!!targetStudent}`);
+
+        // --- Logic Block 1: Admin / Mentor ---
         if (user) {
              let isMatch = false;
 
@@ -25,20 +47,21 @@ router.post('/login', async (req, res) => {
                  isMatch = user.password === password;
              } 
              else if (user.role === 'mentor') {
-                 // Mentor Logic: Password equals Username (Legacy)
-                 // Or check real password if available
-                 isMatch = (user.mentorId === username || user.username === username) && (password === username);
+                 // Mentor Logic: Password equals Username (Legacy) or Password Check
+                 isMatch = (user.mentorId === username || user.username === username) && (password === username || user.password === password);
              }
              else if (user.role === 'student') {
-                 // Student Logic
+                 // Fallback if student is in generic User collection
                  isMatch = user.password === password;
              }
              else if (user.role === 'parent') {
-                 // Parent Logic
                  isMatch = user.password === password;
              }
              
-             if (!isMatch) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+             if (!isMatch) {
+                 console.timeEnd('LoginRequest');
+                 return res.status(401).json({ success: false, message: 'Invalid credentials' });
+             }
              
              // Construct Token Payload
              const payload = {
@@ -48,17 +71,13 @@ router.post('/login', async (req, res) => {
                  email: user.email
              };
 
-             // Add role-specific fields
-             if (user.role === 'student') {
-                 payload.studentId = user.username; // Assuming username matches studentId
-             } else if (user.role === 'parent') {
-                 payload.studentId = user.studentId;
-             } else if (user.role === 'mentor') {
-                 payload.mentorId = user.mentorId;
-             }
+             if (user.role === 'student') payload.studentId = user.username;
+             else if (user.role === 'parent') payload.studentId = user.studentId;
+             else if (user.role === 'mentor') payload.mentorId = user.mentorId;
 
              const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
              
+             console.timeEnd('LoginRequest');
              return res.json({ 
                  success: true, 
                  token, 
@@ -66,33 +85,37 @@ router.post('/login', async (req, res) => {
              });
         }
 
-        // 2. Student Login
-        const student = await Student.findOne({ studentId: username });
-        
+        // --- Logic Block 2: Student Login ---
         if (student) {
-            if (password !== username) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            if (password !== username) {
+                console.timeEnd('LoginRequest');
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
             
             const token = jwt.sign({ id: student._id, role: 'student', name: student.name, studentId: student.studentId }, JWT_SECRET, { expiresIn: '24h' });
+            console.timeEnd('LoginRequest');
             return res.json({ success: true, token, user: { id: student._id, name: student.name, role: 'student', studentId: student.studentId } });
         }
 
-        // 3. Parent Login
-        if (username.startsWith('p_')) {
-            const targetStudentId = username.substring(2);
-            const targetStudent = await Student.findOne({ studentId: targetStudentId });
-            
-            if (targetStudent) {
-                if (password !== username) return res.status(401).json({ success: false, message: 'Invalid credentials' });
-                
-                const token = jwt.sign({ id: 'p_' + targetStudent._id, role: 'parent', name: 'Parent of ' + targetStudent.name, studentId: targetStudent.studentId }, JWT_SECRET, { expiresIn: '24h' });
-                return res.json({ success: true, token, user: { id: 'p_' + targetStudent._id, name: 'Parent of ' + targetStudent.name, role: 'parent', studentId: targetStudent.studentId } });
+        // --- Logic Block 3: Parent Login ---
+        if (targetStudent) {
+            // Parent username is "p_STUDENTID", password matches username (legacy logic from original code)
+            if (password !== username) {
+                console.timeEnd('LoginRequest');
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
             }
+            
+            const token = jwt.sign({ id: 'p_' + targetStudent._id, role: 'parent', name: 'Parent of ' + targetStudent.name, studentId: targetStudent.studentId }, JWT_SECRET, { expiresIn: '24h' });
+            console.timeEnd('LoginRequest');
+            return res.json({ success: true, token, user: { id: 'p_' + targetStudent._id, name: 'Parent of ' + targetStudent.name, role: 'parent', studentId: targetStudent.studentId } });
         }
         
+        console.timeEnd('LoginRequest');
         return res.status(401).json({ success: false, message: 'Invalid credentials' });
         
     } catch (error) {
         console.error("Login Server Error:", error);
+        console.timeEnd('LoginRequest');
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });

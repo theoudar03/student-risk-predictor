@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { FaUserGraduate, FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
@@ -8,12 +8,26 @@ const Login = ({ onLogin }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isTakingLong, setIsTakingLong] = useState(false);
+
+    useEffect(() => {
+        let timer;
+        if (loading) {
+            timer = setTimeout(() => {
+                setIsTakingLong(true);
+            }, 2000);
+        } else {
+            setIsTakingLong(false);
+        }
+        return () => clearTimeout(timer);
+    }, [loading]);
 
     const handleChange = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setIsTakingLong(false);
         setError('');
 
         try {
@@ -95,6 +109,13 @@ const Login = ({ onLogin }) => {
                         <Button variant="primary" type="submit" className="w-100 py-3 fw-bold shadow-sm" disabled={loading}>
                             {loading ? 'Authenticating...' : 'Sign In'}
                         </Button>
+                        
+                        {isTakingLong && (
+                            <div className="text-center mt-3 small text-muted fade-in">
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Waking up secure server... this may take a moment.
+                            </div>
+                        )}
                     </Form>
                     
 

@@ -9,9 +9,21 @@ const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, highRisk: 0, mediumRisk: 0, lowRisk: 0, activeAlerts: 0 });
   const navigate = useNavigate();
 
+  const [graphData, setGraphData] = useState([]);
+
   useEffect(() => {
     fetchStats();
+    fetchGraphData();
   }, []);
+
+  const fetchGraphData = async () => {
+    try {
+        const res = await axios.get('/api/attendance/stats/weekly');
+        setGraphData(res.data);
+    } catch (e) {
+        console.error("Graph fetch error", e);
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -29,14 +41,7 @@ const Dashboard = () => {
     { name: 'High Risk', value: stats.highRisk, color: '#F72585' },
   ];
 
-  const trendData = [
-    { name: 'Jan', avgRisk: 20 },
-    { name: 'Feb', avgRisk: 22 },
-    { name: 'Mar', avgRisk: 18 },
-    { name: 'Apr', avgRisk: 25 },
-    { name: 'May', avgRisk: 30 },
-    { name: 'Jun', avgRisk: 28 },
-  ];
+
 
   const StatCard = ({ title, value, icon, color, bg, onClick }) => (
     <div className="glass-card mb-4" onClick={onClick} style={{cursor: onClick ? 'pointer' : 'default'}}>
@@ -93,10 +98,10 @@ const Dashboard = () => {
       <Row className="mt-2">
         <Col md={7}>
           <div className="glass-card h-100">
-            <h5 className="mb-4 fw-bold">Risk Trend Analysis</h5>
+            <h5 className="mb-4 fw-bold">Avg Attendance Trend - {new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</h5>
             <div style={{ height: 300 }}>
               <ResponsiveContainer>
-                <AreaChart data={trendData}>
+                <AreaChart data={graphData}>
                   <defs>
                     <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#4361EE" stopOpacity={0.3}/>
@@ -105,9 +110,9 @@ const Dashboard = () => {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                  <YAxis axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} domain={[0, 100]} />
                   <Tooltip contentStyle={{borderRadius: 10, border: 'none', boxShadow: '0 5px 15px rgba(0,0,0,0.1)'}} />
-                  <Area type="monotone" dataKey="avgRisk" stroke="#4361EE" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
+                  <Area type="monotone" dataKey="Attendance" stroke="#4361EE" strokeWidth={3} fillOpacity={1} fill="url(#colorRisk)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

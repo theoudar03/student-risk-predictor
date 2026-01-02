@@ -6,8 +6,9 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     try {
         // Forward the entire body to the Python Microservice
+        const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8001';
         const response = await axios.post(
-            "http://127.0.0.1:8000/predict-risk",
+            `${mlServiceUrl}/predict-risk`,
             req.body
         );
 

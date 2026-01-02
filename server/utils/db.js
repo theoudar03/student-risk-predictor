@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
+        // Check if we already have a connection
+        if (mongoose.connection.readyState === 1) {
+            console.log("✅ Using existing MongoDB connection");
+            return;
+        }
+
         console.log("Attempting to connect to MongoDB...");
         const uri = process.env.MONGO_URI;
         
@@ -13,8 +19,15 @@ const connectDB = async () => {
             console.error("   Please add MONGO_URI to your Render Environment Variables.");
         }
 
-        const conn = await mongoose.connect(uri || 'mongodb://127.0.0.1:27017/student-risk-predictor', {
-            // Options
+        // Use Env Var or Fallback (only for local dev)
+        const dbUri = uri || 'mongodb://127.0.0.1:27017/student-risk-predictor';
+        
+        const conn = await mongoose.connect(dbUri, {
+            // Optimization: Connection Pooling
+            maxPoolSize: 10,      // Maintain up to 10 socket connections
+            minPoolSize: 1,       // Keep at least 1 socket open
+            serverSelectionTimeoutMS: 5000, // Timeout faster if DB is unreachable
+            socketTimeoutMS: 45000, // Close sockets after inactivity
         });
         console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
