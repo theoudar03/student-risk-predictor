@@ -52,7 +52,7 @@ const Login = ({ onLogin }) => {
     return (
         <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #4361EE 0%, #3046B1 100%)' }}>
             <Container style={{ maxWidth: 450 }}>
-                <div className="glass-card border-0 shadow-lg p-5">
+                <div className="glass-card border-0 shadow-lg p-4 p-md-5">
                     <div className="text-center mb-5">
                         <div className="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-primary shadow-sm" style={{ width: 80, height: 80, fontSize: 32 }}>
                             <FaUserGraduate />

@@ -36,8 +36,8 @@ const StudentProfile = () => {
         <FaArrowLeft className="me-2" /> Back to Registry
       </Link>
 
-      <Row>
-        <Col md={4}>
+      <Row className="g-4">
+        <Col xs={12} md={4}>
           <div className="glass-card text-center mb-4">
             <div className="bg-gradient-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-lg" 
                  style={{ width: 100, height: 100, fontSize: 36, background: '#4361EE', color: 'white' }}>
@@ -75,9 +75,9 @@ const StudentProfile = () => {
           </div>
         </Col>
 
-        <Col md={8}>
+        <Col xs={12} md={8}>
           <div className="glass-card mb-4 border-start border-5" style={{borderColor: student.riskScore > 70 ? '#D00000' : '#4BA258'}}>
-             <div className="d-flex justify-content-between align-items-center mb-4">
+             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
                 <h4 className="fw-bold m-0"><FaRobot className="text-primary me-2" /> AI Risk Analysis Model</h4>
                 <div className="text-end">
                     <small className="text-muted d-block">Confidence Score</small>
@@ -85,8 +85,8 @@ const StudentProfile = () => {
                 </div>
              </div>
              
-             <Row className="align-items-center">
-                 <Col md={7}>
+             <Row className="align-items-center g-4">
+                 <Col xs={12} md={7}>
                     <p className="text-muted mb-4 opacity-75">
                         Our hybrid regression model has analyzed academic, behavioral, and financial data points to determine dropout likelihood.
                     </p>
@@ -118,7 +118,7 @@ const StudentProfile = () => {
                         </div>
                     )}
                  </Col>
-                 <Col md={5}>
+                 <Col xs={12} md={5}>
                      <div style={{ height: 250, width: '100%' }}>
                         <ResponsiveContainer>
                             <RadarChart data={radarData}>
@@ -134,20 +134,20 @@ const StudentProfile = () => {
              </Row>
           </div>
 
-          <Row>
-             <Col md={4}>
+          <Row className="g-3">
+             <Col xs={12} md={4}>
                  <div className="glass-card text-center py-4">
                      <div className="text-muted small text-uppercase mb-2">Attendance</div>
                      <h2 className={student.attendancePercentage < 75 ? "text-danger" : "text-success"}>{student.attendancePercentage}%</h2>
                  </div>
              </Col>
-             <Col md={4}>
+             <Col xs={12} md={4}>
                  <div className="glass-card text-center py-4">
                      <div className="text-muted small text-uppercase mb-2">CGPA</div>
                      <h2 className={student.cgpa < 6.0 ? "text-danger" : "text-primary"}>{student.cgpa}</h2>
                  </div>
              </Col>
-               <Col md={4}>
+               <Col xs={12} md={4}>
                  <div className="glass-card text-center py-4">
                      <div className="text-muted small text-uppercase mb-2">Engagement</div>
                      <h2 className={student.classParticipationScore < 5 ? "text-warning" : "text-dark"}>{student.classParticipationScore}/10</h2>

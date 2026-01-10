@@ -64,20 +64,20 @@ const Students = () => {
 
     return (
         <div style={{opacity: 1}}>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold fs-3">My Students</h2>
+            <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <h2 className="fw-bold fs-3 mb-0">My Students</h2>
                 <div className="d-flex gap-2">
-                    <Button variant="outline-dark" onClick={exportCSV} disabled={students.length === 0}><FaDownload className="me-2" /> Export Report</Button>
+                    <Button variant="outline-dark" onClick={exportCSV} disabled={students.length === 0} size="sm"><FaDownload className="me-2" /> Export Report</Button>
                 </div>
             </div>
 
             <div className="glass-card mb-4" style={{padding: 15}}>
-                <div className="d-flex gap-3">
-                    <InputGroup style={{ maxWidth: 350 }}>
+                <div className="d-flex flex-wrap gap-3">
+                    <InputGroup style={{ width: '100%', maxWidth: 350, flex: '1 1 250px' }}>
                         <InputGroup.Text className="bg-white border-end-0"><FaSearch className="text-secondary" /></InputGroup.Text>
                         <Form.Control type="text" placeholder="Search by name..." className="border-start-0 ps-0 shadow-none" value={search} onChange={(e) => setSearch(e.target.value)} />
                     </InputGroup>
-                    <Form.Select style={{width: 150}} value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)}>
+                    <Form.Select style={{width: '100%', maxWidth: 200, flex: '1 1 150px'}} value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)}>
                         <option value="All">All Risks</option>
                         <option value="High">High Risk</option>
                         <option value="Medium">Medium Risk</option>
@@ -87,10 +87,10 @@ const Students = () => {
             </div>
 
             <div className="glass-card p-0 overflow-hidden">
-                <Table hover responsive className="mb-0">
+                <Table hover responsive className="mb-0 text-nowrap" style={{ minWidth: 800 }}>
                     <thead style={{background: '#f8f9fa'}}>
                         <tr>
-                            <th className="ps-4">Student</th>
+                            <th className="ps-4 sticky-col">Student</th>
                             <th>Course</th>
                             <th>Contact</th>
                             <th>Performance</th>
@@ -106,7 +106,7 @@ const Students = () => {
                             </tr>
                         ) : filtered.map(s => (
                             <tr key={s._id}>
-                                <td className="ps-4">
+                                <td className="ps-4 sticky-col">
                                     <div className="fw-bold text-dark">{s.name}</div>
                                     <small className="text-muted">{s.studentId}</small>
                                 </td>

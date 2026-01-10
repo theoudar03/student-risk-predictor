@@ -139,6 +139,7 @@ h1, h2, h3, h4, h5, h6 {
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px; /* For horizontal scrollbar */
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
@@ -146,4 +147,59 @@ h1, h2, h3, h4, h5, h6 {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 16px;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h5 {
+    font-size: 1.1rem !important;
+  }
+  
+  .table td, .table th {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile Table Scrolling & Sticky Columns */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: inherit; /* Should inherit from tr/th */
+}
+
+/* Ensure background opacity for sticky effect covering scrolling content */
+.glass-card .table thead th.sticky-col {
+  background-color: #f8f9fa; /* Match header bg */
+  z-index: 11; /* Higher than body sticky cols */
+}
+
+.glass-card .table tbody td.sticky-col {
+  background-color: rgba(255, 255, 255, 0.95); /* Fallback or match row */
+  backdrop-filter: blur(5px);
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Fix hover effect on sticky cells */
+.table-hover tbody tr:hover td.sticky-col {
+  background-color: #ececec; /* Match bootstrap table-hover color approx */
 }

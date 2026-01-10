@@ -149,21 +149,21 @@ const Attendance = () => {
 
     return (
         <div className="fade-in">
-             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold fs-3">Attendance Registry</h2>
-                <div className="d-flex gap-3 align-items-center">
+             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <h2 className="fw-bold fs-3 mb-0">Attendance Registry</h2>
+                <div className="d-flex flex-wrap gap-2 align-items-center">
                     <Form.Control 
                         type="date" 
                         value={currentDate} 
                         min="2026-01-01"
                         onChange={(e) => setCurrentDate(e.target.value)} 
-                        style={{width: 160}} 
+                        style={{width: 'auto', minWidth: 140}} 
                     />
-                    <Button variant="outline-success" onClick={downloadAttendance} disabled={!isFrozen && !noRecords}>
+                    <Button variant="outline-success" onClick={downloadAttendance} disabled={!isFrozen && !noRecords} size="sm">
                         <FaDownload className="me-2" /> Export
                     </Button>
                     {!isFrozen && !noRecords && (
-                        <Button variant="primary" onClick={saveAttendance}>
+                        <Button variant="primary" onClick={saveAttendance} size="sm">
                             <FaSave className="me-2" /> Save Records
                         </Button>
                     )}
@@ -183,11 +183,11 @@ const Attendance = () => {
             ) : (
                 <>
                 <div className="glass-card mb-4">
-                     <div className="d-flex justify-content-between align-items-center mb-3">
+                     <div className="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
                         <h6 className="fw-bold m-0 text-uppercase text-muted">
                             {isFrozen ? <><FaLock className="me-2"/> Finalized Record</> : "Marking Attendance"} : {new Date(currentDate).toLocaleDateString()}
                         </h6>
-                        <div style={{width: 300}}>
+                        <div style={{width: '100%', maxWidth: 300}}>
                             <Form.Control placeholder="Search student..." value={search} onChange={(e) => setSearch(e.target.value)} />
                         </div>
                      </div>
@@ -231,20 +231,20 @@ const Attendance = () => {
                      </div>
                 </div>
                 
-                <Row>
-                    <Col md={4}>
+                <Row className="g-3">
+                    <Col xs={12} md={4}>
                         <div className="glass-card text-center">
                             <h6 className="text-muted mb-2">Total Present</h6>
                             <h3 className="text-success fw-bold">{stats.present}</h3>
                         </div>
                     </Col>
-                     <Col md={4}>
+                     <Col xs={12} md={4}>
                         <div className="glass-card text-center">
                             <h6 className="text-muted mb-2">Total Absent</h6>
                             <h3 className="text-danger fw-bold">{stats.absent}</h3>
                         </div>
                     </Col>
-                     <Col md={4}>
+                     <Col xs={12} md={4}>
                         <div className="glass-card text-center">
                             <h6 className="text-muted mb-2">Daily Rate</h6>
                             <h3 className="text-primary fw-bold">
