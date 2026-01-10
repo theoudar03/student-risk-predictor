@@ -86,19 +86,20 @@ const Students = () => {
                 </div>
             </div>
 
-            <div className="glass-card p-0 overflow-hidden">
-                <Table hover responsive className="mb-0 text-nowrap" style={{ minWidth: 800 }}>
-                    <thead style={{background: '#f8f9fa'}}>
-                        <tr>
-                            <th className="ps-4 sticky-col">Student</th>
-                            <th>Course</th>
-                            <th>Contact</th>
-                            <th>Performance</th>
-                            <th>Risk Analysis</th>
-                            <th>Status</th>
-                            <th>Profile</th>
-                        </tr>
-                    </thead>
+            <div className="glass-card p-0" style={{ overflow: 'hidden' }}>
+                <div className="table-responsive" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <Table hover className="mb-0 text-nowrap" style={{ minWidth: 1000 }}>
+                        <thead style={{background: '#f8f9fa'}}>
+                            <tr>
+                                <th className="ps-4 sticky-col" style={{ minWidth: 200 }}>Student</th>
+                                <th>Course</th>
+                                <th>Contact</th>
+                                <th>Performance</th>
+                                <th>Risk Analysis</th>
+                                <th>Status</th>
+                                <th className="pe-4">Profile</th>
+                            </tr>
+                        </thead>
                     <tbody>
                         {filtered.length === 0 ? (
                             <tr>
@@ -134,6 +135,7 @@ const Students = () => {
                         ))}
                     </tbody>
                 </Table>
+                </div>
             </div>
         </div>
     );
