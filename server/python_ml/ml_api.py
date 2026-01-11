@@ -78,7 +78,7 @@ def predict_risk(data: StudentData):
     risk_level = "Low"
     if risk_score > 50:
         risk_level = "High"
-    elif risk_score > 20: 
+    elif risk_score > 25: 
         risk_level = "Medium"
 
     return {
