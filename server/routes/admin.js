@@ -59,35 +59,36 @@ router.post('/risk-recalc', async (req, res) => {
         let successCount = 0;
         let failCount = 0;
 
-        for (const student of students) {
-            try {
-                // Call Python ML Service for each student
-                const analysis = await predictRisk(
-                    Number(student.attendancePercentage || 0),
-                    Number(student.cgpa || 0),
-                    Number(student.feeDelayDays || 0),
-                    Number(student.classParticipationScore || 0),
-                    Number(student.assignmentsCompleted || 85)
-                );
-
-                // Prepare Bulk Update Operation
-                bulkOps.push({
-                    updateOne: {
-                        filter: { _id: student._id },
-                        update: {
-                            $set: {
-                                riskScore: analysis.score,
-                                riskLevel: analysis.level,
-                                riskFactors: analysis.factors
-                            }
+        // Process in batches to avoid timeouts but respect concurrency
+        const BATCH_SIZE = 5;
+        const processBatch = async (batch) => {
+             return Promise.all(batch.map(async (student) => {
+                try {
+                    const analysis = await predictRisk(
+                        Number(student.attendancePercentage || 0),
+                        Number(student.cgpa || 0),
+                        Number(student.feeDelayDays || 0),
+                        Number(student.classParticipationScore || 0),
+                        Number(student.assignmentsCompleted || 85)
+                    );
+                    
+                    bulkOps.push({
+                        updateOne: {
+                            filter: { _id: student._id },
+                            update: { $set: { riskScore: analysis.score, riskLevel: analysis.level, riskFactors: analysis.factors } }
                         }
-                    }
-                });
-                successCount++;
-            } catch (mlError) {
-                console.error(`ML Failed for ${student.name}:`, mlError.message);
-                failCount++;
-            }
+                    });
+                    successCount++;
+                } catch (mlError) {
+                    console.error(`ML Failed for Student ${student.studentId}:`, mlError.message);
+                    failCount++;
+                }
+             }));
+        };
+
+        for (let i = 0; i < students.length; i += BATCH_SIZE) {
+            const batch = students.slice(i, i + BATCH_SIZE);
+            await processBatch(batch);
         }
 
         if (bulkOps.length > 0) {
