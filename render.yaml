@@ -11,8 +11,13 @@ services:
         value: 10000
       - key: MONGO_URI
         sync: false
+      - key: NODE_ENV
+        value: production
       - key: ML_SERVICE_URL
-        value: http://student-risk-ml-service:10000
+        fromService:
+          type: web
+          name: student-risk-ml-service
+          property: url
 
   # 2. Python ML Microservice
   - type: web
