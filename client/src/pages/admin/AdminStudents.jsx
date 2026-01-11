@@ -94,7 +94,14 @@ const AdminStudents = () => {
     const courseMentors = mentors.filter(m => m.department === formData.course);
     
     // Filter & Sort Logic
-    const filtered = students.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
+    const filtered = students.filter(s => {
+        const term = search.toLowerCase();
+        return (
+            (s.name || "").toLowerCase().includes(term) ||
+            (s.studentId || "").toLowerCase().includes(term) ||
+            (s.course || "").toLowerCase().includes(term)
+        );
+    });
     
     const sorted = [...filtered].sort((a, b) => {
         if (sortType === 'name') return a.name.localeCompare(b.name);

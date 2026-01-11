@@ -38,22 +38,24 @@ const TopBar = ({ user, onToggleSidebar }) => {
 
     const fetchAlerts = async () => {
         try {
-            const res = await axios.get('/api/students/data/alerts');
+            // ✅ Fix: Fetch ONLY Active alerts from DB source
+            const res = await axios.get('/api/students/data/alerts?status=Active');
             if (Array.isArray(res.data)) {
-                // ... same logic
+                // Double check status client-side just in case
                 const active = res.data.filter(a => a.status === 'Active');
+                console.log("Bell Alerts Rendered:", active); // 🔍 Mandatory Debug Log
                 setAlerts(active);
-                setUnreadCount(active.length + (attendanceReminder ? 1 : 0));
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-    // Update unread count when reminder status changes
+    // Unified Unread Count Logic
     useEffect(() => {
-        setUnreadCount(prev => attendanceReminder ? prev + 1 : prev); // Simplified, real logic below
-    }, [attendanceReminder]);
+        const count = alerts.length + (attendanceReminder ? 1 : 0);
+        setUnreadCount(count);
+    }, [alerts, attendanceReminder]);
 
     return (
         <div className="d-flex justify-content-between align-items-center mb-4 pb-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>

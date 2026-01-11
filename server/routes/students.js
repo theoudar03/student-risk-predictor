@@ -96,7 +96,15 @@ router.get('/data/alerts', async (req, res) => {
             }
         }
 
+        if (req.query.status) {
+            alertFilter.status = req.query.status;
+        }
+
         const alerts = await Alert.find(alertFilter).sort({ date: -1 });
+        
+        // 🔍 Mandatory Debug Log
+        console.log(`[Alerts] Fetching for ${req.user.email} | Filter: ${JSON.stringify(alertFilter)} | Found: ${alerts.length}`);
+        
         res.json(alerts);
     } catch (e) {
         console.error("Error fetching alerts:", e);
