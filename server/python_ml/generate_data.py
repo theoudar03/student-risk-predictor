@@ -3,46 +3,54 @@ import pandas as pd
 
 np.random.seed(42)
 
-def calculate_risk_strict(att, cgpa, fee, part, assign):
-    """
-    Strict Academic Risk Formula (Mathematical, No Branching)
-    Uses non-linear transformations to enforce penalties naturally.
-    """
-    # 1. Base Linear Risk (0-100 scale components)
-    # Weights: Att(0.35), CGPA(0.20), Fee(0.15), Part(0.15), Assign(0.15)
-    linear_risk = (
-        (100 - att) * 0.35 +
-        (10 - cgpa) * 10 * 0.20 +
-        (fee / 60) * 100 * 0.15 +  # Normalize fee delay (e.g. 60 days = 100%)
-        (10 - part) * 10 * 0.15 +
-        (100 - assign) * 0.15
+def strict_risk_score(att, cgpa, fee, assign, engage):
+    # Attendance (absolute)
+    att_linear = (100 - att) * 0.50
+    att_exp = 45 * np.exp(-0.05 * att)
+
+    # CGPA (attendance-amplified)
+    cgpa_base = (10 - cgpa) * 10 * 0.20
+    cgpa_effective = cgpa_base * (1 + (100 - att) / 100)
+
+    # Fee delay (independent)
+    fee_risk = min(fee / 90, 1.0) * 15
+
+    # Assignments (limited buffer)
+    assign_risk = (100 - assign) * 0.10
+
+    # Engagement (weak signal)
+    engage_risk = (10 - engage) * 0.5
+
+    # Total risk
+    risk = (
+        att_linear +
+        att_exp +
+        cgpa_effective +
+        fee_risk +
+        assign_risk +
+        engage_risk
     )
-    
-    # 2. Strict Exponential Penalty for Attendance
-    # This mathematically mimics the "If Att < X then Penalty" rule without using 'if'
-    # As attendance drops below 60, this term explodes, creating a soft-barrier.
-    att_penalty = 30 * np.exp(-0.08 * att)  # ~30pts at 0% att, ~0.2pts at 100% att
-    
-    # 3. Combine
-    risk = linear_risk + att_penalty
-    
-    # 4. Add realistic noise
+
+    # small realism noise
     risk += np.random.normal(0, 2)
-    
+
     return np.clip(risk, 0, 100)
 
 records = []
 
-# Generate densely populated training data
-for _ in range(2000):
+for _ in range(2500):  # 2500 samples
     attendance = np.random.randint(0, 101)
     cgpa = round(np.random.uniform(0, 10), 2)
-    fee_delay = np.random.randint(0, 90) # Cap realistic delay for training
-    participation = round(np.random.uniform(0, 10), 1)
+    fee_delay = np.random.randint(0, 121)
     assignments = np.random.randint(0, 101)
+    participation = round(np.random.uniform(0, 10), 1)
 
-    risk_score = calculate_risk_strict(
-        attendance, cgpa, fee_delay, participation, assignments
+    risk = strict_risk_score(
+        attendance,
+        cgpa,
+        fee_delay,
+        assignments,
+        participation
     )
 
     records.append([
@@ -51,13 +59,21 @@ for _ in range(2000):
         fee_delay,
         participation,
         assignments,
-        round(risk_score, 2)
+        round(risk, 2)
     ])
 
-columns = ["attendance", "cgpa", "fee_delay", "participation", "assignments", "risk_score"]
+columns = [
+    "attendance",
+    "cgpa",
+    "fee_delay",
+    "participation",
+    "assignments",
+    "risk_score"
+]
+
 df = pd.DataFrame(records, columns=columns)
 
 df.to_csv("synthetic_student_risk_data.csv", index=False)
 
-print("Success: Generated 2000 strict academic samples.")
+print("Success: Generated 2500 strict academic samples.")
 print(df.head())
