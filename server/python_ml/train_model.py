@@ -20,8 +20,19 @@ y = df['risk_score']
 model = RandomForestRegressor(n_estimators=300, max_depth=12, random_state=42)
 model.fit(X, y)
 
-# 3. Save Model
-joblib.dump(model, 'risk_model.pkl')
+# 3. Save Model with Metadata
+model_data = {
+    'model': model,
+    'metadata': {
+        'version': 'v2.1-StrictMath',
+        'training_date': str(pd.Timestamp.now()),
+        'samples': len(df),
+        'author': 'System_Auto_Train'
+    }
+}
 
-print("Model trained and saved as 'risk_model.pkl'")
+joblib.dump(model_data, 'risk_model.pkl')
+
+print("Model trained and saved as 'risk_model.pkl' with metadata:")
+print(model_data['metadata'])
 print("   Feature Importances:", model.feature_importances_)

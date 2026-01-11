@@ -8,12 +8,34 @@ import os
 
 app = FastAPI()
 
+# Global variables
+model = None
+model_metadata = {"version": "unknown", "type": "legacy"}
+
 # Load the trained model
 try:
-    model = joblib.load('risk_model.pkl')
-    print("ML Model loaded successfully")
-except:
-    print("Error loading ML Model. Ensure 'risk_model.pkl' exists.")
+    loaded_data = joblib.load('risk_model.pkl')
+    
+    if isinstance(loaded_data, dict) and 'model' in loaded_data:
+        # New Format with Metadata
+        model = loaded_data['model']
+        model_metadata = loaded_data.get('metadata', {})
+        print(f"[SUCCESS] ML Model Loaded: {model_metadata.get('version')} (Trained: {model_metadata.get('training_date')})")
+    else:
+        # Legacy Format (Raw Model)
+        model = loaded_data
+        print("[WARNING] Legacy ML Model loaded (No metadata)")
+        
+except Exception as e:
+    print(f"[ERROR] Error loading ML Model: {e}")
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "active", 
+        "model_version": model_metadata.get('version'), 
+        "model_type": "RandomForestRegressor"
+    }
 
 class StudentData(BaseModel):
     attendancePercentage: float
