@@ -1,10 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button, ProgressBar } from 'react-bootstrap';
 import { FaUserGraduate, FaChalkboardTeacher, FaExclamationTriangle, FaChartLine } from 'react-icons/fa';
 import axios from 'axios';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
+    const [isCalculating, setIsCalculating] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [recalcResult, setRecalcResult] = useState(null);
+
+    const handleRecalculate = async () => {
+        if(!window.confirm("Recalculate risk for ALL students? This operation updates the entire database.")) return;
+        
+        setIsCalculating(true);
+        setRecalcResult(null);
+        setProgress(0);
+
+        // Simulate progress while waiting
+        const interval = setInterval(() => {
+            setProgress(prev => Math.min(prev + 5, 90));
+        }, 300);
+
+        try {
+            const res = await axios.post('/api/admin/risk-recalc');
+            clearInterval(interval);
+            setProgress(100);
+            setRecalcResult({ success: true, message: res.data.message });
+            
+            // Refresh after brief delay
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } catch(e) {
+            clearInterval(interval);
+            setProgress(0);
+            setIsCalculating(false);
+            setRecalcResult({ 
+                success: false, 
+                message: "Recalculation failed: " + (e.response?.data?.error || e.message) 
+            });
+        }
+    };
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -69,25 +105,35 @@ const AdminDashboard = () => {
                     Ensure all data privacy regulations are followed when handling student information.
                 </p>
                 <div className="mb-3">
-                     <Button 
-                        variant="danger" 
-                        size="sm"
-                        onClick={async () => {
-                            if(!window.confirm("Recalculate risk for ALL students? This operation updates the entire database.")) return;
-                            try {
-                                const res = await axios.post('/api/admin/risk-recalc');
-                                alert(res.data.message);
-                                window.location.reload(); 
-                            } catch(e) {
-                                alert("Recalculation failed: " + (e.response?.data?.error || e.message));
-                            }
-                        }}
-                    >
-                        ⚡ Recalculate AI Models
-                    </Button>
+                    {!isCalculating ? (
+                        <Button 
+                           variant="danger" 
+                           size="sm"
+                           onClick={handleRecalculate}
+                           disabled={isCalculating}
+                       >
+                           ⚡ Recalculate Risk Scores
+                       </Button>
+                    ) : (
+                        <div className="mt-3">
+                            <div className="d-flex justify-content-between mb-1">
+                                <span className="small fw-bold text-primary">Recalculating AI Models...</span>
+                                <span className="small fw-bold">{progress}%</span>
+                            </div>
+                            <ProgressBar animated now={progress} variant="danger" className="mb-2" style={{height: '10px'}} />
+                            <p className="small text-muted mb-0">Processing student behavioral data and updating risk profiles...</p>
+                        </div>
+                    )}
+                    
+                    {recalcResult && (
+                        <div className={`mt-3 alert alert-${recalcResult.success ? 'success' : 'danger'} py-2 small`}>
+                            <strong>{recalcResult.success ? 'Success!' : 'Error:'}</strong> {recalcResult.message}
+                            {recalcResult.success && <div className="mt-1">Page will refresh in 3 seconds...</div>}
+                        </div>
+                    )}
                 </div>
                 <hr />
-                <p className="mb-0 small">System Status: Operational | v1.2.0</p>
+                <p className="mb-0 small">System Status: Operational | 2026</p>
             </div>
         </div>
     );
