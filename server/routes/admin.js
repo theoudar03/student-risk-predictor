@@ -80,13 +80,17 @@ router.post('/risk-recalc', async (req, res) => {
                     );
                     
                     // Direct update to ensure atomicity and avoid bulkWrite silent failures
-                    await Student.findByIdAndUpdate(student._id, {
+                    const updatedStudent = await Student.findByIdAndUpdate(student._id, {
                         $set: {
                             riskScore: analysis.score,
                             riskLevel: analysis.level,
                             riskFactors: analysis.factors
                         }
-                    });
+                    }, { new: true }); // Return the updated document
+
+                    // 🔔 Trigger Alert Sync
+                    const { syncStudentAlert } = require('../utils/alertService');
+                    await syncStudentAlert(updatedStudent);
 
                     console.log(`[Recalc] Updated ${student.name}: ${student.riskScore} -> ${analysis.score}`);
                     successCount++;
@@ -167,7 +171,12 @@ router.post('/students', async (req, res) => {
             riskFactors: analysis.factors,
         });
         
+        
         await newStudent.save();
+
+        // 🔔 Centralized Alert Sync (Replaces manual creation)
+        const { syncStudentAlert } = require('../utils/alertService');
+        await syncStudentAlert(newStudent);
 
         // 1. Create Student User Account
         await User.create({
@@ -189,17 +198,7 @@ router.post('/students', async (req, res) => {
             studentId: newId
         });
         
-        // Auto-Generate Alert if High Risk
-        if (analysis.level === 'High') {
-            await Alert.create({
-                studentId: newStudent._id,
-                studentName: newStudent.name,
-                severity: 'High',
-                message: `High dropout risk detected (${analysis.score}/100). Factors: ${analysis.factors.join(', ')}`,
-                status: 'Active',
-                date: new Date().toISOString()
-            });
-        }
+
 
         res.status(201).json(newStudent);
     } catch (e) {
@@ -239,6 +238,10 @@ router.put('/students/:id', async (req, res) => {
             riskLevel: analysis.level,
             riskFactors: analysis.factors
         }, { new: true });
+        
+        // 🔔 Trigger Alert Sync
+        const { syncStudentAlert } = require('../utils/alertService');
+        await syncStudentAlert(updatedStudent);
 
         if (!updatedStudent) return res.status(404).json({ error: "Student not found" });
         
