@@ -20,8 +20,9 @@ const StudentSchema = new mongoose.Schema({
   // Risk Metrics (Output of ML)
   riskScore: { type: Number, default: null }, // 0-100
   riskLevel: { type: String, enum: ['Low', 'Medium', 'High', 'Pending', null], default: null },
-  riskStatus: { type: String, enum: ['PENDING', 'CALCULATED', 'FAILED'], default: 'PENDING' },
+  riskStatus: { type: String, enum: ['PENDING', 'PROCESSING', 'CALCULATED', 'FAILED'], default: 'PENDING' },
   riskModel: { type: String, default: null },
+  riskUpdatedAt: { type: Date },
   riskFactors: [{ type: String }], // Explanations
   
 }, { timestamps: true });

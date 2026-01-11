@@ -2,8 +2,11 @@ const Student = require('../models/Student');
 const { predictRisk } = require('./mlService');
 const { syncStudentAlert } = require('./alertService');
 
+const ML_TIMEOUT_MS = 5000; // Hard SLA: 5 Seconds
+
 const calculateRisk = async (studentId) => {
-    console.log(`[RiskEngine] Starting calculation for Student ID: ${studentId}`);
+    const startTime = Date.now();
+    console.log(`[RiskEngine] 🕒 Starting calculation for Student ID: ${studentId}`);
     
     try {
         const student = await Student.findById(studentId);
@@ -12,16 +15,19 @@ const calculateRisk = async (studentId) => {
             return;
         }
 
-        // 1. Prepare Data for ML
-        // Use nullish coalescing to ensure we send numbers
+        // 1. Mark as PROCESSING immediately
+        student.riskStatus = 'PROCESSING';
+        await student.save();
+
+        // 2. Prepare Data for ML
         const att = student.attendancePercentage ?? 0;
         const cgpa = student.cgpa ?? 0;
         const fee = student.feeDelayDays ?? 0;
         const part = student.classParticipationScore ?? 0;
         const assign = student.assignmentsCompleted ?? 85;
 
-        // 2. Call ML Service
-        const analysis = await predictRisk(
+        // 3. Call ML Service with explicit TIMEOUT
+        const mlPromise = predictRisk(
             Number(att),
             Number(cgpa),
             Number(fee),
@@ -29,29 +35,42 @@ const calculateRisk = async (studentId) => {
             Number(assign)
         );
 
-        // 3. Update Student Record
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("ML_TIMEOUT_EXCEEDED")), ML_TIMEOUT_MS)
+        );
+
+        // RACE: ML vs Time
+        const analysis = await Promise.race([mlPromise, timeoutPromise]);
+
+        // 4. Update Student Record (Success)
+        const duration = (Date.now() - startTime) / 1000;
+        
         student.riskScore = analysis.score;
         student.riskLevel = analysis.level;
         student.riskFactors = analysis.factors;
         student.riskStatus = 'CALCULATED';
         student.riskModel = 'extreme_dropout_v4';
+        student.riskUpdatedAt = new Date();
         
         await student.save();
-        console.log(`[RiskEngine] Risk calculated for ${student.name}: ${analysis.score} (${analysis.level})`);
+        console.log(`[RiskEngine] ✅ Success in ${duration}s | Score: ${analysis.score}`);
 
-        // 4. Trigger Alerts (Only after successful calculation)
+        // 5. Trigger Alerts
         await syncStudentAlert(student);
 
     } catch (error) {
-        console.error(`[RiskEngine] Failed for Student ${studentId}:`, error.message);
+        const duration = (Date.now() - startTime) / 1000;
+        console.error(`[RiskEngine] ❌ Failed after ${duration}s:`, error.message);
         
-        // Update status to keep it PENDING or mark as FAILED?
-        // User says: "If ML service is unavailable: Keep riskStatus = PENDING"
-        // So we might not need to update anything in DB if we want it to stay pending for retry.
-        // However, logging is crucial.
-        
-        // Optional: We could update a lastAttempted timestamp if we want to implement backoff later.
-        // For now, ensuring we don't crash is key.
+        // Update status to FAILED
+        try {
+            await Student.findByIdAndUpdate(studentId, {
+                riskStatus: 'FAILED',
+                riskUpdatedAt: new Date()
+            });
+        } catch (dbErr) {
+            console.error("[RiskEngine] Failed to update error status:", dbErr);
+        }
     }
 };
 

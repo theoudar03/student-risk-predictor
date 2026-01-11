@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, Button, Modal, Form, Badge, InputGroup, Row, Col } from 'react-bootstrap';
-import { FaSearch, FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
+import { Table, Button, Modal, Form, Badge, InputGroup, Row, Col, Spinner } from 'react-bootstrap';
+import { FaSearch, FaPlus, FaTrash, FaEdit, FaRedo } from 'react-icons/fa';
 
 const AdminStudents = () => {
     const [students, setStudents] = useState([]);
@@ -114,11 +114,53 @@ const AdminStudents = () => {
         return 0;
     });
 
-    const getRiskBadge = (s) => {
-        if (s.riskStatus === 'PENDING' || !s.riskLevel) {
-            return <Badge bg="secondary" className="animate-pulse">Calculating...</Badge>;
+
+    const handleRetryRisk = async (id) => {
+        try {
+            await axios.post(`/api/risk/calculate/${id}`);
+            // Optimistic update to show spinner immediately
+            setStudents(prev => prev.map(s => s._id === id ? { ...s, riskStatus: 'PROCESSING' } : s));
+            // Fetch fresh data shortly after
+            setTimeout(fetchStudents, 1000);
+        } catch (e) {
+            console.error("Retry failed", e);
+            alert("Retry failed. Check console.");
         }
-        return <Badge bg={s.riskLevel === 'High' ? 'danger' : s.riskLevel === 'Medium' ? 'warning' : 'success'}>{s.riskLevel}</Badge>;
+    };
+
+    const getRiskBadge = (s) => {
+        const { riskStatus, riskLevel } = s;
+
+        if (riskStatus === 'PROCESSING') {
+            return (
+                <Badge bg="info" text="dark" className="d-flex align-items-center gap-2">
+                    <Spinner size="sm" animation="border" />
+                    Calculating...
+                </Badge>
+            );
+        }
+
+        if (riskStatus === 'PENDING' || !riskStatus) {
+            return (
+                <Badge bg="secondary" className="d-flex align-items-center gap-2">
+                    <span>Pending</span>
+                </Badge>
+            );
+        }
+
+        if (riskStatus === 'FAILED') {
+            return (
+                <div className="d-flex align-items-center gap-2">
+                    <Badge bg="danger">Failed</Badge>
+                    <Button variant="outline-danger" size="sm" className="p-0 px-1" onClick={() => handleRetryRisk(s._id)} title="Retry Calculation">
+                        <FaRedo size={10} />
+                    </Button>
+                </div>
+            );
+        }
+
+        // CALCULATED
+        return <Badge bg={riskLevel === 'High' ? 'danger' : riskLevel === 'Medium' ? 'warning' : 'success'}>{riskLevel}</Badge>;
     };
 
     return (
