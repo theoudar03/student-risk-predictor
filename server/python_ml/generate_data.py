@@ -68,7 +68,8 @@ for _ in range(TOTAL):
         engage = np.random.uniform(0, 4)
 
     risk = extreme_dropout_risk(att, cgpa, fee, assign, engage)
-    category = "Low" if risk <= 30 else "Medium" if risk <= 60 else "High"
+    # Updated Thresholds: Low(0-20), Medium(21-50), High(51-100)
+    category = "Low" if risk <= 20 else "Medium" if risk <= 50 else "High"
 
     records.append([
         round(att,1), round(cgpa,2), fee,
