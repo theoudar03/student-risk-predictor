@@ -1,77 +1,110 @@
 const Student = require('../models/Student');
-const { predictRisk } = require('./mlService');
+const { predictRisk, predictRiskBatch } = require('./mlService');
 const { syncStudentAlert } = require('./alertService');
 
 const ML_TIMEOUT_MS = 5000; // Hard SLA: 5 Seconds
 
 const calculateRisk = async (studentId) => {
+    // ... existing logic ...
     const startTime = Date.now();
     console.log(`[RiskEngine] 🕒 Starting calculation for Student ID: ${studentId}`);
     
     try {
         const student = await Student.findById(studentId);
-        if (!student) {
-            console.error(`[RiskEngine] Student not found: ${studentId}`);
-            return;
-        }
+        if (!student) return;
 
-        // 1. Mark as PROCESSING immediately
+        // 1. Mark as PROCESSING
         student.riskStatus = 'PROCESSING';
         await student.save();
 
-        // 2. Prepare Data for ML
         const att = student.attendancePercentage ?? 0;
         const cgpa = student.cgpa ?? 0;
         const fee = student.feeDelayDays ?? 0;
         const part = student.classParticipationScore ?? 0;
         const assign = student.assignmentsCompleted ?? 85;
 
-        // 3. Call ML Service with explicit TIMEOUT
-        const mlPromise = predictRisk(
-            Number(att),
-            Number(cgpa),
-            Number(fee),
-            Number(part),
-            Number(assign)
-        );
+        const analysis = await Promise.race([
+            predictRisk(Number(att), Number(cgpa), Number(fee), Number(part), Number(assign)),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("ML_TIMEOUT_EXCEEDED")), ML_TIMEOUT_MS))
+        ]);
 
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("ML_TIMEOUT_EXCEEDED")), ML_TIMEOUT_MS)
-        );
-
-        // RACE: ML vs Time
-        const analysis = await Promise.race([mlPromise, timeoutPromise]);
-
-        // 4. Update Student Record (Success)
-        const duration = (Date.now() - startTime) / 1000;
-        
         student.riskScore = analysis.score;
         student.riskLevel = analysis.level;
         student.riskFactors = analysis.factors;
         student.riskStatus = 'CALCULATED';
         student.riskModel = 'extreme_dropout_v4';
         student.riskUpdatedAt = new Date();
-        
         await student.save();
-        console.log(`[RiskEngine] ✅ Success in ${duration}s | Score: ${analysis.score}`);
-
-        // 5. Trigger Alerts
         await syncStudentAlert(student);
 
     } catch (error) {
-        const duration = (Date.now() - startTime) / 1000;
-        console.error(`[RiskEngine] ❌ Failed after ${duration}s:`, error.message);
-        
-        // Update status to FAILED
-        try {
-            await Student.findByIdAndUpdate(studentId, {
-                riskStatus: 'FAILED',
-                riskUpdatedAt: new Date()
-            });
-        } catch (dbErr) {
-            console.error("[RiskEngine] Failed to update error status:", dbErr);
-        }
+        console.error(`[RiskEngine] ❌ Failed ID ${studentId}:`, error.message);
+        await Student.findByIdAndUpdate(studentId, { riskStatus: 'FAILED', riskUpdatedAt: new Date() });
     }
 };
 
-module.exports = { calculateRisk };
+const calculateAllRiskBatch = async () => {
+    const startTime = Date.now();
+    console.log(`[RiskEngine] 🚀 Starting BATCH calculation for ALL students`);
+
+    try {
+        // 1. Fetch ALL students
+        const students = await Student.find({});
+        if (students.length === 0) return { processed: 0, durationMs: 0 };
+
+        // 2. Call ML Batch API
+        console.log(`[RiskEngine] Sending ${students.length} students to Python ML...`);
+        const predictions = await predictRiskBatch(students);
+        
+        // 3. Prepare Bulk Writes
+        // We need to map predictions back to student IDs. 
+        // Order is preserved in Python list, so index i corresponds to students[i]
+        
+        const bulkOps = students.map((student, i) => {
+            const pred = predictions[i];
+            const factors = [];
+            // Re-generate factors locally or trust updated logic. Keeping heuristic explanation logic here for UI consistency
+            const att = student.attendancePercentage;
+            if (att < 75) factors.push(`Low Attendance (${att}%)`);
+            if (student.cgpa < 6.0) factors.push(`Low CGPA (${student.cgpa})`);
+            if (student.feeDelayDays > 15) factors.push(`Fee Payment Overdue (${student.feeDelayDays} days)`);
+
+            return {
+                updateOne: {
+                    filter: { _id: student._id },
+                    update: {
+                        $set: {
+                            riskScore: pred.riskScore,
+                            riskLevel: pred.riskLevel,
+                            riskStatus: 'CALCULATED',
+                            riskModel: 'extreme_dropout_v4_batch',
+                            riskUpdatedAt: new Date(),
+                            riskFactors: factors
+                        }
+                    }
+                }
+            };
+        });
+
+        // 4. Execute Bulk Write
+        if (bulkOps.length > 0) {
+            await Student.bulkWrite(bulkOps);
+        }
+
+        const duration = Date.now() - startTime;
+        console.log(`[RiskEngine] ✅ Batch Success in ${duration}ms | Count: ${students.length}`);
+        
+        return {
+            processed: students.length,
+            durationMs: duration,
+            status: "success"
+        };
+
+    } catch (error) {
+        const duration = Date.now() - startTime;
+        console.error(`[RiskEngine] ❌ Batch Failed after ${duration}ms:`, error.message);
+        throw error;
+    }
+};
+
+module.exports = { calculateRisk, calculateAllRiskBatch };

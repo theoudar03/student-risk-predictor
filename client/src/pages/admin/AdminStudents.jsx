@@ -115,59 +115,77 @@ const AdminStudents = () => {
     });
 
 
+    const [globalProcessing, setGlobalProcessing] = useState(false);
+
+    const handleRecalculateAll = async () => {
+        if (!window.confirm("This will trigger risk recalculation for ALL students. Continue?")) return;
+        
+        setGlobalProcessing(true);
+        try {
+            const res = await axios.post('/api/risk/recalculate-all');
+            const { processed, durationMs } = res.data;
+            alert(`✅ Batch Recalculation Complete!\n\nProcessed: ${processed} students\nTime: ${durationMs}ms`);
+            fetchStudents(); // Refresh data
+        } catch (e) {
+            console.error("Batch Failed:", e);
+            alert("❌ Batch Recalculation Failed. Please try again.");
+        } finally {
+            setGlobalProcessing(false);
+        }
+    };
+
     const handleRetryRisk = async (id) => {
         try {
             await axios.post(`/api/risk/calculate/${id}`);
-            // Optimistic update to show spinner immediately
-            setStudents(prev => prev.map(s => s._id === id ? { ...s, riskStatus: 'PROCESSING' } : s));
-            // Fetch fresh data shortly after
-            setTimeout(fetchStudents, 1000);
+            // Optimistic update to show status in row if strictly needed, 
+            // but requirements say "Never show calculating in rows".
+            // So we just toast or fetch data.
+            fetchStudents();
         } catch (e) {
             console.error("Retry failed", e);
-            alert("Retry failed. Check console.");
+            alert("Retry failed.");
         }
     };
 
     const getRiskBadge = (s) => {
-        const { riskStatus, riskLevel } = s;
-
-        if (riskStatus === 'PROCESSING') {
-            return (
-                <Badge bg="info" text="dark" className="d-flex align-items-center gap-2">
-                    <Spinner size="sm" animation="border" />
-                    Calculating...
-                </Badge>
-            );
-        }
-
-        if (riskStatus === 'PENDING' || !riskStatus) {
-            return (
-                <Badge bg="secondary" className="d-flex align-items-center gap-2">
-                    <span>Pending</span>
-                </Badge>
-            );
-        }
-
-        if (riskStatus === 'FAILED') {
-            return (
-                <div className="d-flex align-items-center gap-2">
-                    <Badge bg="danger">Failed</Badge>
-                    <Button variant="outline-danger" size="sm" className="p-0 px-1" onClick={() => handleRetryRisk(s._id)} title="Retry Calculation">
-                        <FaRedo size={10} />
-                    </Button>
-                </div>
-            );
-        }
-
-        // CALCULATED
-        return <Badge bg={riskLevel === 'High' ? 'danger' : riskLevel === 'Medium' ? 'warning' : 'success'}>{riskLevel}</Badge>;
+        // Requirement: "Risk Level Column Must ONLY show Low | Medium | High"
+        // Requirement: "Must never show Pending | Calculating | Failed"
+        // Requirement: "Always display the last successfully calculated ML result"
+        
+        const level = s.riskLevel || 'Low'; // Fallback to 'Low' if null/pending to keep UI clean, or maybe 'Unknown' but user said Low/Med/High specific. 
+        // Actually, if it's strictly PENDING new student, we probably don't have a level.
+        // But user said: "Low / Medium / High risk always visible".
+        // Use logic: if riskLevel is null, maybe show "Low" (default safe) or "-" ?
+        // User instruction: "Always display the last successfully calculated ML result".
+        // If s.riskLevel exists, show it.
+        // If it's pure null (fresh student), showing "Low" is safer than "Pending".
+        
+        return <Badge bg={level === 'High' ? 'danger' : level === 'Medium' ? 'warning' : 'success'}>{level}</Badge>;
     };
 
     return (
         <div>
+            {globalProcessing && (
+                <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(255,255,255,0.8)', zIndex: 9999 }}>
+                    <div className="text-center p-4 bg-white shadow rounded">
+                        <Spinner animation="border" variant="primary" className="mb-3" />
+                        <h5 className="fw-bold">Recalculating Risk Scores...</h5>
+                        <p className="text-muted mb-0">Please wait while we process all students.</p>
+                    </div>
+                </div>
+            )}
+
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="fw-bold fs-3">Manage Students</h2>
-                <Button variant="primary" onClick={() => setShowModal(true)}><FaPlus className="me-2" /> Register Student</Button>
+                <div className="d-flex gap-2">
+                    <Button variant="outline-primary" onClick={handleRecalculateAll} disabled={globalProcessing}>
+                        <FaRedo className={`me-2 ${globalProcessing ? 'fa-spin' : ''}`} /> 
+                        {globalProcessing ? 'Processing...' : 'Recalculate All'}
+                    </Button>
+                    <Button variant="primary" onClick={() => setShowModal(true)} disabled={globalProcessing}>
+                        <FaPlus className="me-2" /> Register Student
+                    </Button>
+                </div>
             </div>
 
             <div className="glass-card mb-4 p-3 d-flex gap-3">

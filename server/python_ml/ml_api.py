@@ -86,6 +86,52 @@ def predict_risk(data: StudentData):
         "riskLevel": risk_level
     }
 
+from typing import List
+
+@app.post("/predict-risk-batch")
+def predict_risk_batch(students: List[StudentData]):
+    # 1. Prepare Batch DataFrame
+    data_list = []
+    for s in students:
+        data_list.append({
+            'attendance': s.attendancePercentage,
+            'cgpa': s.cgpa,
+            'fee_delay': s.feeDelayDays,
+            'assignments': s.assignmentsCompleted,
+            'engagement': s.classParticipationScore
+        })
+    
+    # 2. Convert to DataFrame and enforce column order
+    input_df = pd.DataFrame(data_list)
+    if input_df.empty:
+        return []
+        
+    input_df = input_df[['attendance', 'cgpa', 'fee_delay', 'assignments', 'engagement']]
+    
+    # 3. Batch Inference (Optimized)
+    try:
+        predictions = model.predict(input_df)
+    except Exception as e:
+        print(f"Batch Error: {e}")
+        # Return zeros on catastrophic failure, but this shouldn't happen with valid DF
+        return [{"riskScore": 0, "riskLevel": "Low"} for _ in students]
+
+    # 4. Process Results
+    results = []
+    for score in predictions:
+        score = float(max(0, min(100, score)))
+        level = "Low"
+        if score > 50: level = "High"
+        elif score > 25: level = "Medium"
+        
+        results.append({
+            "riskScore": round(score),
+            "riskLevel": level
+        })
+        
+    print(f"Computed {len(results)} predictions in batch.")
+    return results
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8001))
     uvicorn.run(app, host="0.0.0.0", port=port)

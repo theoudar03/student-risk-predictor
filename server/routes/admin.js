@@ -47,71 +47,20 @@ const generateStudentId = async () => {
 
 // Bulk Recalculate Risk (Admin Trigger)
 router.post('/risk-recalc', async (req, res) => {
-    // Extra role check just in case middleware fails or for explicit clarity
+    // Legacy endpoint: Redirect to new batch optimized engine
     if (req.user.role !== 'admin') {
          return res.status(403).json({ error: "Access denied. Admin rights required." });
     }
 
     try {
-        const students = await Student.find({});
-        console.log(`Starting bulk recalculation for ${students.length} students...`);
-
-        const bulkOps = [];
-        let successCount = 0;
-        let failCount = 0;
-
-        // Process in batches to avoid timeouts but respect concurrency
-        const BATCH_SIZE = 5;
-        const processBatch = async (batch) => {
-             return Promise.all(batch.map(async (student) => {
-                try {
-                    // Fix: Use nullish coalescing to allow 0 as a valid value
-                    const att = student.attendancePercentage ?? 0;
-                    const cgpa = student.cgpa ?? 0;
-                    const fee = student.feeDelayDays ?? 0;
-                    const part = student.classParticipationScore ?? 0;
-                    const assign = student.assignmentsCompleted ?? 85;
-
-                    const analysis = await predictRisk(
-                        Number(att),
-                        Number(cgpa),
-                        Number(fee),
-                        Number(part),
-                        Number(assign)
-                    );
-                    
-                    // Direct update to ensure atomicity and avoid bulkWrite silent failures
-                    const updatedStudent = await Student.findByIdAndUpdate(student._id, {
-                        $set: {
-                            riskScore: analysis.score,
-                            riskLevel: analysis.level,
-                            riskFactors: analysis.factors
-                        }
-                    }, { new: true }); // Return the updated document
-
-                    // 🔔 Trigger Alert Sync
-                    const { syncStudentAlert } = require('../utils/alertService');
-                    await syncStudentAlert(updatedStudent);
-
-                    console.log(`[Recalc] Updated ${student.name}: ${student.riskScore} -> ${analysis.score}`);
-                    successCount++;
-                } catch (mlError) {
-                    console.error(`ML Failed for Student ${student.studentId}:`, mlError.message);
-                    failCount++;
-                }
-             }));
-        };
-
-        for (let i = 0; i < students.length; i += BATCH_SIZE) {
-            const batch = students.slice(i, i + BATCH_SIZE);
-            await processBatch(batch);
-        }
-        // Removed bulkWrite logic in favor of direct updates
-
+        console.log("Redirecting legacy bulk recalc to Batch Engine...");
+        const { calculateAllRiskBatch } = require('../utils/riskEngine');
+        const result = await calculateAllRiskBatch();
+        
         res.json({
             success: true,
-            message: `Recalculation complete. Updated: ${successCount}, Failed: ${failCount}`,
-            total: students.length
+            message: `Recalculation complete. Processed: ${result.processed}`,
+            total: result.processed
         });
     } catch (e) {
         console.error("Bulk Recalc Error:", e);

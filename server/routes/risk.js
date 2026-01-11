@@ -28,4 +28,16 @@ router.post('/calculate/:studentId', async (req, res) => {
     }
 });
 
+// Bulk Recalculate (Batch Optimized)
+router.post('/recalculate-all', async (req, res) => {
+    try {
+        const { calculateAllRiskBatch } = require('../utils/riskEngine');
+        const result = await calculateAllRiskBatch();
+        res.json(result);
+    } catch (e) {
+        console.error("Batch Risk Error:", e);
+        res.status(500).json({ error: "Batch Calculation Failed" });
+    }
+});
+
 module.exports = router;

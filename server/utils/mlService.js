@@ -43,4 +43,25 @@ const predictRisk = async (attendance, cgpa, feeDelay, participation, assignment
     }
 };
 
-module.exports = { predictRisk };
+const predictRiskBatch = async (students) => {
+    let mlUrl = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8001';
+    
+    // Transform incoming student objects to match Python Pydantic schema
+    const payload = students.map(s => ({
+        attendancePercentage: Number(s.attendancePercentage || 0),
+        cgpa: Number(s.cgpa || 0),
+        feeDelayDays: Number(s.feeDelayDays || 0),
+        classParticipationScore: Number(s.classParticipationScore || 0),
+        assignmentsCompleted: Number(s.assignmentsCompleted || 85)
+    }));
+
+    try {
+        const response = await axios.post(`${mlUrl}/predict-risk-batch`, payload);
+        return response.data; // Returns Array<{ riskScore, riskLevel }>
+    } catch (error) {
+        console.error("⚠️ Python ML Batch Service unavailable:", error.message);
+        throw new Error("ML_SERVICE_UNAVAILABLE");
+    }
+};
+
+module.exports = { predictRisk, predictRiskBatch };
