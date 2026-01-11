@@ -79,14 +79,16 @@ router.post('/risk-recalc', async (req, res) => {
                         Number(assign)
                     );
                     
-                    console.log(`[Recalc] ${student.name}: ${student.riskScore} -> ${analysis.score}`);
-                    
-                    bulkOps.push({
-                        updateOne: {
-                            filter: { _id: student._id },
-                            update: { $set: { riskScore: analysis.score, riskLevel: analysis.level, riskFactors: analysis.factors } }
+                    // Direct update to ensure atomicity and avoid bulkWrite silent failures
+                    await Student.findByIdAndUpdate(student._id, {
+                        $set: {
+                            riskScore: analysis.score,
+                            riskLevel: analysis.level,
+                            riskFactors: analysis.factors
                         }
                     });
+
+                    console.log(`[Recalc] Updated ${student.name}: ${student.riskScore} -> ${analysis.score}`);
                     successCount++;
                 } catch (mlError) {
                     console.error(`ML Failed for Student ${student.studentId}:`, mlError.message);
@@ -99,10 +101,7 @@ router.post('/risk-recalc', async (req, res) => {
             const batch = students.slice(i, i + BATCH_SIZE);
             await processBatch(batch);
         }
-
-        if (bulkOps.length > 0) {
-            await Student.bulkWrite(bulkOps);
-        }
+        // Removed bulkWrite logic in favor of direct updates
 
         res.json({
             success: true,
