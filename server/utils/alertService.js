@@ -9,7 +9,7 @@ const Student = require('../models/Student');
 // Define thresholds based on strict ML logic (v4.0)
 const RISK_THRESHOLDS = {
     HIGH: 50,
-    MEDIUM: 20
+    MEDIUM: 25
 };
 
 const syncStudentAlert = async (student) => {

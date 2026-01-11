@@ -1,7 +1,7 @@
 attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_reason
 74,6.96,30,56,5.3,62.6,High,Student shows overall stability
 90,9.67,3,87,9.1,12.74,Low,Student shows overall stability
-81,9.3,5,81,7.5,24.89,Medium,Student shows overall stability
+81,9.3,5,81,7.5,24.89,Low,Student shows overall stability
 91,9.03,8,96,8.6,16.98,Low,Student shows overall stability
 75,5.97,12,54,5.8,57.33,High,Student shows overall stability
 86,7.53,8,93,9.4,26.04,Medium,Student shows overall stability
@@ -17,28 +17,28 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 64,6.96,49,71,6.7,71.92,High,Low attendance
 64,7.44,12,50,6.2,56.78,High,Low attendance
 93,8.73,8,94,8.3,18.16,Low,Student shows overall stability
-92,8.0,6,96,7.9,21.48,Medium,Student shows overall stability
+92,8.0,6,96,7.9,21.48,Low,Student shows overall stability
 64,6.0,24,60,4.6,71.65,High,Low attendance
 6,1.59,67,1,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 100,9.68,3,90,8.0,8.34,Low,Student shows overall stability
 86,9.77,0,99,8.1,12.02,Low,Student shows overall stability
-85,8.78,8,84,9.1,23.17,Medium,Student shows overall stability
-94,7.92,7,88,8.2,22.12,Medium,Student shows overall stability
+85,8.78,8,84,9.1,23.17,Low,Student shows overall stability
+94,7.92,7,88,8.2,22.12,Low,Student shows overall stability
 99,8.12,6,81,9.1,16.66,Low,Student shows overall stability
 96,8.17,1,81,8.2,17.92,Low,Student shows overall stability
 80,9.09,1,100,8.5,18.39,Low,Student shows overall stability
 31,3.26,94,10,1.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-85,8.42,3,81,8.9,23.12,Medium,Student shows overall stability
+85,8.42,3,81,8.9,23.12,Low,Student shows overall stability
 75,7.1,18,77,5.5,51.02,High,Student shows overall stability
 2,3.25,98,35,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 78,6.2,16,69,6.8,51.53,High,Student shows overall stability
 66,7.37,10,60,5.0,55.11,High,Student shows overall stability
-89,8.14,9,95,8.7,22.95,Medium,Student shows overall stability
+89,8.14,9,95,8.7,22.95,Low,Student shows overall stability
 61,7.49,21,54,6.7,61.15,High,Low attendance
 68,6.06,28,65,6.5,65.98,High,Student shows overall stability
 53,4.29,63,10,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 39,3.34,64,28,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-81,9.23,8,83,9.1,23.18,Medium,Student shows overall stability
+81,9.23,8,83,9.1,23.18,Low,Student shows overall stability
 100,7.95,7,87,9.5,14.05,Low,Student shows overall stability
 60,6.59,31,72,4.8,71.87,High,Low attendance
 65,6.29,17,76,5.3,61.3,High,Student shows overall stability
@@ -76,7 +76,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 76,6.51,34,71,4.9,63.35,High,Student shows overall stability
 83,7.53,8,98,7.3,31.19,Medium,Student shows overall stability
 93,9.19,3,98,8.5,12.47,Low,Student shows overall stability
-84,8.23,8,99,9.0,23.55,Medium,Student shows overall stability
+84,8.23,8,99,9.0,23.55,Low,Student shows overall stability
 22,4.3,78,44,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 13,3.02,44,34,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 77,7.44,18,59,6.5,49.7,Medium,Student shows overall stability
@@ -101,7 +101,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 100,7.64,5,96,8.6,14.7,Low,Student shows overall stability
 2,3.05,92,36,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 73,5.91,10,68,4.8,56.82,High,Student shows overall stability
-80,9.18,1,87,7.1,23.36,Medium,Student shows overall stability
+80,9.18,1,87,7.1,23.36,Low,Student shows overall stability
 62,6.54,21,50,5.7,68.45,High,Low attendance
 76,5.77,32,64,6.4,64.68,High,Student shows overall stability
 70,5.93,47,77,6.9,70.99,High,Student shows overall stability
@@ -121,11 +121,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 61,6.99,23,76,4.8,64.3,High,Low attendance
 46,4.64,57,37,2.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 84,7.96,6,96,7.6,27.16,Medium,Student shows overall stability
-91,8.08,3,83,8.1,22.46,Medium,Student shows overall stability
+91,8.08,3,83,8.1,22.46,Low,Student shows overall stability
 77,5.67,31,51,5.7,67.97,High,Student shows overall stability
 71,5.76,46,55,6.7,75.65,High,Student shows overall stability
 72,6.16,42,70,4.3,72.83,High,Student shows overall stability
-95,7.9,7,88,7.2,23.47,Medium,Student shows overall stability
+95,7.9,7,88,7.2,23.47,Low,Student shows overall stability
 67,6.89,33,55,5.2,69.3,High,Student shows overall stability
 3,0.03,90,1,2.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 78,7.18,14,55,6.9,48.4,Medium,Student shows overall stability
@@ -152,15 +152,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 60,5.54,21,61,5.7,72.48,High,Low attendance
 55,0.13,70,8,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 39,4.62,50,22,0.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-93,7.97,6,80,9.6,20.89,Medium,Student shows overall stability
+93,7.97,6,80,9.6,20.89,Low,Student shows overall stability
 67,6.72,18,70,5.0,60.26,High,Student shows overall stability
 52,3.32,74,24,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 6,1.91,73,26,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 91,9.78,5,86,7.5,15.89,Low,Student shows overall stability
-80,8.41,5,97,9.0,23.83,Medium,Student shows overall stability
+80,8.41,5,97,9.0,23.83,Low,Student shows overall stability
 99,8.65,3,87,8.5,13.23,Low,Student shows overall stability
 72,6.29,28,79,4.6,63.25,High,Student shows overall stability
-92,8.44,7,98,7.2,21.05,Medium,Student shows overall stability
+92,8.44,7,98,7.2,21.05,Low,Student shows overall stability
 46,2.9,77,3,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 38,4.14,49,9,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 60,5.55,37,67,6.6,77.58,High,Low attendance
@@ -179,7 +179,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 71,5.91,31,70,4.8,68.73,High,Student shows overall stability
 87,8.13,8,100,7.5,25.04,Medium,Student shows overall stability
 25,2.22,101,45,0.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-90,7.96,4,83,9.3,21.69,Medium,Student shows overall stability
+90,7.96,4,83,9.3,21.69,Low,Student shows overall stability
 90,8.22,3,96,9.2,17.63,Low,Student shows overall stability
 61,6.29,33,71,4.4,74.67,High,Low attendance
 63,6.58,28,52,6.5,69.03,High,Low attendance
@@ -190,7 +190,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 16,5.23,94,48,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 78,6.96,30,66,6.0,56.72,High,Student shows overall stability
 5,5.39,51,14,2.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-94,7.61,6,96,7.5,22.75,Medium,Student shows overall stability
+94,7.61,6,96,7.5,22.75,Low,Student shows overall stability
 66,5.57,16,58,4.6,68.71,High,Student shows overall stability
 97,9.36,3,86,8.4,11.96,Low,Student shows overall stability
 66,5.57,40,73,4.7,77.61,High,Student shows overall stability
@@ -201,7 +201,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 96,8.5,4,91,8.9,14.83,Low,Student shows overall stability
 46,2.19,69,24,1.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,5.98,12,62,5.1,66.17,High,Low attendance
-83,9.29,4,95,7.1,21.54,Medium,Student shows overall stability
+83,9.29,4,95,7.1,21.54,Low,Student shows overall stability
 8,0.6,107,11,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 36,0.49,109,38,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 10,4.97,64,6,4.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -213,7 +213,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 36,0.5,95,2,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 62,7.41,21,59,6.4,60.54,High,Low attendance
 64,6.97,43,73,4.8,72.61,High,Low attendance
-84,7.62,1,85,9.9,22.86,Medium,Student shows overall stability
+84,7.62,1,85,9.9,22.86,Low,Student shows overall stability
 84,9.98,1,87,9.6,11.99,Low,Student shows overall stability
 78,7.15,49,51,5.6,67.63,High,Student shows overall stability
 32,4.83,58,15,2.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -224,7 +224,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 66,5.89,22,63,5.0,68.6,High,Student shows overall stability
 67,6.02,33,62,6.3,70.23,High,Student shows overall stability
 86,8.85,1,94,9.8,14.8,Low,Student shows overall stability
-83,7.93,3,97,9.8,21.37,Medium,Student shows overall stability
+83,7.93,3,97,9.8,21.37,Low,Student shows overall stability
 91,7.67,9,80,7.2,29.87,Medium,Student shows overall stability
 97,9.68,3,82,8.8,10.46,Low,Student shows overall stability
 70,7.14,24,68,4.8,60.14,High,Student shows overall stability
@@ -243,7 +243,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 70,6.89,42,77,6.3,64.78,High,Student shows overall stability
 98,7.76,0,91,10.0,11.83,Low,Student shows overall stability
 95,8.71,3,80,8.7,16.68,Low,Student shows overall stability
-80,8.79,0,88,8.1,21.12,Medium,Student shows overall stability
+80,8.79,0,88,8.1,21.12,Low,Student shows overall stability
 99,8.39,6,81,9.9,13.89,Low,Student shows overall stability
 97,9.55,9,91,7.3,14.59,Low,Student shows overall stability
 62,7.29,18,55,5.8,61.59,High,Low attendance
@@ -263,7 +263,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 44,2.4,99,46,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 79,6.69,15,66,5.2,51.94,High,Student shows overall stability
 1,4.72,44,0,3.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-92,8.09,9,82,8.3,24.57,Medium,Student shows overall stability
+92,8.09,9,82,8.3,24.57,Low,Student shows overall stability
 69,6.84,10,54,4.7,57.75,High,Student shows overall stability
 60,6.01,29,77,4.1,74.24,High,Low attendance
 36,2.93,88,48,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -279,7 +279,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 3,3.72,58,30,2.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 64,6.65,37,51,7.0,71.54,High,Low attendance
 88,9.67,8,95,9.3,14.16,Low,Student shows overall stability
-88,7.77,1,85,8.0,23.83,Medium,Student shows overall stability
+88,7.77,1,85,8.0,23.83,Low,Student shows overall stability
 65,7.3,22,58,5.0,62.98,High,Student shows overall stability
 0,0.66,93,6,0.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 91,9.02,4,98,8.2,15.54,Low,Student shows overall stability
@@ -300,7 +300,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 49,4.03,99,38,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,7.87,6,97,7.5,28.27,Medium,Student shows overall stability
 91,9.66,6,100,7.3,14.64,Low,Student shows overall stability
-94,8.08,6,90,7.7,21.58,Medium,Student shows overall stability
+94,8.08,6,90,7.7,21.58,Low,Student shows overall stability
 61,6.05,16,70,6.0,64.07,High,Low attendance
 66,6.95,20,56,5.0,63.48,High,Student shows overall stability
 3,3.98,81,31,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -316,7 +316,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 79,6.75,27,57,6.3,57.03,High,Student shows overall stability
 95,8.77,3,81,7.2,19.19,Low,Student shows overall stability
 97,8.35,8,100,8.0,16.49,Low,Student shows overall stability
-80,8.26,3,83,9.6,24.78,Medium,Student shows overall stability
+80,8.26,3,83,9.6,24.78,Low,Student shows overall stability
 90,8.94,4,99,7.6,17.41,Low,Student shows overall stability
 41,2.97,84,34,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 73,7.11,25,56,4.9,60.99,High,Student shows overall stability
@@ -326,10 +326,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 100,7.8,4,81,8.5,16.88,Low,Student shows overall stability
 92,8.87,3,97,7.8,16.0,Low,Student shows overall stability
 31,1.19,41,22,0.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-98,7.98,8,81,8.5,20.32,Medium,Student shows overall stability
+98,7.98,8,81,8.5,20.32,Low,Student shows overall stability
 30,3.82,112,22,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 88,9.46,2,86,9.1,14.65,Low,Student shows overall stability
-83,9.08,7,96,7.7,22.63,Medium,Student shows overall stability
+83,9.08,7,96,7.7,22.63,Low,Student shows overall stability
 99,9.14,5,86,9.2,10.81,Low,Student shows overall stability
 34,2.02,53,6,2.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 54,2.29,60,37,1.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -373,7 +373,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 77,6.7,28,66,5.9,57.93,High,Student shows overall stability
 92,9.36,9,85,7.6,19.21,Low,Student shows overall stability
 18,2.42,94,48,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-99,7.66,8,92,7.5,20.45,Medium,Student shows overall stability
+99,7.66,8,92,7.5,20.45,Low,Student shows overall stability
 79,7.07,36,64,5.2,60.04,High,Student shows overall stability
 10,4.07,55,4,0.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 77,5.83,39,79,5.8,65.07,High,Student shows overall stability
@@ -398,7 +398,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 87,7.78,9,82,7.2,31.53,Medium,Student shows overall stability
 31,1.42,59,25,1.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 21,0.1,118,21,0.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-88,8.9,9,96,7.1,22.85,Medium,Student shows overall stability
+88,8.9,9,96,7.1,22.85,Low,Student shows overall stability
 82,9.77,0,89,8.5,15.12,Low,Student shows overall stability
 99,8.63,1,90,9.3,10.14,Low,Student shows overall stability
 55,1.03,47,23,1.4,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -417,12 +417,12 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 100,8.55,1,88,9.2,10.09,Low,Student shows overall stability
 90,9.13,5,96,9.5,13.8,Low,Student shows overall stability
 74,6.01,42,69,6.2,68.65,High,Student shows overall stability
-82,9.22,6,85,9.6,20.47,Medium,Student shows overall stability
-87,7.68,2,83,9.6,22.79,Medium,Student shows overall stability
+82,9.22,6,85,9.6,20.47,Low,Student shows overall stability
+87,7.68,2,83,9.6,22.79,Low,Student shows overall stability
 94,8.03,2,100,8.2,16.57,Low,Student shows overall stability
 35,4.79,78,8,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 77,6.8,15,76,4.0,52.97,High,Student shows overall stability
-81,8.62,5,93,9.6,21.84,Medium,Student shows overall stability
+81,8.62,5,93,9.6,21.84,Low,Student shows overall stability
 62,6.33,23,76,5.3,66.17,High,Low attendance
 93,9.8,6,95,9.1,10.06,Low,Student shows overall stability
 2,4.15,112,27,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -449,13 +449,13 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 67,6.84,21,78,4.9,59.72,High,Student shows overall stability
 38,5.25,108,7,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 92,9.57,0,94,9.6,7.67,Low,Student shows overall stability
-83,8.46,3,97,7.3,24.1,Medium,Student shows overall stability
+83,8.46,3,97,7.3,24.1,Low,Student shows overall stability
 67,7.0,42,61,4.2,73.5,High,Student shows overall stability
 66,6.33,38,58,5.9,73.22,High,Student shows overall stability
 12,0.06,90,8,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 19,3.51,41,28,0.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 67,7.14,21,52,5.3,62.54,High,Student shows overall stability
-94,7.61,4,96,7.6,21.51,Medium,Student shows overall stability
+94,7.61,4,96,7.6,21.51,Low,Student shows overall stability
 65,7.19,27,53,6.0,64.87,High,Student shows overall stability
 100,9.65,1,82,8.4,8.62,Low,Student shows overall stability
 68,6.36,49,60,5.7,76.66,High,Student shows overall stability
@@ -487,12 +487,12 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 75,7.03,31,78,4.1,60.18,High,Student shows overall stability
 9,0.74,60,15,3.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 62,5.92,39,64,7.0,75.15,High,Low attendance
-96,7.72,6,82,9.2,20.34,Medium,Student shows overall stability
+96,7.72,6,82,9.2,20.34,Low,Student shows overall stability
 0,0.38,52,39,3.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 8,4.21,75,34,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 88,9.31,3,85,7.9,18.44,Low,Student shows overall stability
 73,7.12,41,51,4.0,70.98,High,Student shows overall stability
-85,8.25,7,96,8.5,23.99,Medium,Student shows overall stability
+85,8.25,7,96,8.5,23.99,Low,Student shows overall stability
 15,2.63,105,1,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 61,6.06,17,72,6.8,62.65,High,Low attendance
 66,6.45,10,66,5.9,56.61,High,Student shows overall stability
@@ -516,7 +516,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 60,7.09,32,62,4.1,72.87,High,Low attendance
 67,6.8,27,52,4.9,68.04,High,Student shows overall stability
 67,6.44,10,53,4.3,62.03,High,Student shows overall stability
-92,7.65,5,89,8.6,22.59,Medium,Student shows overall stability
+92,7.65,5,89,8.6,22.59,Low,Student shows overall stability
 89,7.54,4,85,8.0,26.38,Medium,Student shows overall stability
 83,9.87,2,82,8.2,17.6,Low,Student shows overall stability
 79,5.52,34,53,4.1,71.43,High,Student shows overall stability
@@ -525,7 +525,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 100,8.35,6,86,8.0,15.29,Low,Student shows overall stability
 75,6.64,45,62,6.9,65.97,High,Student shows overall stability
 8,3.01,47,32,2.4,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-92,8.5,3,87,7.2,20.98,Medium,Student shows overall stability
+92,8.5,3,87,7.2,20.98,Low,Student shows overall stability
 81,9.01,6,91,7.2,25.68,Medium,Student shows overall stability
 8,1.32,95,31,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 68,5.91,35,61,5.9,72.26,High,Student shows overall stability
@@ -539,7 +539,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 71,7.3,42,66,6.9,62.88,High,Student shows overall stability
 10,2.16,109,40,0.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 47,2.24,98,25,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-84,8.59,2,85,8.9,21.48,Medium,Student shows overall stability
+84,8.59,2,85,8.9,21.48,Low,Student shows overall stability
 3,4.56,68,33,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 75,7.45,17,62,6.6,49.65,Medium,Student shows overall stability
 35,1.36,104,42,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -567,7 +567,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 47,4.49,117,47,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 38,1.21,61,20,2.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 95,7.7,9,89,7.1,25.46,Medium,Student shows overall stability
-88,8.17,9,96,8.8,22.96,Medium,Student shows overall stability
+88,8.17,9,96,8.8,22.96,Low,Student shows overall stability
 100,8.9,0,80,9.1,10.15,Low,Student shows overall stability
 96,9.83,7,81,9.1,11.4,Low,Student shows overall stability
 58,4.42,62,38,3.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -593,7 +593,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 89,9.22,9,90,8.8,18.4,Low,Student shows overall stability
 94,9.88,8,99,8.8,9.6,Low,Student shows overall stability
 74,6.61,43,71,6.9,64.19,High,Student shows overall stability
-89,8.63,5,88,8.6,20.26,Medium,Student shows overall stability
+89,8.63,5,88,8.6,20.26,Low,Student shows overall stability
 81,9.67,0,98,7.3,16.6,Low,Student shows overall stability
 94,8.03,2,95,7.0,19.97,Low,Student shows overall stability
 35,3.86,64,44,1.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -603,7 +603,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 94,8.15,8,98,8.8,18.45,Low,Student shows overall stability
 68,5.98,29,62,4.3,71.97,High,Student shows overall stability
 94,9.35,0,93,7.8,11.39,Low,Student shows overall stability
-87,8.39,1,82,7.6,23.0,Medium,Student shows overall stability
+87,8.39,1,82,7.6,23.0,Low,Student shows overall stability
 75,5.66,19,67,6.4,58.78,High,Student shows overall stability
 58,1.56,85,2,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 55,5.43,47,45,1.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -612,7 +612,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 58,3.88,79,35,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 94,7.66,1,90,8.8,18.3,Low,Student shows overall stability
 86,7.64,5,83,7.6,29.46,Medium,Student shows overall stability
-82,8.52,1,80,9.8,21.24,Medium,Student shows overall stability
+82,8.52,1,80,9.8,21.24,Low,Student shows overall stability
 84,9.47,4,97,9.6,14.49,Low,Student shows overall stability
 19,2.45,107,4,0.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 26,2.83,62,24,1.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -632,22 +632,22 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 86,7.86,9,96,7.6,28.05,Medium,Student shows overall stability
 76,6.86,48,70,6.3,64.97,High,Student shows overall stability
 70,5.64,12,64,6.7,58.25,High,Student shows overall stability
-95,7.52,8,80,8.4,24.9,Medium,Student shows overall stability
+95,7.52,8,80,8.4,24.9,Low,Student shows overall stability
 40,2.67,90,40,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 78,7.21,24,52,4.0,59.4,High,Student shows overall stability
 67,5.53,11,57,6.6,61.4,High,Student shows overall stability
 67,7.44,37,69,5.9,63.84,High,Student shows overall stability
-81,8.78,5,94,7.7,24.63,Medium,Student shows overall stability
+81,8.78,5,94,7.7,24.63,Low,Student shows overall stability
 41,1.77,42,13,1.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-83,8.66,3,90,9.0,21.18,Medium,Student shows overall stability
+83,8.66,3,90,9.0,21.18,Low,Student shows overall stability
 26,2.09,41,48,1.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 61,7.05,24,65,4.2,67.85,High,Low attendance
 57,3.01,84,38,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 34,3.69,103,43,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-88,8.37,5,96,7.8,22.06,Medium,Student shows overall stability
+88,8.37,5,96,7.8,22.06,Low,Student shows overall stability
 63,7.21,31,79,4.5,65.81,High,Low attendance
 72,6.93,25,57,5.8,60.68,High,Student shows overall stability
-92,8.04,9,91,9.2,21.2,Medium,Student shows overall stability
+92,8.04,9,91,9.2,21.2,Low,Student shows overall stability
 61,5.77,35,72,6.0,75.08,High,Low attendance
 37,2.93,106,37,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 92,9.56,4,93,7.7,14.36,Low,Student shows overall stability
@@ -661,7 +661,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 75,6.32,44,69,6.7,66.29,High,Student shows overall stability
 53,3.11,87,34,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,9.27,3,94,8.5,10.46,Low,Student shows overall stability
-82,9.06,4,89,8.2,22.19,Medium,Student shows overall stability
+82,9.06,4,89,8.2,22.19,Low,Student shows overall stability
 98,8.61,9,90,8.7,15.62,Low,Student shows overall stability
 70,7.36,37,54,5.9,65.47,High,Student shows overall stability
 71,6.49,29,55,5.8,65.85,High,Student shows overall stability
@@ -712,17 +712,17 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 5,2.01,76,44,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 68,6.07,20,73,4.1,65.19,High,Student shows overall stability
 39,5.13,67,16,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-81,9.05,4,98,8.5,20.31,Medium,Student shows overall stability
+81,9.05,4,98,8.5,20.31,Low,Student shows overall stability
 76,6.06,22,69,6.0,58.07,High,Student shows overall stability
 63,6.75,28,75,4.8,66.94,High,Low attendance
 80,7.72,7,80,9.8,30.02,Medium,Student shows overall stability
 95,8.63,5,91,7.5,18.16,Low,Student shows overall stability
-91,8.18,6,93,8.3,21.09,Medium,Student shows overall stability
+91,8.18,6,93,8.3,21.09,Low,Student shows overall stability
 2,1.36,112,25,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,9.76,4,82,9.3,8.89,Low,Student shows overall stability
 94,8.66,8,100,7.7,17.76,Low,Student shows overall stability
 22,4.87,51,22,1.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-95,8.18,8,81,7.6,23.46,Medium,Student shows overall stability
+95,8.18,8,81,7.6,23.46,Low,Student shows overall stability
 79,7.16,31,70,6.2,54.23,High,Student shows overall stability
 65,6.86,24,63,5.9,63.39,High,Student shows overall stability
 64,6.21,32,53,5.7,73.66,High,Low attendance
@@ -741,7 +741,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 74,6.45,29,55,4.5,66.7,High,Student shows overall stability
 77,6.16,23,63,4.2,62.27,High,Student shows overall stability
 74,6.73,44,66,5.9,66.89,High,Student shows overall stability
-82,8.51,7,96,9.7,22.09,Medium,Student shows overall stability
+82,8.51,7,96,9.7,22.09,Low,Student shows overall stability
 34,1.95,52,5,2.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 75,5.93,13,57,4.5,60.15,High,Student shows overall stability
 3,2.31,67,31,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -755,9 +755,9 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 98,8.36,5,85,8.3,16.84,Low,Student shows overall stability
 95,9.05,9,82,10.0,14.8,Low,Student shows overall stability
 93,9.22,0,88,7.6,13.83,Low,Student shows overall stability
-94,8.55,3,81,7.5,20.11,Medium,Student shows overall stability
+94,8.55,3,81,7.5,20.11,Low,Student shows overall stability
 69,7.3,39,72,6.4,62.71,High,Student shows overall stability
-82,9.01,1,89,7.7,21.43,Medium,Student shows overall stability
+82,9.01,1,89,7.7,21.43,Low,Student shows overall stability
 100,9.87,6,96,7.7,7.93,Low,Student shows overall stability
 11,0.2,93,10,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 82,7.57,9,95,7.0,33.2,Medium,Student shows overall stability
@@ -773,14 +773,14 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 92,8.34,1,92,7.7,18.25,Low,Student shows overall stability
 35,4.87,91,46,1.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,9.12,3,94,9.4,8.79,Low,Student shows overall stability
-83,7.76,4,99,9.0,24.15,Medium,Student shows overall stability
+83,7.76,4,99,9.0,24.15,Low,Student shows overall stability
 63,6.04,43,62,7.0,76.12,High,Low attendance
 86,7.79,9,82,8.7,28.92,Medium,Student shows overall stability
 18,5.42,71,1,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 61,6.16,26,65,5.9,70.04,High,Low attendance
 90,8.2,6,100,9.3,18.25,Low,Student shows overall stability
 97,8.13,0,80,8.5,16.01,Low,Student shows overall stability
-94,8.03,9,86,7.8,23.88,Medium,Student shows overall stability
+94,8.03,9,86,7.8,23.88,Low,Student shows overall stability
 43,0.34,114,39,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 2,1.78,66,48,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 1,3.16,69,19,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -788,13 +788,13 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 41,1.38,119,44,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 42,0.62,119,33,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 71,6.16,21,75,4.0,63.05,High,Student shows overall stability
-81,9.61,6,81,8.3,22.23,Medium,Student shows overall stability
+81,9.61,6,81,8.3,22.23,Low,Student shows overall stability
 61,6.83,23,51,4.2,71.4,High,Low attendance
 27,0.91,63,20,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,7.82,1,91,7.5,18.34,Low,Student shows overall stability
 44,1.61,117,15,4.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,7.18,29,67,5.7,66.71,High,Low attendance
-92,8.18,4,83,8.0,22.18,Medium,Student shows overall stability
+92,8.18,4,83,8.0,22.18,Low,Student shows overall stability
 86,7.54,5,91,8.0,27.63,Medium,Student shows overall stability
 73,5.75,41,64,4.3,75.06,High,Student shows overall stability
 46,2.74,44,44,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -864,7 +864,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 70,6.9,41,79,6.8,62.92,High,Student shows overall stability
 74,5.82,48,72,4.9,74.22,High,Student shows overall stability
 98,9.57,2,89,8.4,9.27,Low,Student shows overall stability
-85,8.33,4,92,8.2,23.29,Medium,Student shows overall stability
+85,8.33,4,92,8.2,23.29,Low,Student shows overall stability
 87,9.03,0,99,7.8,15.03,Low,Student shows overall stability
 76,6.89,11,74,5.0,49.51,Medium,Student shows overall stability
 70,6.07,47,55,4.1,80.35,High,Student shows overall stability
@@ -884,7 +884,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 8,4.18,41,22,2.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 20,5.14,117,25,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 24,0.84,59,43,0.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-92,8.57,9,85,8.1,22.18,Medium,Student shows overall stability
+92,8.57,9,85,8.1,22.18,Low,Student shows overall stability
 90,9.11,4,98,8.2,15.63,Low,Student shows overall stability
 94,9.8,7,88,8.1,13.27,Low,Student shows overall stability
 54,4.21,53,48,2.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -902,15 +902,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 34,4.61,102,47,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 76,6.11,32,67,5.2,64.63,High,Student shows overall stability
 14,0.39,66,14,3.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-94,8.12,8,81,9.3,20.85,Medium,Student shows overall stability
+94,8.12,8,81,9.3,20.85,Low,Student shows overall stability
 79,6.59,10,51,5.1,52.85,High,Student shows overall stability
 61,5.83,16,78,4.1,67.38,High,Low attendance
 85,7.66,5,81,7.2,31.19,Medium,Student shows overall stability
 79,6.34,31,52,6.7,61.04,High,Student shows overall stability
 48,0.76,119,1,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 65,6.12,34,54,4.8,76.17,High,Student shows overall stability
-98,7.64,7,88,8.3,20.37,Medium,Student shows overall stability
-88,8.88,5,81,7.5,23.16,Medium,Student shows overall stability
+98,7.64,7,88,8.3,20.37,Low,Student shows overall stability
+88,8.88,5,81,7.5,23.16,Low,Student shows overall stability
 93,9.69,6,80,7.7,16.51,Low,Student shows overall stability
 3,2.82,66,42,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 41,0.61,99,5,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -920,7 +920,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 55,1.76,46,39,1.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 3,5.46,91,49,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 13,4.72,86,11,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-85,8.34,7,85,10.0,22.79,Medium,Student shows overall stability
+85,8.34,7,85,10.0,22.79,Low,Student shows overall stability
 48,1.28,86,6,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 62,6.23,38,71,6.9,71.72,High,Low attendance
 50,1.82,104,30,1.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -936,14 +936,14 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 25,4.04,75,44,3.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 84,7.85,6,80,8.5,29.05,Medium,Student shows overall stability
 75,7.05,35,52,5.9,63.46,High,Student shows overall stability
-81,8.63,8,86,9.7,24.67,Medium,Student shows overall stability
+81,8.63,8,86,9.7,24.67,Low,Student shows overall stability
 77,7.35,10,78,4.9,45.38,Medium,Student shows overall stability
 66,6.74,35,51,6.1,70.76,High,Student shows overall stability
 76,6.35,21,73,5.8,55.91,High,Student shows overall stability
 76,5.89,11,53,5.6,57.25,High,Student shows overall stability
 60,7.21,34,54,5.1,72.82,High,Low attendance
 88,7.7,7,93,7.9,26.56,Medium,Student shows overall stability
-84,9.62,8,88,8.0,20.49,Medium,Student shows overall stability
+84,9.62,8,88,8.0,20.49,Low,Student shows overall stability
 97,9.91,7,90,7.7,11.26,Low,Student shows overall stability
 69,6.57,27,59,4.5,67.51,High,Student shows overall stability
 17,1.11,53,48,0.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -958,11 +958,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 73,6.08,35,74,5.4,66.3,High,Student shows overall stability
 99,8.83,9,90,8.8,13.58,Low,Student shows overall stability
 48,4.94,83,32,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-81,9.17,4,95,7.0,23.35,Medium,Student shows overall stability
+81,9.17,4,95,7.0,23.35,Low,Student shows overall stability
 88,8.39,6,96,9.5,18.98,Low,Student shows overall stability
 79,7.21,12,72,6.2,44.6,Medium,Student shows overall stability
 35,2.3,73,43,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-83,7.8,3,100,8.2,24.7,Medium,Student shows overall stability
+83,7.8,3,100,8.2,24.7,Low,Student shows overall stability
 75,6.67,29,76,6.6,56.6,High,Student shows overall stability
 86,9.62,2,84,9.1,15.23,Low,Student shows overall stability
 74,5.78,15,66,5.6,58.64,High,Student shows overall stability
@@ -978,7 +978,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 66,7.29,32,56,4.9,67.79,High,Student shows overall stability
 37,0.2,83,21,1.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 57,0.27,90,49,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-87,8.34,5,100,7.8,21.82,Medium,Student shows overall stability
+87,8.34,5,100,7.8,21.82,Low,Student shows overall stability
 60,6.36,37,74,5.4,74.33,High,Low attendance
 41,1.07,91,41,0.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 70,7.08,49,79,5.1,68.74,High,Student shows overall stability
@@ -997,7 +997,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 63,5.95,35,78,4.1,75.35,High,Low attendance
 95,8.13,0,86,7.6,17.52,Low,Student shows overall stability
 95,8.35,3,87,8.7,16.79,Low,Student shows overall stability
-91,8.61,4,95,7.1,20.14,Medium,Student shows overall stability
+91,8.61,4,95,7.1,20.14,Low,Student shows overall stability
 64,7.33,37,73,4.4,68.69,High,Low attendance
 33,4.13,97,13,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,5.93,17,54,6.8,67.5,High,Low attendance
@@ -1006,7 +1006,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 63,6.76,18,78,6.6,57.76,High,Low attendance
 56,1.79,117,3,2.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,9.36,9,95,7.2,15.03,Low,Student shows overall stability
-89,8.42,9,96,8.2,22.35,Medium,Student shows overall stability
+89,8.42,9,96,8.2,22.35,Low,Student shows overall stability
 82,8.94,5,86,7.0,26.17,Medium,Student shows overall stability
 63,6.9,18,53,5.5,64.1,High,Low attendance
 87,9.15,7,95,8.3,19.07,Low,Student shows overall stability
@@ -1024,16 +1024,16 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 32,0.62,101,28,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 43,2.14,45,0,3.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 75,7.42,32,69,5.4,57.78,High,Student shows overall stability
-84,7.86,1,94,7.8,24.13,Medium,Student shows overall stability
+84,7.86,1,94,7.8,24.13,Low,Student shows overall stability
 80,10.0,2,89,8.7,15.59,Low,Student shows overall stability
-82,9.33,5,92,7.8,21.57,Medium,Student shows overall stability
+82,9.33,5,92,7.8,21.57,Low,Student shows overall stability
 92,9.67,7,95,9.8,10.3,Low,Student shows overall stability
 72,6.19,18,66,5.9,58.85,High,Student shows overall stability
 55,0.5,102,41,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 76,5.55,11,79,6.1,52.57,High,Student shows overall stability
 38,4.77,110,16,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,9.94,4,91,9.5,13.5,Low,Student shows overall stability
-83,8.86,4,97,7.3,22.83,Medium,Student shows overall stability
+83,8.86,4,97,7.3,22.83,Low,Student shows overall stability
 77,6.24,33,60,4.5,66.57,High,Student shows overall stability
 74,5.56,18,64,4.1,64.64,High,Student shows overall stability
 62,6.65,28,62,6.4,67.45,High,Low attendance
@@ -1087,7 +1087,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 79,6.53,40,67,5.0,64.41,High,Student shows overall stability
 74,6.87,19,78,6.2,51.77,High,Student shows overall stability
 44,1.01,110,22,1.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-85,7.62,5,93,10.0,23.4,Medium,Student shows overall stability
+85,7.62,5,93,10.0,23.4,Low,Student shows overall stability
 72,5.55,37,77,6.1,68.61,High,Student shows overall stability
 41,1.13,75,40,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 88,9.65,0,89,8.5,12.54,Low,Student shows overall stability
@@ -1096,7 +1096,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 19,3.52,40,44,2.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 93,9.44,7,91,7.1,17.17,Low,Student shows overall stability
 69,7.02,37,53,6.7,66.51,High,Student shows overall stability
-96,8.13,8,81,8.8,20.51,Medium,Student shows overall stability
+96,8.13,8,81,8.8,20.51,Low,Student shows overall stability
 50,5.01,108,34,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 81,8.24,9,97,8.7,26.86,Medium,Student shows overall stability
 82,8.15,0,80,7.3,25.79,Medium,Student shows overall stability
@@ -1123,15 +1123,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 38,5.42,94,22,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 88,9.14,1,97,7.9,15.58,Low,Student shows overall stability
 69,6.92,34,51,5.9,67.74,High,Student shows overall stability
-85,8.96,2,92,7.1,21.39,Medium,Student shows overall stability
+85,8.96,2,92,7.1,21.39,Low,Student shows overall stability
 65,7.09,21,66,6.1,59.6,High,Student shows overall stability
 81,8.54,4,83,7.3,28.24,Medium,Student shows overall stability
 100,8.09,1,90,9.2,11.55,Low,Student shows overall stability
 87,9.7,8,98,9.6,13.28,Low,Student shows overall stability
 4,1.89,111,18,0.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,8.8,9,86,9.2,14.57,Low,Student shows overall stability
-84,9.33,6,86,8.8,20.15,Medium,Student shows overall stability
-84,8.6,4,84,8.7,23.18,Medium,Student shows overall stability
+84,9.33,6,86,8.8,20.15,Low,Student shows overall stability
+84,8.6,4,84,8.7,23.18,Low,Student shows overall stability
 74,7.23,42,60,5.3,65.66,High,Student shows overall stability
 77,5.61,35,65,6.1,66.46,High,Student shows overall stability
 75,6.47,47,51,6.8,70.26,High,Student shows overall stability
@@ -1154,11 +1154,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 86,9.48,7,93,9.4,16.0,Low,Student shows overall stability
 8,5.17,108,34,2.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,6.05,46,68,6.9,78.41,High,Low attendance
-81,9.25,2,81,9.0,20.55,Medium,Student shows overall stability
+81,9.25,2,81,9.0,20.55,Low,Student shows overall stability
 4,5.24,59,37,2.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-85,8.31,2,80,8.6,23.72,Medium,Student shows overall stability
+85,8.31,2,80,8.6,23.72,Low,Student shows overall stability
 18,3.37,64,34,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-86,8.13,5,82,8.9,24.93,Medium,Student shows overall stability
+86,8.13,5,82,8.9,24.93,Low,Student shows overall stability
 4,2.5,72,7,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 75,5.68,21,62,6.6,60.44,High,Student shows overall stability
 45,5.05,86,43,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1192,15 +1192,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 87,9.06,0,90,7.5,17.28,Low,Student shows overall stability
 13,3.09,51,44,1.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 28,1.16,46,29,3.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-96,7.54,5,98,7.3,21.35,Medium,Student shows overall stability
+96,7.54,5,98,7.3,21.35,Low,Student shows overall stability
 84,7.75,5,81,10.0,25.79,Medium,Student shows overall stability
-80,9.8,8,90,7.2,22.69,Medium,Student shows overall stability
+80,9.8,8,90,7.2,22.69,Low,Student shows overall stability
 22,4.92,50,21,1.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 41,1.42,117,17,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 53,0.68,111,3,1.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 48,1.47,111,38,2.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-84,9.5,7,86,8.1,21.04,Medium,Student shows overall stability
-93,7.94,5,83,7.2,24.69,Medium,Student shows overall stability
+84,9.5,7,86,8.1,21.04,Low,Student shows overall stability
+93,7.94,5,83,7.2,24.69,Low,Student shows overall stability
 66,6.49,14,52,5.5,62.44,High,Student shows overall stability
 79,5.82,20,57,6.6,57.58,High,Student shows overall stability
 6,0.52,58,8,3.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -1215,7 +1215,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 64,5.7,17,74,4.3,67.27,High,Low attendance
 82,9.91,4,99,9.1,13.58,Low,Student shows overall stability
 93,9.31,5,90,9.1,13.19,Low,Student shows overall stability
-82,9.44,5,87,8.3,20.82,Medium,Student shows overall stability
+82,9.44,5,87,8.3,20.82,Low,Student shows overall stability
 67,6.23,24,61,6.5,64.55,High,Student shows overall stability
 45,3.69,119,28,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 28,3.09,97,20,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1236,7 +1236,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 76,7.48,36,65,5.3,59.44,High,Student shows overall stability
 48,3.02,59,15,0.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 55,0.13,77,28,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-91,8.01,6,96,7.4,23.2,Medium,Student shows overall stability
+91,8.01,6,96,7.4,23.2,Low,Student shows overall stability
 95,8.46,8,86,9.3,17.71,Low,Student shows overall stability
 71,6.43,44,51,4.8,75.8,High,Student shows overall stability
 64,7.4,17,74,4.8,57.64,High,Low attendance
@@ -1245,7 +1245,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 7,3.98,90,13,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 70,6.74,42,76,5.7,67.14,High,Student shows overall stability
 6,0.52,101,22,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-82,8.08,3,81,9.9,24.28,Medium,Student shows overall stability
+82,8.08,3,81,9.9,24.28,Low,Student shows overall stability
 29,5.22,49,34,3.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 91,8.39,0,83,9.2,15.98,Low,Student shows overall stability
 90,9.12,8,94,9.8,15.13,Low,Student shows overall stability
@@ -1294,18 +1294,18 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 89,9.48,9,89,9.2,16.38,Low,Student shows overall stability
 69,6.09,39,73,6.2,69.38,High,Student shows overall stability
 68,6.31,10,58,4.8,59.94,High,Student shows overall stability
-87,8.35,8,88,8.3,24.81,Medium,Student shows overall stability
+87,8.35,8,88,8.3,24.81,Low,Student shows overall stability
 89,9.64,8,85,7.3,19.72,Low,Student shows overall stability
 66,6.44,25,50,6.7,66.56,High,Student shows overall stability
 53,2.35,103,25,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,9.64,3,97,7.0,20.38,Medium,Student shows overall stability
+80,9.64,3,97,7.0,20.38,Low,Student shows overall stability
 63,6.83,22,74,4.5,64.31,High,Low attendance
 23,5.16,72,18,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 66,6.45,10,59,6.0,57.77,High,Student shows overall stability
 94,10.0,4,88,7.3,12.13,Low,Student shows overall stability
 66,5.85,34,76,6.5,69.1,High,Student shows overall stability
 68,6.07,42,68,5.8,73.36,High,Student shows overall stability
-81,9.48,9,93,8.6,21.36,Medium,Student shows overall stability
+81,9.48,9,93,8.6,21.36,Low,Student shows overall stability
 67,6.16,30,77,6.4,64.92,High,Student shows overall stability
 91,8.57,7,85,9.2,19.64,Low,Student shows overall stability
 77,6.68,48,67,5.3,67.96,High,Student shows overall stability
@@ -1345,15 +1345,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 31,5.0,42,11,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 76,6.91,42,79,6.9,59.28,High,Student shows overall stability
 73,7.31,24,56,4.3,60.67,High,Student shows overall stability
-85,9.11,8,91,8.3,21.63,Medium,Student shows overall stability
+85,9.11,8,91,8.3,21.63,Low,Student shows overall stability
 24,1.94,96,18,0.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 67,6.21,18,51,5.4,65.8,High,Student shows overall stability
 24,4.43,87,44,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 82,7.71,3,97,8.2,26.21,Medium,Student shows overall stability
 69,6.19,10,76,6.0,53.97,High,Student shows overall stability
 64,7.03,38,64,5.6,70.11,High,Low attendance
-91,9.19,4,82,7.0,20.19,Medium,Student shows overall stability
-81,9.27,4,95,7.7,21.37,Medium,Student shows overall stability
+91,9.19,4,82,7.0,20.19,Low,Student shows overall stability
+81,9.27,4,95,7.7,21.37,Low,Student shows overall stability
 98,9.74,0,85,9.2,6.62,Low,Student shows overall stability
 98,9.48,7,92,7.2,13.47,Low,Student shows overall stability
 3,2.11,75,40,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1366,7 +1366,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 95,9.45,7,94,8.8,12.01,Low,Student shows overall stability
 81,8.11,9,82,8.6,30.76,Medium,Student shows overall stability
 83,9.93,4,89,9.4,14.24,Low,Student shows overall stability
-80,8.89,0,86,8.0,21.22,Medium,Student shows overall stability
+80,8.89,0,86,8.0,21.22,Low,Student shows overall stability
 14,2.53,105,18,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 74,5.58,36,77,5.4,68.08,High,Student shows overall stability
 0,0.7,83,9,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1374,19 +1374,19 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 54,3.37,59,14,0.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 89,8.82,6,84,9.8,18.29,Low,Student shows overall stability
 74,5.82,46,73,4.9,73.19,High,Student shows overall stability
-86,9.23,6,92,7.4,21.15,Medium,Student shows overall stability
+86,9.23,6,92,7.4,21.15,Low,Student shows overall stability
 78,6.32,39,50,4.2,70.77,High,Student shows overall stability
 97,9.86,6,97,8.4,8.48,Low,Student shows overall stability
 38,4.2,96,44,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 72,7.05,44,50,5.4,70.72,High,Student shows overall stability
 61,7.37,44,64,6.3,71.46,High,Low attendance
-92,7.69,3,98,7.3,22.08,Medium,Student shows overall stability
+92,7.69,3,98,7.3,22.08,Low,Student shows overall stability
 53,4.51,118,13,2.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-85,8.29,4,99,9.2,20.17,Medium,Student shows overall stability
+85,8.29,4,99,9.2,20.17,Low,Student shows overall stability
 78,6.92,15,63,4.8,52.79,High,Student shows overall stability
 92,9.54,2,98,9.4,8.97,Low,Student shows overall stability
 72,7.48,27,61,5.2,59.03,High,Student shows overall stability
-83,8.52,3,89,8.4,23.09,Medium,Student shows overall stability
+83,8.52,3,89,8.4,23.09,Low,Student shows overall stability
 61,6.26,15,75,6.7,60.02,High,Low attendance
 97,8.76,6,82,8.6,16.24,Low,Student shows overall stability
 98,8.66,5,97,9.2,11.38,Low,Student shows overall stability
@@ -1405,21 +1405,21 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 36,1.05,117,46,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 81,7.87,9,95,7.2,32.01,Medium,Student shows overall stability
 72,7.02,42,55,4.2,71.55,High,Student shows overall stability
-80,8.82,8,96,9.8,22.02,Medium,Student shows overall stability
+80,8.82,8,96,9.8,22.02,Low,Student shows overall stability
 55,4.63,108,23,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 80,7.9,9,82,7.5,34.52,Medium,Student shows overall stability
 77,6.78,26,77,4.9,56.49,High,Student shows overall stability
 76,5.58,29,67,6.5,63.31,High,Student shows overall stability
-83,8.51,4,93,8.3,23.21,Medium,Student shows overall stability
+83,8.51,4,93,8.3,23.21,Low,Student shows overall stability
 10,1.99,63,15,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 68,5.99,26,79,5.4,64.71,High,Student shows overall stability
 29,4.47,113,30,0.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 68,5.88,44,70,4.2,78.04,High,Student shows overall stability
 15,0.27,91,24,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 35,4.56,56,44,0.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-85,8.68,2,84,8.9,20.6,Medium,Student shows overall stability
+85,8.68,2,84,8.9,20.6,Low,Student shows overall stability
 95,8.86,9,83,9.0,17.4,Low,Student shows overall stability
-80,9.14,4,81,8.4,23.97,Medium,Student shows overall stability
+80,9.14,4,81,8.4,23.97,Low,Student shows overall stability
 68,6.66,25,65,6.1,62.34,High,Student shows overall stability
 67,5.7,22,74,4.8,67.09,High,Student shows overall stability
 99,8.13,6,88,9.1,15.38,Low,Student shows overall stability
@@ -1457,10 +1457,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 80,7.65,3,89,9.2,27.12,Medium,Student shows overall stability
 16,4.29,107,29,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,8.52,3,87,8.6,15.0,Low,Student shows overall stability
-80,8.86,3,93,9.0,21.26,Medium,Student shows overall stability
+80,8.86,3,93,9.0,21.26,Low,Student shows overall stability
 80,8.23,7,87,7.2,31.46,Medium,Student shows overall stability
 21,0.52,95,13,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-83,8.95,3,80,9.0,21.71,Medium,Student shows overall stability
+83,8.95,3,80,9.0,21.71,Low,Student shows overall stability
 68,6.85,36,66,5.5,67.53,High,Student shows overall stability
 75,6.96,42,50,5.3,68.51,High,Student shows overall stability
 4,3.99,57,48,0.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -1491,8 +1491,8 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 1,2.34,116,49,1.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 95,9.76,7,85,7.3,15.21,Low,Student shows overall stability
 78,6.58,17,71,4.4,54.57,High,Student shows overall stability
-81,7.72,5,100,9.7,24.39,Medium,Student shows overall stability
-87,7.7,4,98,8.4,23.5,Medium,Student shows overall stability
+81,7.72,5,100,9.7,24.39,Low,Student shows overall stability
+87,7.7,4,98,8.4,23.5,Low,Student shows overall stability
 79,6.98,11,59,6.0,48.18,Medium,Student shows overall stability
 88,9.54,5,80,8.7,17.7,Low,Student shows overall stability
 77,7.28,25,64,4.2,57.32,High,Student shows overall stability
@@ -1502,7 +1502,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 66,7.0,22,59,5.4,62.94,High,Student shows overall stability
 91,7.53,7,86,8.5,25.71,Medium,Student shows overall stability
 72,5.55,10,76,5.6,55.87,High,Student shows overall stability
-83,9.01,3,88,7.0,23.86,Medium,Student shows overall stability
+83,9.01,3,88,7.0,23.86,Low,Student shows overall stability
 54,3.75,55,23,1.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 46,0.63,70,27,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 62,5.98,48,66,5.8,80.87,High,Low attendance
@@ -1514,7 +1514,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 94,9.61,2,95,7.1,12.82,Low,Student shows overall stability
 40,1.67,46,14,3.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 64,6.34,22,57,4.4,69.87,High,Low attendance
-95,7.54,7,91,8.2,22.56,Medium,Student shows overall stability
+95,7.54,7,91,8.2,22.56,Low,Student shows overall stability
 71,5.89,27,53,5.1,69.76,High,Student shows overall stability
 87,9.44,6,88,8.0,19.05,Low,Student shows overall stability
 74,6.59,31,53,5.2,65.96,High,Student shows overall stability
@@ -1525,7 +1525,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 41,1.79,94,22,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,8.27,8,94,9.4,14.51,Low,Student shows overall stability
 70,6.57,10,56,4.0,59.5,High,Student shows overall stability
-92,7.78,3,85,8.9,21.02,Medium,Student shows overall stability
+92,7.78,3,85,8.9,21.02,Low,Student shows overall stability
 31,0.21,90,16,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 26,3.46,79,32,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 22,3.28,118,5,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1541,7 +1541,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 82,8.24,7,88,9.1,26.25,Medium,Student shows overall stability
 10,1.73,80,1,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,8.23,1,99,9.2,19.32,Low,Student shows overall stability
-90,7.74,9,99,9.3,22.2,Medium,Student shows overall stability
+90,7.74,9,99,9.3,22.2,Low,Student shows overall stability
 81,9.6,3,96,8.9,16.55,Low,Student shows overall stability
 87,8.68,5,89,9.2,19.77,Low,Student shows overall stability
 82,8.34,9,88,7.7,29.56,Medium,Student shows overall stability
@@ -1564,7 +1564,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 57,1.68,82,41,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 78,6.98,18,77,6.5,47.82,Medium,Student shows overall stability
 75,6.08,30,60,7.0,62.45,High,Student shows overall stability
-92,8.16,8,83,7.7,24.85,Medium,Student shows overall stability
+92,8.16,8,83,7.7,24.85,Low,Student shows overall stability
 1,3.09,101,4,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,9.04,5,89,9.6,19.38,Low,Student shows overall stability
 78,5.57,14,75,4.3,57.18,High,Student shows overall stability
@@ -1575,8 +1575,8 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 34,5.43,104,3,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,8.25,8,85,9.9,15.37,Low,Student shows overall stability
 90,7.6,8,94,7.0,27.84,Medium,Student shows overall stability
-98,8.06,9,91,7.4,20.39,Medium,Student shows overall stability
-89,7.55,5,96,9.1,22.56,Medium,Student shows overall stability
+98,8.06,9,91,7.4,20.39,Low,Student shows overall stability
+89,7.55,5,96,9.1,22.56,Low,Student shows overall stability
 96,8.38,7,92,7.9,18.61,Low,Student shows overall stability
 70,6.87,44,50,6.8,70.24,High,Student shows overall stability
 64,7.04,26,50,4.2,70.08,High,Low attendance
@@ -1586,17 +1586,17 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 0,0.93,64,41,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 58,2.89,118,23,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 28,0.61,71,4,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-82,9.28,1,81,8.2,20.73,Medium,Student shows overall stability
+82,9.28,1,81,8.2,20.73,Low,Student shows overall stability
 64,6.22,46,54,4.1,83.18,High,Low attendance
 77,5.91,45,50,7.0,70.67,High,Student shows overall stability
 96,9.95,8,87,9.4,9.19,Low,Student shows overall stability
-91,7.55,2,89,9.0,21.1,Medium,Student shows overall stability
+91,7.55,2,89,9.0,21.1,Low,Student shows overall stability
 75,7.13,23,60,4.2,59.3,High,Student shows overall stability
 68,6.8,19,68,4.1,61.97,High,Student shows overall stability
 92,7.57,7,88,7.1,27.3,Medium,Student shows overall stability
 5,3.23,50,11,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 11,2.81,113,19,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-84,8.8,9,82,9.9,22.93,Medium,Student shows overall stability
+84,8.8,9,82,9.9,22.93,Low,Student shows overall stability
 49,4.56,48,21,0.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 91,9.41,2,98,9.3,10.45,Low,Student shows overall stability
 22,2.62,65,12,3.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1621,7 +1621,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 13,2.5,45,6,1.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 91,8.45,0,83,9.9,14.22,Low,Student shows overall stability
 79,7.28,17,60,6.3,49.04,Medium,Student shows overall stability
-84,8.68,9,94,8.3,24.35,Medium,Student shows overall stability
+84,8.68,9,94,8.3,24.35,Low,Student shows overall stability
 39,0.64,44,12,1.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 90,7.62,8,87,8.5,26.23,Medium,Student shows overall stability
 72,6.4,36,69,5.2,67.19,High,Student shows overall stability
@@ -1651,7 +1651,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 15,0.37,102,3,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 52,2.31,112,42,1.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,9.75,8,95,8.3,18.21,Low,Student shows overall stability
-81,8.2,1,100,7.8,23.13,Medium,Student shows overall stability
+81,8.2,1,100,7.8,23.13,Low,Student shows overall stability
 91,8.36,3,97,9.3,15.94,Low,Student shows overall stability
 30,2.55,102,22,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 14,3.69,67,2,2.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1670,7 +1670,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 83,8.84,6,95,9.9,19.22,Low,Student shows overall stability
 78,6.32,17,63,5.7,54.93,High,Student shows overall stability
 14,3.6,85,18,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-83,8.86,2,86,7.5,23.28,Medium,Student shows overall stability
+83,8.86,2,86,7.5,23.28,Low,Student shows overall stability
 78,6.92,37,68,4.4,62.74,High,Student shows overall stability
 92,9.97,0,97,8.8,7.21,Low,Student shows overall stability
 84,9.02,0,91,7.1,19.59,Low,Student shows overall stability
@@ -1686,7 +1686,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 70,5.68,30,64,5.8,69.27,High,Student shows overall stability
 74,5.61,21,74,4.4,63.25,High,Student shows overall stability
 82,9.83,2,81,9.2,16.53,Low,Student shows overall stability
-96,7.93,5,89,7.6,20.7,Medium,Student shows overall stability
+96,7.93,5,89,7.6,20.7,Low,Student shows overall stability
 75,6.97,39,70,6.4,60.96,High,Student shows overall stability
 99,7.91,5,100,9.4,12.84,Low,Student shows overall stability
 93,8.85,4,86,8.5,16.99,Low,Student shows overall stability
@@ -1700,8 +1700,8 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 95,8.01,6,93,8.0,19.93,Low,Student shows overall stability
 71,5.67,45,56,5.7,77.36,High,Student shows overall stability
 65,5.75,49,72,6.6,77.77,High,Student shows overall stability
-90,8.46,5,80,8.8,21.68,Medium,Student shows overall stability
-85,8.78,6,92,8.8,21.21,Medium,Student shows overall stability
+90,8.46,5,80,8.8,21.68,Low,Student shows overall stability
+85,8.78,6,92,8.8,21.21,Low,Student shows overall stability
 48,1.94,52,33,2.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 81,7.55,1,84,9.8,25.18,Medium,Student shows overall stability
 69,7.34,31,62,4.1,65.52,High,Student shows overall stability
@@ -1720,7 +1720,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 96,8.79,0,92,8.7,11.03,Low,Student shows overall stability
 64,6.81,47,60,5.8,75.86,High,Low attendance
 65,7.19,21,62,4.7,62.79,High,Student shows overall stability
-85,9.02,3,87,7.2,22.52,Medium,Student shows overall stability
+85,9.02,3,87,7.2,22.52,Low,Student shows overall stability
 32,1.72,118,35,1.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 21,4.46,84,21,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 57,3.17,119,28,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -1736,7 +1736,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 76,6.56,29,58,5.5,62.19,High,Student shows overall stability
 65,7.36,26,74,6.0,59.39,High,Student shows overall stability
 45,0.41,98,5,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-89,8.18,2,83,7.9,22.83,Medium,Student shows overall stability
+89,8.18,2,83,7.9,22.83,Low,Student shows overall stability
 61,6.63,47,79,7.0,72.57,High,Low attendance
 77,6.06,35,71,5.7,63.84,High,Student shows overall stability
 89,9.3,5,96,9.1,14.35,Low,Student shows overall stability
@@ -1751,7 +1751,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 34,4.15,97,44,0.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 64,7.1,30,73,5.3,64.82,High,Low attendance
 89,9.26,4,99,7.9,15.96,Low,Student shows overall stability
-83,9.43,5,82,7.4,23.27,Medium,Student shows overall stability
+83,9.43,5,82,7.4,23.27,Low,Student shows overall stability
 95,8.23,0,92,9.4,12.32,Low,Student shows overall stability
 92,8.16,1,91,8.6,17.46,Low,Student shows overall stability
 60,6.75,33,79,5.2,69.64,High,Low attendance
@@ -1763,7 +1763,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 84,7.58,4,85,8.2,28.69,Medium,Student shows overall stability
 68,5.63,11,51,6.4,62.11,High,Student shows overall stability
 81,7.84,0,83,7.5,26.54,Medium,Student shows overall stability
-89,8.03,8,96,7.7,24.7,Medium,Student shows overall stability
+89,8.03,8,96,7.7,24.7,Low,Student shows overall stability
 65,6.78,28,63,5.1,67.4,High,Student shows overall stability
 28,1.52,111,0,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 93,9.64,0,84,8.8,10.54,Low,Student shows overall stability
@@ -1779,7 +1779,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 44,3.49,107,32,1.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 42,5.1,51,10,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 68,5.74,12,52,6.3,62.14,High,Student shows overall stability
-82,9.34,7,85,8.9,21.69,Medium,Student shows overall stability
+82,9.34,7,85,8.9,21.69,Low,Student shows overall stability
 71,6.17,22,71,6.1,60.22,High,Student shows overall stability
 20,1.3,70,45,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 67,6.3,32,64,4.9,70.73,High,Student shows overall stability
@@ -1792,7 +1792,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 13,3.35,95,41,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 12,3.02,72,20,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 64,7.25,47,52,6.8,72.83,High,Low attendance
-83,9.48,4,87,7.2,21.88,Medium,Student shows overall stability
+83,9.48,4,87,7.2,21.88,Low,Student shows overall stability
 81,9.33,0,86,8.1,18.87,Low,Student shows overall stability
 85,9.28,0,89,8.7,15.24,Low,Student shows overall stability
 96,9.87,3,97,8.8,6.93,Low,Student shows overall stability
@@ -1812,7 +1812,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 79,7.26,25,52,6.0,55.06,High,Student shows overall stability
 64,6.94,36,73,5.1,68.85,High,Low attendance
 96,7.82,6,95,8.2,19.37,Low,Student shows overall stability
-82,8.9,0,89,7.0,21.53,Medium,Student shows overall stability
+82,8.9,0,89,7.0,21.53,Low,Student shows overall stability
 96,8.84,4,85,7.3,17.81,Low,Student shows overall stability
 19,4.15,46,28,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 61,6.03,47,55,5.6,83.58,High,Low attendance
@@ -1822,7 +1822,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 84,9.24,5,95,8.4,19.12,Low,Student shows overall stability
 73,5.64,29,62,4.1,70.75,High,Student shows overall stability
 25,0.74,53,35,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-95,7.97,9,100,7.9,20.32,Medium,Student shows overall stability
+95,7.97,9,100,7.9,20.32,Low,Student shows overall stability
 49,3.76,60,35,2.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 63,6.02,39,68,6.2,74.81,High,Low attendance
 92,8.4,5,84,9.1,19.33,Low,Student shows overall stability
@@ -1833,28 +1833,28 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 65,7.16,14,66,5.5,56.88,High,Student shows overall stability
 66,6.43,49,54,4.3,81.74,High,Student shows overall stability
 45,5.11,76,45,1.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-97,7.6,2,84,7.2,21.82,Medium,Student shows overall stability
+97,7.6,2,84,7.2,21.82,Low,Student shows overall stability
 47,0.42,100,10,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 61,6.56,22,61,6.9,64.8,High,Low attendance
 53,0.41,116,11,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 81,7.7,3,92,7.7,28.89,Medium,Student shows overall stability
-80,8.6,8,93,9.3,24.64,Medium,Student shows overall stability
+80,8.6,8,93,9.3,24.64,Low,Student shows overall stability
 82,7.67,3,86,8.0,28.9,Medium,Student shows overall stability
 77,5.59,14,72,5.2,56.53,High,Student shows overall stability
 71,7.41,10,52,5.0,53.67,High,Student shows overall stability
-81,8.12,0,89,7.8,23.56,Medium,Student shows overall stability
+81,8.12,0,89,7.8,23.56,Low,Student shows overall stability
 77,6.67,24,69,4.2,59.0,High,Student shows overall stability
 20,3.64,72,25,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 74,6.3,20,72,4.2,60.27,High,Student shows overall stability
 95,8.38,9,97,7.5,19.95,Low,Student shows overall stability
-82,8.05,4,95,8.6,24.85,Medium,Student shows overall stability
+82,8.05,4,95,8.6,24.85,Low,Student shows overall stability
 100,7.88,9,83,8.1,18.73,Low,Student shows overall stability
 9,2.45,45,47,2.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 22,2.07,60,9,1.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 68,6.54,33,78,4.7,66.98,High,Student shows overall stability
 68,7.05,13,68,4.7,56.26,High,Student shows overall stability
 87,9.25,7,100,9.7,14.68,Low,Student shows overall stability
-80,9.63,4,85,7.5,22.46,Medium,Student shows overall stability
+80,9.63,4,85,7.5,22.46,Low,Student shows overall stability
 59,2.43,86,47,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 62,7.11,31,66,4.1,70.22,High,Low attendance
 78,7.19,11,64,4.9,49.02,Medium,Student shows overall stability
@@ -1867,7 +1867,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 76,6.99,36,50,6.1,63.5,High,Student shows overall stability
 18,2.83,116,25,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 61,7.4,39,76,5.5,68.14,High,Low attendance
-92,7.56,8,93,9.5,22.05,Medium,Student shows overall stability
+92,7.56,8,93,9.5,22.05,Low,Student shows overall stability
 77,6.33,12,50,6.5,53.84,High,Student shows overall stability
 13,3.63,86,49,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,8.08,3,98,8.6,14.01,Low,Student shows overall stability
@@ -1890,10 +1890,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 97,9.42,3,100,7.6,10.36,Low,Student shows overall stability
 76,5.66,29,62,5.8,65.42,High,Student shows overall stability
 88,8.79,5,80,9.8,19.24,Low,Student shows overall stability
-82,9.83,8,83,8.4,20.48,Medium,Student shows overall stability
-89,8.26,6,89,8.8,21.87,Medium,Student shows overall stability
-83,9.15,1,87,7.2,21.53,Medium,Student shows overall stability
-84,9.24,8,82,8.5,22.89,Medium,Student shows overall stability
+82,9.83,8,83,8.4,20.48,Low,Student shows overall stability
+89,8.26,6,89,8.8,21.87,Low,Student shows overall stability
+83,9.15,1,87,7.2,21.53,Low,Student shows overall stability
+84,9.24,8,82,8.5,22.89,Low,Student shows overall stability
 94,9.09,9,100,9.0,13.55,Low,Student shows overall stability
 98,9.95,2,97,8.7,5.24,Low,Student shows overall stability
 60,6.82,24,56,6.2,67.53,High,Low attendance
@@ -1999,27 +1999,27 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 22,4.72,77,29,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 63,7.31,43,65,5.5,71.49,High,Low attendance
 13,2.71,107,0,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-87,8.68,8,82,8.9,23.32,Medium,Student shows overall stability
+87,8.68,8,82,8.9,23.32,Low,Student shows overall stability
 67,5.7,13,56,6.6,62.0,High,Student shows overall stability
 38,4.28,72,32,1.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 73,6.18,25,77,4.4,62.64,High,Student shows overall stability
 5,2.77,54,43,4.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 73,5.61,13,75,6.4,55.5,High,Student shows overall stability
-82,9.27,5,88,8.0,22.13,Medium,Student shows overall stability
+82,9.27,5,88,8.0,22.13,Low,Student shows overall stability
 95,7.83,4,100,9.6,15.21,Low,Student shows overall stability
 4,2.73,57,20,2.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-89,8.33,8,87,8.5,23.49,Medium,Student shows overall stability
+89,8.33,8,87,8.5,23.49,Low,Student shows overall stability
 60,7.44,43,60,4.5,75.63,High,Low attendance
 90,9.03,8,94,8.7,17.77,Low,Student shows overall stability
 0,1.59,63,35,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 25,0.87,75,26,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-82,9.0,4,88,7.9,23.27,Medium,Student shows overall stability
+82,9.0,4,88,7.9,23.27,Low,Student shows overall stability
 70,7.19,13,54,4.9,56.83,High,Student shows overall stability
 15,3.53,50,28,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 66,6.37,45,56,6.5,75.53,High,Student shows overall stability
 58,4.69,95,7,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 93,8.69,8,97,8.8,16.73,Low,Student shows overall stability
-86,9.76,9,81,7.8,20.79,Medium,Student shows overall stability
+86,9.76,9,81,7.8,20.79,Low,Student shows overall stability
 85,7.55,8,92,8.4,28.85,Medium,Student shows overall stability
 87,9.78,5,82,8.1,17.65,Low,Student shows overall stability
 60,5.71,28,51,5.3,78.08,High,Low attendance
@@ -2028,8 +2028,8 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 32,3.82,68,42,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 67,7.37,22,75,4.4,59.05,High,Student shows overall stability
 96,8.09,4,82,8.8,18.54,Low,Student shows overall stability
-81,8.98,7,96,7.6,24.42,Medium,Student shows overall stability
-88,8.3,8,100,8.4,21.97,Medium,Student shows overall stability
+81,8.98,7,96,7.6,24.42,Low,Student shows overall stability
+88,8.3,8,100,8.4,21.97,Low,Student shows overall stability
 75,5.63,34,75,4.5,68.47,High,Student shows overall stability
 14,3.56,104,4,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 72,6.91,49,64,6.0,69.59,High,Student shows overall stability
@@ -2046,7 +2046,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 45,2.47,85,43,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 32,2.08,47,8,0.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 36,1.77,77,34,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-85,8.91,4,82,8.9,21.19,Medium,Student shows overall stability
+85,8.91,4,82,8.9,21.19,Low,Student shows overall stability
 72,6.9,37,79,5.8,61.82,High,Student shows overall stability
 83,8.91,9,97,9.8,20.0,Low,Student shows overall stability
 77,6.31,43,60,5.9,67.81,High,Student shows overall stability
@@ -2089,7 +2089,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 41,1.87,101,38,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 21,1.93,109,31,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 38,3.62,70,11,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-82,8.99,4,90,9.3,20.15,Medium,Student shows overall stability
+82,8.99,4,90,9.3,20.15,Low,Student shows overall stability
 84,9.26,2,92,9.2,16.35,Low,Student shows overall stability
 41,2.72,57,3,0.4,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 25,2.78,107,40,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2114,7 +2114,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 77,5.52,22,69,4.6,62.84,High,Student shows overall stability
 41,4.43,100,19,1.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 86,7.64,5,95,7.1,28.17,Medium,Student shows overall stability
-89,8.11,8,90,9.9,21.17,Medium,Student shows overall stability
+89,8.11,8,90,9.9,21.17,Low,Student shows overall stability
 1,3.74,89,34,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 30,0.94,67,31,0.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 90,9.86,0,84,9.1,10.53,Low,Student shows overall stability
@@ -2136,9 +2136,9 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 93,9.02,3,91,9.3,12.96,Low,Student shows overall stability
 79,6.02,43,56,6.1,68.31,High,Student shows overall stability
 80,9.43,7,80,7.1,26.87,Medium,Student shows overall stability
-80,9.66,9,89,8.3,22.0,Medium,Student shows overall stability
+80,9.66,9,89,8.3,22.0,Low,Student shows overall stability
 67,5.83,33,66,6.3,70.54,High,Student shows overall stability
-85,9.3,4,94,7.3,20.14,Medium,Student shows overall stability
+85,9.3,4,94,7.3,20.14,Low,Student shows overall stability
 100,8.25,1,96,7.8,12.52,Low,Student shows overall stability
 18,5.3,53,14,2.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 68,6.99,22,76,4.2,60.75,High,Student shows overall stability
@@ -2147,18 +2147,18 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 6,4.37,53,45,0.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 79,6.68,14,79,4.2,50.85,High,Student shows overall stability
 15,4.81,45,30,2.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-82,9.09,9,97,9.0,21.41,Medium,Student shows overall stability
+82,9.09,9,97,9.0,21.41,Low,Student shows overall stability
 69,7.22,12,54,5.3,55.97,High,Student shows overall stability
 91,8.51,4,83,9.9,17.51,Low,Student shows overall stability
 78,5.54,15,58,5.2,59.58,High,Student shows overall stability
 65,6.32,43,73,6.2,72.61,High,Student shows overall stability
 5,3.1,59,20,1.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 55,2.0,109,22,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-93,7.55,0,81,7.5,22.14,Medium,Student shows overall stability
+93,7.55,0,81,7.5,22.14,Low,Student shows overall stability
 86,9.53,3,90,8.1,17.04,Low,Student shows overall stability
 75,6.74,14,60,6.3,52.62,High,Student shows overall stability
 83,9.18,6,94,9.7,18.02,Low,Student shows overall stability
-89,8.32,5,93,7.2,23.45,Medium,Student shows overall stability
+89,8.32,5,93,7.2,23.45,Low,Student shows overall stability
 95,9.06,9,94,8.9,14.57,Low,Student shows overall stability
 91,9.23,9,89,8.7,17.61,Low,Student shows overall stability
 75,6.78,23,68,4.6,58.69,High,Student shows overall stability
@@ -2185,10 +2185,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 70,7.21,22,58,6.5,57.35,High,Student shows overall stability
 80,8.37,3,81,9.2,25.59,Medium,Student shows overall stability
 73,5.6,17,77,6.1,57.86,High,Student shows overall stability
-87,8.77,7,89,7.4,23.84,Medium,Student shows overall stability
+87,8.77,7,89,7.4,23.84,Low,Student shows overall stability
 34,3.31,54,26,3.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 77,5.53,46,58,6.8,71.77,High,Student shows overall stability
-82,9.42,5,82,7.8,23.07,Medium,Student shows overall stability
+82,9.42,5,82,7.8,23.07,Low,Student shows overall stability
 3,4.01,56,27,2.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 97,9.65,9,89,7.5,14.12,Low,Student shows overall stability
 71,7.1,10,76,6.8,46.72,Medium,Student shows overall stability
@@ -2197,7 +2197,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 46,1.76,97,41,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 21,4.14,86,37,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 52,0.76,47,49,2.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-84,8.58,3,96,7.6,22.58,Medium,Student shows overall stability
+84,8.58,3,96,7.6,22.58,Low,Student shows overall stability
 11,1.25,83,1,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 17,0.1,97,0,1.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,8.59,1,98,8.8,18.67,Low,Student shows overall stability
@@ -2244,22 +2244,22 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 23,2.91,92,44,1.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 64,7.25,13,60,5.5,57.58,High,Low attendance
 94,8.14,4,95,7.4,19.89,Low,Student shows overall stability
-81,9.26,3,88,8.1,21.62,Medium,Student shows overall stability
+81,9.26,3,88,8.1,21.62,Low,Student shows overall stability
 82,7.72,2,85,9.6,25.09,Medium,Student shows overall stability
 24,1.99,78,29,1.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 22,3.03,102,24,0.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-86,8.93,9,97,8.5,20.92,Medium,Student shows overall stability
+86,8.93,9,97,8.5,20.92,Low,Student shows overall stability
 75,6.67,17,59,4.2,58.83,High,Student shows overall stability
-85,8.3,8,85,9.3,24.86,Medium,Student shows overall stability
+85,8.3,8,85,9.3,24.86,Low,Student shows overall stability
 0,5.42,79,42,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 86,8.38,3,97,9.4,18.44,Low,Student shows overall stability
 73,6.5,25,51,6.3,62.38,High,Student shows overall stability
 76,7.5,24,77,6.6,49.11,Medium,Student shows overall stability
 58,5.03,85,44,0.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-83,9.58,2,82,7.1,21.51,Medium,Student shows overall stability
+83,9.58,2,82,7.1,21.51,Low,Student shows overall stability
 68,7.0,26,65,4.1,65.0,High,Student shows overall stability
 96,8.95,7,81,9.7,14.64,Low,Student shows overall stability
-99,8.21,8,85,7.2,20.2,Medium,Student shows overall stability
+99,8.21,8,85,7.2,20.2,Low,Student shows overall stability
 38,2.46,65,36,2.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 25,4.87,68,30,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 100,7.83,0,86,7.3,16.84,Low,Student shows overall stability
@@ -2268,7 +2268,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 47,2.11,116,32,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 100,8.13,3,91,7.4,15.55,Low,Student shows overall stability
 2,0.33,91,17,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-89,8.16,1,86,7.6,22.12,Medium,Student shows overall stability
+89,8.16,1,86,7.6,22.12,Low,Student shows overall stability
 100,9.76,2,83,7.8,9.38,Low,Student shows overall stability
 24,3.93,102,26,3.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 65,7.47,10,57,4.5,56.86,High,Student shows overall stability
@@ -2290,11 +2290,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 20,4.43,86,25,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 86,8.0,1,89,10.0,19.13,Low,Student shows overall stability
 29,0.55,46,4,3.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-87,7.53,0,85,8.3,22.82,Medium,Student shows overall stability
+87,7.53,0,85,8.3,22.82,Low,Student shows overall stability
 67,6.75,24,52,6.9,62.92,High,Student shows overall stability
 7,1.58,71,44,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 72,6.31,23,77,6.4,57.59,High,Student shows overall stability
-80,7.54,0,83,9.4,24.54,Medium,Student shows overall stability
+80,7.54,0,83,9.4,24.54,Low,Student shows overall stability
 20,3.46,59,15,1.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 67,5.57,32,61,4.5,76.03,High,Student shows overall stability
 16,0.76,91,40,0.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2313,11 +2313,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 51,2.04,79,12,1.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,9.21,2,100,9.5,7.11,Low,Student shows overall stability
 4,0.48,68,31,1.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-84,9.62,6,80,7.6,22.11,Medium,Student shows overall stability
+84,9.62,6,80,7.6,22.11,Low,Student shows overall stability
 71,7.26,33,66,5.3,62.35,High,Student shows overall stability
 97,8.3,8,83,9.5,17.15,Low,Student shows overall stability
 61,6.4,14,69,5.4,62.65,High,Low attendance
-87,7.76,7,100,8.3,24.73,Medium,Student shows overall stability
+87,7.76,7,100,8.3,24.73,Low,Student shows overall stability
 2,0.96,46,3,0.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 14,5.28,52,47,0.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 38,3.02,61,24,2.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2332,23 +2332,23 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 66,7.19,23,52,5.8,62.91,High,Student shows overall stability
 16,5.41,113,46,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 69,6.95,20,77,5.3,56.86,High,Student shows overall stability
-85,8.94,5,84,7.6,23.77,Medium,Student shows overall stability
+85,8.94,5,84,7.6,23.77,Low,Student shows overall stability
 98,9.83,1,90,8.0,8.31,Low,Student shows overall stability
 37,3.5,45,17,0.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 66,7.42,44,72,6.6,65.71,High,Student shows overall stability
 97,8.6,7,89,8.8,15.72,Low,Student shows overall stability
 77,5.9,44,78,4.2,70.31,High,Student shows overall stability
 100,9.03,8,85,7.7,14.08,Low,Student shows overall stability
-82,9.04,2,84,7.5,23.36,Medium,Student shows overall stability
+82,9.04,2,84,7.5,23.36,Low,Student shows overall stability
 35,0.27,60,17,1.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 7,2.37,118,33,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 100,9.92,3,94,9.8,2.92,Low,Student shows overall stability
 21,5.48,84,9,1.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 13,4.61,114,5,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-86,8.32,2,99,7.8,20.92,Medium,Student shows overall stability
+86,8.32,2,99,7.8,20.92,Low,Student shows overall stability
 52,1.14,101,33,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 81,7.78,5,90,7.7,30.2,Medium,Student shows overall stability
-92,7.76,2,88,8.8,20.18,Medium,Student shows overall stability
+92,7.76,2,88,8.8,20.18,Low,Student shows overall stability
 17,4.26,60,0,1.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 96,9.45,8,85,8.3,14.62,Low,Student shows overall stability
 66,5.65,36,57,4.9,78.16,High,Student shows overall stability
@@ -2382,10 +2382,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 75,6.12,47,61,4.8,74.0,High,Student shows overall stability
 68,6.35,14,70,4.1,61.23,High,Student shows overall stability
 6,1.93,69,36,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-89,7.52,1,87,9.9,20.1,Medium,Student shows overall stability
-87,9.1,7,83,7.8,22.61,Medium,Student shows overall stability
+89,7.52,1,87,9.9,20.1,Low,Student shows overall stability
+87,9.1,7,83,7.8,22.61,Low,Student shows overall stability
 77,6.81,38,72,4.3,63.87,High,Student shows overall stability
-91,7.95,2,80,7.6,24.02,Medium,Student shows overall stability
+91,7.95,2,80,7.6,24.02,Low,Student shows overall stability
 66,5.9,22,74,5.0,66.19,High,Student shows overall stability
 0,3.64,98,49,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 84,7.66,8,97,9.0,26.77,Medium,Student shows overall stability
@@ -2410,8 +2410,8 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 81,7.82,3,92,7.7,28.28,Medium,Student shows overall stability
 80,9.57,4,97,8.4,18.63,Low,Student shows overall stability
 37,0.08,100,49,1.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,8.67,1,93,7.9,22.86,Medium,Student shows overall stability
-84,9.49,5,82,7.9,21.35,Medium,Student shows overall stability
+80,8.67,1,93,7.9,22.86,Low,Student shows overall stability
+84,9.49,5,82,7.9,21.35,Low,Student shows overall stability
 80,7.84,3,91,8.8,26.72,Medium,Student shows overall stability
 58,1.11,57,40,2.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 68,6.36,17,64,6.4,59.34,High,Student shows overall stability
@@ -2433,7 +2433,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 60,7.3,37,63,6.3,69.34,High,Low attendance
 4,4.95,77,13,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 67,5.72,28,78,5.0,68.75,High,Student shows overall stability
-98,7.74,2,84,7.3,20.4,Medium,Student shows overall stability
+98,7.74,2,84,7.3,20.4,Low,Student shows overall stability
 79,7.31,41,54,4.6,64.11,High,Student shows overall stability
 23,3.67,68,7,2.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 77,5.65,16,65,5.4,58.37,High,Student shows overall stability
@@ -2466,7 +2466,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 61,7.43,11,77,5.7,53.51,High,Low attendance
 20,5.08,66,23,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,5.87,26,63,4.7,74.92,High,Low attendance
-93,8.3,3,80,7.3,22.36,Medium,Student shows overall stability
+93,8.3,3,80,7.3,22.36,Low,Student shows overall stability
 32,0.95,108,4,3.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 13,4.81,47,33,1.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 98,8.25,4,100,8.3,13.95,Low,Student shows overall stability
@@ -2493,7 +2493,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 68,6.61,42,75,6.9,66.88,High,Student shows overall stability
 60,7.31,26,64,4.9,66.76,High,Low attendance
 87,9.51,8,94,8.5,17.41,Low,Student shows overall stability
-89,7.7,1,98,7.3,22.35,Medium,Student shows overall stability
+89,7.7,1,98,7.3,22.35,Low,Student shows overall stability
 77,5.83,47,65,5.1,72.65,High,Student shows overall stability
 97,9.68,2,94,8.0,9.19,Low,Student shows overall stability
 74,6.04,24,59,6.5,61.43,High,Student shows overall stability
@@ -2508,7 +2508,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 72,7.27,22,53,4.1,61.61,High,Student shows overall stability
 91,8.23,6,94,9.9,17.52,Low,Student shows overall stability
 51,2.94,118,47,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-84,8.0,1,82,9.9,21.78,Medium,Student shows overall stability
+84,8.0,1,82,9.9,21.78,Low,Student shows overall stability
 48,2.77,61,28,3.3,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 92,9.3,5,80,8.9,16.25,Low,Student shows overall stability
 96,9.32,1,98,8.5,9.01,Low,Student shows overall stability
@@ -2535,10 +2535,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 47,4.53,53,2,0.4,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 5,2.21,117,13,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 34,4.99,95,1,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-82,8.38,1,81,9.5,22.27,Medium,Student shows overall stability
+82,8.38,1,81,9.5,22.27,Low,Student shows overall stability
 48,3.92,81,0,1.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 6,5.21,104,13,2.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,8.95,3,88,7.6,24.59,Medium,Student shows overall stability
+80,8.95,3,88,7.6,24.59,Low,Student shows overall stability
 62,7.36,16,59,6.1,58.9,High,Low attendance
 46,0.58,91,17,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 71,5.9,35,57,5.8,71.16,High,Student shows overall stability
@@ -2547,7 +2547,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 26,0.62,87,48,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 43,0.01,77,9,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 65,5.75,24,53,6.1,70.69,High,Student shows overall stability
-87,8.86,9,96,8.0,21.91,Medium,Student shows overall stability
+87,8.86,9,96,8.0,21.91,Low,Student shows overall stability
 81,8.9,1,90,9.5,18.62,Low,Student shows overall stability
 56,1.21,95,4,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 64,6.44,47,79,4.1,77.39,High,Low attendance
@@ -2567,7 +2567,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 75,5.74,36,56,6.2,69.27,High,Student shows overall stability
 70,6.09,47,71,4.8,75.62,High,Student shows overall stability
 85,9.87,3,88,9.2,13.79,Low,Student shows overall stability
-87,7.96,3,85,9.9,21.31,Medium,Student shows overall stability
+87,7.96,3,85,9.9,21.31,Low,Student shows overall stability
 89,9.9,1,88,7.4,14.26,Low,Student shows overall stability
 62,6.13,19,67,6.1,65.22,High,Low attendance
 65,7.04,22,74,5.9,59.32,High,Student shows overall stability
@@ -2606,11 +2606,11 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 77,7.17,20,57,7.0,51.51,High,Student shows overall stability
 98,7.57,2,94,9.3,15.11,Low,Student shows overall stability
 76,5.92,21,65,4.2,62.85,High,Student shows overall stability
-93,8.66,8,86,8.2,20.33,Medium,Student shows overall stability
+93,8.66,8,86,8.2,20.33,Low,Student shows overall stability
 63,6.64,11,52,6.4,59.92,High,Low attendance
 98,9.04,2,95,7.3,12.55,Low,Student shows overall stability
 93,8.1,2,88,9.6,16.57,Low,Student shows overall stability
-88,8.61,8,83,8.1,24.31,Medium,Student shows overall stability
+88,8.61,8,83,8.1,24.31,Low,Student shows overall stability
 17,4.48,54,2,0.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 67,5.56,41,51,5.7,79.92,High,Student shows overall stability
 66,6.69,27,53,6.8,65.3,High,Student shows overall stability
@@ -2619,10 +2619,10 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 8,3.86,58,18,0.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 35,0.72,81,38,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 42,4.4,89,5,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,9.15,9,90,9.2,23.19,Medium,Student shows overall stability
-80,9.65,2,81,8.0,20.99,Medium,Student shows overall stability
+80,9.15,9,90,9.2,23.19,Low,Student shows overall stability
+80,9.65,2,81,8.0,20.99,Low,Student shows overall stability
 77,6.96,31,58,4.2,63.1,High,Student shows overall stability
-92,9.05,7,89,7.2,20.01,Medium,Student shows overall stability
+92,9.05,7,89,7.2,20.01,Low,Student shows overall stability
 71,6.31,16,66,4.7,60.24,High,Student shows overall stability
 79,7.38,25,68,5.8,51.55,High,Student shows overall stability
 95,8.84,7,82,10.0,14.92,Low,Student shows overall stability
@@ -2634,7 +2634,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 44,2.08,42,1,1.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 55,4.89,98,49,0.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 71,7.15,49,66,5.1,70.34,High,Student shows overall stability
-86,8.71,9,83,8.8,24.16,Medium,Student shows overall stability
+86,8.71,9,83,8.8,24.16,Low,Student shows overall stability
 67,6.85,33,73,4.1,68.05,High,Student shows overall stability
 7,1.0,42,20,3.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 3,4.66,102,15,1.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2642,7 +2642,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 61,5.87,11,61,5.9,63.94,High,Low attendance
 73,7.44,41,54,4.0,68.65,High,Student shows overall stability
 68,6.59,38,77,5.2,68.2,High,Student shows overall stability
-90,8.05,5,92,7.0,24.58,Medium,Student shows overall stability
+90,8.05,5,92,7.0,24.58,Low,Student shows overall stability
 89,9.69,1,88,9.7,10.77,Low,Student shows overall stability
 13,5.49,48,2,3.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 21,3.07,97,27,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2663,27 +2663,27 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 95,9.19,5,80,8.0,16.88,Low,Student shows overall stability
 97,8.32,0,98,7.6,13.52,Low,Student shows overall stability
 60,6.46,43,66,5.1,78.64,High,Low attendance
-84,8.72,4,91,7.6,23.54,Medium,Student shows overall stability
+84,8.72,4,91,7.6,23.54,Low,Student shows overall stability
 63,7.29,12,61,4.7,58.83,High,Low attendance
 92,8.51,3,98,7.6,17.84,Low,Student shows overall stability
 37,0.08,93,17,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,9.55,8,84,9.8,20.41,Medium,Student shows overall stability
+80,9.55,8,84,9.8,20.41,Low,Student shows overall stability
 48,1.38,64,19,4.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 94,9.63,1,99,9.2,7.11,Low,Student shows overall stability
 33,4.92,64,47,3.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 68,5.75,23,78,4.8,65.85,High,Student shows overall stability
-89,8.18,2,81,7.9,23.19,Medium,Student shows overall stability
-95,8.28,9,83,8.5,21.23,Medium,Student shows overall stability
+89,8.18,2,81,7.9,23.19,Low,Student shows overall stability
+95,8.28,9,83,8.5,21.23,Low,Student shows overall stability
 74,7.18,45,58,5.9,66.48,High,Student shows overall stability
 20,3.29,105,45,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 35,2.19,72,22,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 48,2.37,62,47,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 23,4.06,99,11,2.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-86,8.57,4,87,8.4,22.34,Medium,Student shows overall stability
+86,8.57,4,87,8.4,22.34,Low,Student shows overall stability
 74,5.78,32,60,7.0,65.57,High,Student shows overall stability
 88,9.67,0,87,9.6,10.65,Low,Student shows overall stability
 78,6.12,38,73,6.5,62.18,High,Student shows overall stability
-87,9.17,4,91,7.1,20.55,Medium,Student shows overall stability
+87,9.17,4,91,7.1,20.55,Low,Student shows overall stability
 87,8.27,0,85,8.6,19.24,Low,Student shows overall stability
 99,8.79,9,90,9.0,13.39,Low,Student shows overall stability
 59,0.77,45,27,2.7,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -2698,7 +2698,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 85,7.56,6,95,7.6,28.6,Medium,Student shows overall stability
 40,3.39,79,42,2.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 97,9.45,4,81,7.3,15.15,Low,Student shows overall stability
-84,9.36,6,87,8.0,21.28,Medium,Student shows overall stability
+84,9.36,6,87,8.0,21.28,Low,Student shows overall stability
 95,9.99,2,80,9.4,8.6,Low,Student shows overall stability
 32,5.04,58,20,1.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 70,6.65,34,75,4.1,67.31,High,Student shows overall stability
@@ -2729,32 +2729,32 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 80,7.6,7,96,8.3,30.47,Medium,Student shows overall stability
 43,2.66,50,11,2.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 8,4.92,117,12,2.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-95,8.36,3,85,7.0,20.47,Medium,Student shows overall stability
+95,8.36,3,85,7.0,20.47,Low,Student shows overall stability
 89,9.54,4,90,8.8,14.43,Low,Student shows overall stability
-85,8.21,2,92,8.1,22.89,Medium,Student shows overall stability
+85,8.21,2,92,8.1,22.89,Low,Student shows overall stability
 85,7.58,2,84,8.5,26.27,Medium,Student shows overall stability
-83,9.32,9,96,7.6,22.38,Medium,Student shows overall stability
+83,9.32,9,96,7.6,22.38,Low,Student shows overall stability
 76,6.54,23,63,4.7,59.97,High,Student shows overall stability
 44,1.7,119,29,0.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 35,4.88,107,17,2.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 88,8.78,2,90,7.9,19.43,Low,Student shows overall stability
 88,9.82,2,98,8.2,12.1,Low,Student shows overall stability
-83,8.3,8,98,9.5,23.05,Medium,Student shows overall stability
+83,8.3,8,98,9.5,23.05,Low,Student shows overall stability
 78,6.9,30,51,6.0,59.91,High,Student shows overall stability
 1,2.6,82,9,1.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-91,7.58,6,85,9.4,23.23,Medium,Student shows overall stability
+91,7.58,6,85,9.4,23.23,Low,Student shows overall stability
 14,0.77,92,6,1.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 90,9.95,8,89,8.7,13.45,Low,Student shows overall stability
 62,5.97,45,62,6.6,78.85,High,Low attendance
 86,7.65,9,83,9.4,27.97,Medium,Student shows overall stability
-82,9.11,3,93,7.7,21.51,Medium,Student shows overall stability
+82,9.11,3,93,7.7,21.51,Low,Student shows overall stability
 74,5.79,21,79,6.9,56.38,High,Student shows overall stability
 93,9.11,3,93,8.2,14.4,Low,Student shows overall stability
 54,5.26,67,37,3.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 46,0.66,42,18,2.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 55,3.86,94,34,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 18,2.85,80,21,0.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-88,8.99,4,81,8.0,21.07,Medium,Student shows overall stability
+88,8.99,4,81,8.0,21.07,Low,Student shows overall stability
 41,5.16,49,39,3.5,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 63,7.28,15,77,4.7,57.33,High,Low attendance
 83,7.6,2,86,8.5,26.91,Medium,Student shows overall stability
@@ -2772,9 +2772,9 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 72,7.29,17,71,4.6,54.42,High,Student shows overall stability
 91,9.55,8,95,8.6,14.51,Low,Student shows overall stability
 22,3.96,58,35,2.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-92,7.87,4,81,8.1,23.69,Medium,Student shows overall stability
+92,7.87,4,81,8.1,23.69,Low,Student shows overall stability
 29,4.88,87,12,1.5,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-97,7.83,6,80,7.9,22.14,Medium,Student shows overall stability
+97,7.83,6,80,7.9,22.14,Low,Student shows overall stability
 54,2.52,47,25,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 95,9.52,7,80,9.0,13.98,Low,Student shows overall stability
 77,6.35,45,65,4.4,70.59,High,Student shows overall stability
@@ -2788,15 +2788,15 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 67,5.52,41,65,4.3,80.17,High,Student shows overall stability
 72,6.55,33,57,4.1,69.71,High,Student shows overall stability
 3,3.55,104,16,2.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-90,7.57,1,87,8.8,21.46,Medium,Student shows overall stability
+90,7.57,1,87,8.8,21.46,Low,Student shows overall stability
 15,2.24,51,40,2.4,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-95,7.64,8,92,8.9,21.03,Medium,Student shows overall stability
+95,7.64,8,92,8.9,21.03,Low,Student shows overall stability
 9,3.06,54,12,2.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 71,6.91,47,61,4.6,72.95,High,Student shows overall stability
 61,7.29,21,56,6.6,62.06,High,Low attendance
 49,0.94,70,42,2.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 77,7.27,45,79,5.4,60.87,High,Student shows overall stability
-82,9.74,7,86,7.5,21.88,Medium,Student shows overall stability
+82,9.74,7,86,7.5,21.88,Low,Student shows overall stability
 96,7.92,5,94,8.1,18.79,Low,Student shows overall stability
 61,6.7,29,63,4.1,72.69,High,Low attendance
 7,4.25,110,29,0.2,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2807,7 +2807,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 56,4.59,76,39,0.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 65,5.94,28,76,6.1,67.08,High,Student shows overall stability
 78,6.39,25,56,5.0,61.29,High,Student shows overall stability
-80,8.81,8,100,8.4,24.02,Medium,Student shows overall stability
+80,8.81,8,100,8.4,24.02,Low,Student shows overall stability
 6,0.14,56,10,1.3,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 37,0.57,91,1,3.4,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 90,8.68,4,99,7.0,19.78,Low,Student shows overall stability
@@ -2847,7 +2847,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 2,4.44,44,7,1.1,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 86,8.01,7,91,7.0,28.46,Medium,Student shows overall stability
 65,6.21,10,50,5.2,63.09,High,Student shows overall stability
-90,8.17,2,85,8.2,21.29,Medium,Student shows overall stability
+90,8.17,2,85,8.2,21.29,Low,Student shows overall stability
 90,8.83,9,81,10.0,19.23,Low,Student shows overall stability
 76,7.29,43,73,5.0,62.5,High,Student shows overall stability
 75,6.19,43,65,5.8,69.03,High,Student shows overall stability
@@ -2881,7 +2881,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 48,2.28,58,22,0.8,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 66,7.05,28,78,4.1,64.4,High,Student shows overall stability
 11,0.19,64,24,1.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-94,8.55,9,86,7.2,22.54,Medium,Student shows overall stability
+94,8.55,9,86,7.2,22.54,Low,Student shows overall stability
 31,3.76,52,43,3.2,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 95,8.33,1,97,8.8,13.58,Low,Student shows overall stability
 11,0.75,40,42,2.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
@@ -2893,7 +2893,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 73,6.27,22,52,6.8,60.77,High,Student shows overall stability
 20,3.78,55,27,1.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 80,9.9,5,99,10.0,13.35,Low,Student shows overall stability
-84,8.63,3,83,9.4,21.4,Medium,Student shows overall stability
+84,8.63,3,83,9.4,21.4,Low,Student shows overall stability
 65,6.93,40,68,6.4,68.49,High,Student shows overall stability
 49,2.77,95,14,3.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 64,7.05,32,52,5.0,70.85,High,Low attendance
@@ -2903,7 +2903,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 11,0.94,114,36,3.6,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,6.46,37,60,4.6,78.15,High,Low attendance
 65,5.86,21,59,6.0,67.5,High,Student shows overall stability
-92,7.99,3,83,8.3,21.73,Medium,Student shows overall stability
+92,7.99,3,83,8.3,21.73,Low,Student shows overall stability
 31,1.42,96,0,0.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 98,9.98,5,94,9.6,4.99,Low,Student shows overall stability
 26,4.57,62,32,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
@@ -2912,7 +2912,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 70,5.58,13,59,5.8,61.77,High,Student shows overall stability
 7,0.47,72,40,1.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 70,6.89,12,71,6.1,52.04,High,Student shows overall stability
-81,8.61,3,90,8.5,23.47,Medium,Student shows overall stability
+81,8.61,3,90,8.5,23.47,Low,Student shows overall stability
 50,2.97,90,45,3.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 83,7.85,2,86,7.7,27.47,Medium,Student shows overall stability
 60,5.72,16,73,5.7,66.27,High,Low attendance
@@ -2922,7 +2922,7 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 79,5.74,29,79,4.3,62.5,High,Student shows overall stability
 5,2.46,57,22,2.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 74,7.37,21,54,6.0,55.34,High,Student shows overall stability
-94,7.64,8,82,8.7,24.09,Medium,Student shows overall stability
+94,7.64,8,82,8.7,24.09,Low,Student shows overall stability
 2,2.89,103,27,1.9,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 70,7.03,43,66,6.7,65.9,High,Student shows overall stability
 84,9.74,4,88,8.8,16.5,Low,Student shows overall stability
@@ -2933,18 +2933,18 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 16,5.07,87,26,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 91,9.4,1,84,9.1,13.0,Low,Student shows overall stability
 48,2.05,115,40,2.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
-80,8.58,4,92,8.3,24.75,Medium,Student shows overall stability
+80,8.58,4,92,8.3,24.75,Low,Student shows overall stability
 72,6.16,27,52,4.5,69.13,High,Student shows overall stability
-83,9.67,8,85,8.0,21.28,Medium,Student shows overall stability
+83,9.67,8,85,8.0,21.28,Low,Student shows overall stability
 3,4.12,102,6,3.7,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 95,9.42,6,83,8.7,14.17,Low,Student shows overall stability
 98,8.8,9,88,7.6,17.35,Low,Student shows overall stability
 97,8.04,2,100,7.2,16.7,Low,Student shows overall stability
-94,8.12,8,82,9.5,20.4,Medium,Student shows overall stability
+94,8.12,8,82,9.5,20.4,Low,Student shows overall stability
 35,3.33,111,3,0.1,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 63,6.3,18,72,6.3,61.79,High,Low attendance
 91,9.77,3,90,9.6,10.01,Low,Student shows overall stability
-93,8.85,7,89,7.3,20.15,Medium,Student shows overall stability
+93,8.85,7,89,7.3,20.15,Low,Student shows overall stability
 99,9.66,8,94,9.9,6.5,Low,Student shows overall stability
 71,5.6,23,71,4.0,67.68,High,Student shows overall stability
 62,6.55,29,68,7.0,66.16,High,Low attendance
@@ -2969,17 +2969,17 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 63,7.29,27,66,5.7,63.7,High,Low attendance
 71,7.45,43,74,6.8,61.1,High,Student shows overall stability
 68,6.43,11,55,6.3,57.59,High,Student shows overall stability
-94,8.39,6,87,8.0,20.14,Medium,Student shows overall stability
+94,8.39,6,87,8.0,20.14,Low,Student shows overall stability
 83,7.51,4,94,8.2,27.88,Medium,Student shows overall stability
 78,6.76,10,59,5.5,50.35,High,Student shows overall stability
 71,6.84,39,55,5.6,68.94,High,Student shows overall stability
-89,8.78,6,83,7.4,23.36,Medium,Student shows overall stability
+89,8.78,6,83,7.4,23.36,Low,Student shows overall stability
 87,9.56,0,81,9.2,13.69,Low,Student shows overall stability
 98,8.5,2,97,9.4,10.36,Low,Student shows overall stability
 100,7.6,8,80,9.5,17.21,Low,Student shows overall stability
 2,1.2,114,40,2.8,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 15,3.21,45,48,0.9,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
-87,8.43,4,80,8.6,23.39,Medium,Student shows overall stability
+87,8.43,4,80,8.6,23.39,Low,Student shows overall stability
 87,9.52,3,92,7.7,16.96,Low,Student shows overall stability
 68,6.56,31,76,5.9,63.97,High,Student shows overall stability
 90,9.49,6,80,8.3,18.08,Low,Student shows overall stability
@@ -2993,9 +2993,9 @@ attendance,cgpa,fee_delay,assignments,engagement,risk_score,risk_category,risk_r
 75,5.57,43,71,6.9,68.95,High,Student shows overall stability
 19,1.97,71,9,2.0,100.0,High,"Low attendance, Low academic performance, Financial stress due to fee delay, Poor assignment completion, Low engagement / motivation"
 60,5.89,27,58,4.6,76.71,High,Low attendance
-83,9.26,7,80,8.1,24.05,Medium,Student shows overall stability
+83,9.26,7,80,8.1,24.05,Low,Student shows overall stability
 56,4.55,55,25,3.6,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 76,7.32,46,69,5.7,63.08,High,Student shows overall stability
-91,7.67,5,96,7.2,24.46,Medium,Student shows overall stability
+91,7.67,5,96,7.2,24.46,Low,Student shows overall stability
 27,2.13,52,40,2.0,100.0,High,"Low attendance, Low academic performance, Poor assignment completion, Low engagement / motivation"
 97,9.04,8,81,7.0,19.25,Low,Student shows overall stability
