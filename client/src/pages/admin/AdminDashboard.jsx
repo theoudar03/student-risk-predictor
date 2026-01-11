@@ -112,7 +112,7 @@ const AdminDashboard = () => {
                            onClick={handleRecalculate}
                            disabled={isCalculating}
                        >
-                           ⚡ Recalculate Risk Scores
+                           Recalculate Risk Scores
                        </Button>
                     ) : (
                         <div className="mt-3">
