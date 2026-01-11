@@ -4,6 +4,7 @@ const Student = require('../models/Student');
 const User = require('../models/User');
 const Alert = require('../models/Alert');
 const { predictRisk } = require('../utils/mlService');
+const { calculateRisk } = require('../utils/riskEngine');
 const { authenticateToken, authorizeRole } = require('../middleware/authMiddleware');
 
 router.use(authenticateToken);
@@ -144,16 +145,7 @@ router.post('/students', async (req, res) => {
             newId = await generateStudentId(); 
         }
 
-        // AI Analysis
-        // Ensure consistent parameter passing
-        const analysis = await predictRisk(
-            Number(attendancePercentage), 
-            Number(cgpa), 
-            Number(feeDelayDays), 
-            Number(classParticipationScore),
-            Number(assignmentsCompleted || 85)
-        );
-        
+        // Initial Save (Risk Calculation is Async)
         const newStudent = new Student({
             studentId: newId,   // Official ID
             name, 
@@ -166,17 +158,21 @@ router.post('/students', async (req, res) => {
             feeDelayDays: Number(feeDelayDays), 
             classParticipationScore: Number(classParticipationScore),
             assignmentsCompleted: Number(assignmentsCompleted || 85),
-            riskScore: analysis.score,
-            riskLevel: analysis.level,
-            riskFactors: analysis.factors,
+            riskScore: null,
+            riskLevel: null,
+            riskStatus: 'PENDING',
+            riskModel: 'extreme_dropout_v4',
+            riskFactors: [],
         });
         
         
         await newStudent.save();
 
-        // 🔔 Centralized Alert Sync (Replaces manual creation)
-        const { syncStudentAlert } = require('../utils/alertService');
-        await syncStudentAlert(newStudent);
+        // 🚀 Trigger Async Risk Calculation (Decoupled)
+        // Fire and forget - do not await
+        calculateRisk(newStudent._id).catch(err => console.error("Async Risk Calc Failed:", err));
+
+        // Note: Alerts are generated in riskEngine now
 
         // 1. Create Student User Account
         await User.create({
@@ -203,9 +199,6 @@ router.post('/students', async (req, res) => {
         res.status(201).json(newStudent);
     } catch (e) {
         console.error(e);
-        if (e.message === 'ML_SERVICE_UNAVAILABLE') {
-            return res.status(503).json({ error: "Risk Analysis Service is offline. Cannot save student data without risk score." });
-        }
         res.status(500).json({ error: "Server Error" });
     }
 });
@@ -215,16 +208,6 @@ router.put('/students/:id', async (req, res) => {
     try {
         const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted } = req.body;
         
-        // AI Analysis Refresh
-        // Using updated feature values for prediction
-        const analysis = await predictRisk(
-            Number(attendancePercentage), 
-            Number(cgpa), 
-            Number(feeDelayDays), 
-            Number(classParticipationScore),
-            Number(assignmentsCompleted || 85)
-        );
-
         const updatedStudent = await Student.findByIdAndUpdate(req.params.id, {
             name, 
             email, 
@@ -234,23 +217,18 @@ router.put('/students/:id', async (req, res) => {
             feeDelayDays: Number(feeDelayDays), 
             classParticipationScore: Number(classParticipationScore),
             assignmentsCompleted: Number(assignmentsCompleted || 85),
-            riskScore: analysis.score,
-            riskLevel: analysis.level,
-            riskFactors: analysis.factors
+            riskStatus: 'PENDING',
+            riskModel: 'extreme_dropout_v4'
         }, { new: true });
         
-        // 🔔 Trigger Alert Sync
-        const { syncStudentAlert } = require('../utils/alertService');
-        await syncStudentAlert(updatedStudent);
+        // 🚀 Trigger Async Risk Calculation
+        calculateRisk(req.params.id).catch(err => console.error("Async Risk Calc Failed:", err));
 
         if (!updatedStudent) return res.status(404).json({ error: "Student not found" });
         
         res.json(updatedStudent);
     } catch (e) {
         console.error("Update Student Error:", e);
-        if (e.message === 'ML_SERVICE_UNAVAILABLE') {
-            return res.status(503).json({ error: "Risk Analysis Service is offline. Cannot update student data." });
-        }
         res.status(500).json({ error: "Server Error" });
     }
 });

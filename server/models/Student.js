@@ -18,8 +18,10 @@ const StudentSchema = new mongoose.Schema({
   feeDelayDays: { type: Number, default: 0 },
   
   // Risk Metrics (Output of ML)
-  riskScore: { type: Number, default: 0 }, // 0-100
-  riskLevel: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Low' },
+  riskScore: { type: Number, default: null }, // 0-100
+  riskLevel: { type: String, enum: ['Low', 'Medium', 'High', 'Pending', null], default: null },
+  riskStatus: { type: String, enum: ['PENDING', 'CALCULATED', 'FAILED'], default: 'PENDING' },
+  riskModel: { type: String, default: null },
   riskFactors: [{ type: String }], // Explanations
   
 }, { timestamps: true });

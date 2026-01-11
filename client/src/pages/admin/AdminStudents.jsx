@@ -22,6 +22,10 @@ const AdminStudents = () => {
     useEffect(() => {
         fetchStudents();
         fetchMentors();
+        
+        // Auto-refresh for async risk updates
+        const interval = setInterval(fetchStudents, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     const fetchMentors = async () => {
@@ -110,6 +114,13 @@ const AdminStudents = () => {
         return 0;
     });
 
+    const getRiskBadge = (s) => {
+        if (s.riskStatus === 'PENDING' || !s.riskLevel) {
+            return <Badge bg="secondary" className="animate-pulse">Calculating...</Badge>;
+        }
+        return <Badge bg={s.riskLevel === 'High' ? 'danger' : s.riskLevel === 'Medium' ? 'warning' : 'success'}>{s.riskLevel}</Badge>;
+    };
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -146,7 +157,7 @@ const AdminStudents = () => {
                                 <small className="text-muted">{s.studentId}</small>
                             </td>
                             <td><Badge bg="light" text="dark" className="border">{s.course}</Badge></td>
-                            <td><Badge bg={s.riskLevel === 'High' ? 'danger' : s.riskLevel === 'Medium' ? 'warning' : 'success'}>{s.riskLevel}</Badge></td>
+                            <td>{getRiskBadge(s)}</td>
                             <td className="text-end pe-3">
                                 <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEdit(s)}><FaEdit /></Button>
                                 <Button size="sm" variant="outline-danger" onClick={() => handleDelete(s._id)}><FaTrash /></Button>

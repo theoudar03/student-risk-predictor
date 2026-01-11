@@ -36,6 +36,7 @@ app.use('/api/export', exportRoutes);
 app.use('/api/portal', portalRoutes);
 app.use('/api/ml', mlRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/risk', require('./routes/risk'));
 
 // Health Check Route
 app.get('/', (req, res) => {
