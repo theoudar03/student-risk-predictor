@@ -86,9 +86,8 @@ const Students = () => {
                 </div>
             </div>
 
-            <div className="glass-card p-0">
-                <div className="table-responsive">
-                    <Table hover className="mb-0 text-nowrap" style={{ minWidth: 800 }}>
+            <div className="glass-card p-0 overflow-hidden">
+                <Table hover responsive className="mb-0 text-nowrap" style={{ minWidth: 800 }}>
                     <thead style={{background: '#f8f9fa'}}>
                         <tr>
                             <th className="ps-4 sticky-col">Student</th>
@@ -135,7 +134,6 @@ const Students = () => {
                         ))}
                     </tbody>
                 </Table>
-                </div>
             </div>
         </div>
     );

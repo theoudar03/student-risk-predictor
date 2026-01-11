@@ -178,16 +178,13 @@ h1, h2, h3, h4, h5, h6 {
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 20px; /* Match card radius if needed, to prevent square corners overflowing */
 }
 
 .sticky-col {
   position: sticky;
   left: 0;
-  z-index: 20; /* Increased z-index */
-  background-color: inherit;
-  min-width: 150px; /* Ensure a minimum width so it doesn't squash */
-  max-width: 200px;
+  z-index: 10;
+  background-color: inherit; /* Should inherit from tr/th */
 }
 
 /* Ensure background opacity for sticky effect covering scrolling content */

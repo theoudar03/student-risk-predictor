@@ -2,7 +2,14 @@ const axios = require('axios');
 
 const predictRisk = async (attendance, cgpa, feeDelay, participation, assignments = 80) => {
     // Call Python ML Service
-    const mlUrl = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8001';
+    let mlUrl = process.env.ML_SERVICE_URL;
+    
+    // In production, ensure we don't silently fallback to localhost
+    if (process.env.NODE_ENV === 'production' && !mlUrl) {
+         console.warn("⚠️ WARNING: ML_SERVICE_URL is not set in production! Defaulting to localhost may fail.");
+    }
+    
+    mlUrl = mlUrl || 'http://127.0.0.1:8001';
     try {
         const response = await axios.post(`${mlUrl}/predict-risk`, {
             attendancePercentage: attendance,

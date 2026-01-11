@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import { FaUserGraduate, FaChalkboardTeacher, FaExclamationTriangle, FaChartLine } from 'react-icons/fa';
 import axios from 'axios';
 
@@ -68,6 +68,24 @@ const AdminDashboard = () => {
                     Use the sidebar to manage Students and Mentors. You have full access to add, remove, and modify records. 
                     Ensure all data privacy regulations are followed when handling student information.
                 </p>
+                <div className="mb-3">
+                     <Button 
+                        variant="danger" 
+                        size="sm"
+                        onClick={async () => {
+                            if(!window.confirm("Recalculate risk for ALL students? This operation updates the entire database.")) return;
+                            try {
+                                const res = await axios.post('/api/admin/risk-recalc');
+                                alert(res.data.message);
+                                window.location.reload(); 
+                            } catch(e) {
+                                alert("Recalculation failed: " + (e.response?.data?.error || e.message));
+                            }
+                        }}
+                    >
+                        ⚡ Recalculate AI Models
+                    </Button>
+                </div>
                 <hr />
                 <p className="mb-0 small">System Status: Operational | v1.2.0</p>
             </div>

@@ -267,11 +267,11 @@ router.post('/', async (req, res) => {
                     // We must handle the error if ML is down, but since we already sent response, just log it.
                     try {
                         const analysis = await predictRisk(
-                            newPercentage,
-                            student.cgpa,
-                            student.feeDelayDays,
-                            student.classParticipationScore,
-                            student.assignmentsCompleted
+                            newPercentage, // Use NEW attendance
+                            Number(student.cgpa || 0),
+                            Number(student.feeDelayDays || 0),
+                            Number(student.classParticipationScore || 0),
+                            Number(student.assignmentsCompleted || 85)
                         );
 
                         // Update Student

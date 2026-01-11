@@ -33,6 +33,12 @@ def predict_risk(data: StudentData):
         'assignments': data.assignmentsCompleted
     }])
     
+    # 🌟 CRITICAL: Enforce Column Order to match Training
+    input_df = input_df[['attendance', 'cgpa', 'fee_delay', 'participation', 'assignments']]
+    
+    # Log for Debugging
+    print(f"Predicting for: {input_df.values.tolist()}")
+    
     # Predict using the loaded .pkl model
     try:
         prediction = model.predict(input_df)

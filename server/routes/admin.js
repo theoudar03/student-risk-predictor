@@ -44,8 +44,66 @@ const generateStudentId = async () => {
     return (maxId + 1).toString();
 };
 
-// Add Student (Admin Only)
-// Add Student (Admin Only)
+// Bulk Recalculate Risk (Admin Trigger)
+router.post('/risk-recalc', async (req, res) => {
+    // Extra role check just in case middleware fails or for explicit clarity
+    if (req.user.role !== 'admin') {
+         return res.status(403).json({ error: "Access denied. Admin rights required." });
+    }
+
+    try {
+        const students = await Student.find({});
+        console.log(`Starting bulk recalculation for ${students.length} students...`);
+
+        const bulkOps = [];
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const student of students) {
+            try {
+                // Call Python ML Service for each student
+                const analysis = await predictRisk(
+                    Number(student.attendancePercentage || 0),
+                    Number(student.cgpa || 0),
+                    Number(student.feeDelayDays || 0),
+                    Number(student.classParticipationScore || 0),
+                    Number(student.assignmentsCompleted || 85)
+                );
+
+                // Prepare Bulk Update Operation
+                bulkOps.push({
+                    updateOne: {
+                        filter: { _id: student._id },
+                        update: {
+                            $set: {
+                                riskScore: analysis.score,
+                                riskLevel: analysis.level,
+                                riskFactors: analysis.factors
+                            }
+                        }
+                    }
+                });
+                successCount++;
+            } catch (mlError) {
+                console.error(`ML Failed for ${student.name}:`, mlError.message);
+                failCount++;
+            }
+        }
+
+        if (bulkOps.length > 0) {
+            await Student.bulkWrite(bulkOps);
+        }
+
+        res.json({
+            success: true,
+            message: `Recalculation complete. Updated: ${successCount}, Failed: ${failCount}`,
+            total: students.length
+        });
+    } catch (e) {
+        console.error("Bulk Recalc Error:", e);
+        res.status(500).json({ error: "Server Error during recalculation" });
+    }
+});// Add Student (Admin Only)
 router.post('/students', async (req, res) => {
     try {
         const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted, mentorId, studentId } = req.body;
@@ -74,6 +132,7 @@ router.post('/students', async (req, res) => {
         }
 
         // AI Analysis
+        // Ensure consistent parameter passing
         const analysis = await predictRisk(
             Number(attendancePercentage), 
             Number(cgpa), 
@@ -149,6 +208,7 @@ router.put('/students/:id', async (req, res) => {
         const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted } = req.body;
         
         // AI Analysis Refresh
+        // Using updated feature values for prediction
         const analysis = await predictRisk(
             Number(attendancePercentage), 
             Number(cgpa), 
