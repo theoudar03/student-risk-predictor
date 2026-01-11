@@ -64,13 +64,22 @@ router.post('/risk-recalc', async (req, res) => {
         const processBatch = async (batch) => {
              return Promise.all(batch.map(async (student) => {
                 try {
+                    // Fix: Use nullish coalescing to allow 0 as a valid value
+                    const att = student.attendancePercentage ?? 0;
+                    const cgpa = student.cgpa ?? 0;
+                    const fee = student.feeDelayDays ?? 0;
+                    const part = student.classParticipationScore ?? 0;
+                    const assign = student.assignmentsCompleted ?? 85;
+
                     const analysis = await predictRisk(
-                        Number(student.attendancePercentage || 0),
-                        Number(student.cgpa || 0),
-                        Number(student.feeDelayDays || 0),
-                        Number(student.classParticipationScore || 0),
-                        Number(student.assignmentsCompleted || 85)
+                        Number(att),
+                        Number(cgpa),
+                        Number(fee),
+                        Number(part),
+                        Number(assign)
                     );
+                    
+                    console.log(`[Recalc] ${student.name}: ${student.riskScore} -> ${analysis.score}`);
                     
                     bulkOps.push({
                         updateOne: {
