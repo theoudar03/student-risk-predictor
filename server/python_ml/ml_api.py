@@ -47,16 +47,17 @@ class StudentData(BaseModel):
 @app.post("/predict-risk")
 def predict_risk(data: StudentData):
     # Prepare Input for Model
+    # Prepare Input for Model
     input_df = pd.DataFrame([{
         'attendance': data.attendancePercentage,
         'cgpa': data.cgpa,
         'fee_delay': data.feeDelayDays,
-        'participation': data.classParticipationScore,
-        'assignments': data.assignmentsCompleted
+        'assignments': data.assignmentsCompleted,
+        'engagement': data.classParticipationScore  # Map 'classParticipationScore' to 'engagement'
     }])
     
     # 🌟 CRITICAL: Enforce Column Order to match Training
-    input_df = input_df[['attendance', 'cgpa', 'fee_delay', 'participation', 'assignments']]
+    input_df = input_df[['attendance', 'cgpa', 'fee_delay', 'assignments', 'engagement']]
     
     # Log for Debugging
     print(f"Predicting for: {input_df.values.tolist()}")
