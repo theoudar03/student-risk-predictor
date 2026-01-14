@@ -40,7 +40,16 @@ router.get('/', authenticateToken, async (req, res) => {
              return priorities[b.severity] - priorities[a.severity];
         });
 
-        res.json(sortedAlerts);
+        // Presentation Mapping: Round Risk Score in Alert Object
+        const presentationAlerts = sortedAlerts.map(a => {
+            const obj = a.toObject();
+            if (obj.riskScore !== null && obj.riskScore !== undefined) {
+                obj.riskScore = Math.round(obj.riskScore);
+            }
+            return obj;
+        });
+
+        res.json(presentationAlerts);
     } catch (e) {
         console.error("Alert Fetch Error:", e);
         res.status(500).json({ error: "Server Error" });

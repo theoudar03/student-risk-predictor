@@ -20,7 +20,11 @@ router.post('/calculate/:studentId', async (req, res) => {
         await calculateRisk(targetId);
         
         const updatedStudent = await Student.findById(targetId);
-        res.json(updatedStudent);
+        
+        const obj = updatedStudent.toObject();
+        if (obj.riskScore !== null) obj.riskScore = Math.round(obj.riskScore);
+        
+        res.json(obj);
 
     } catch (e) {
         console.error("Risk Route Error:", e);

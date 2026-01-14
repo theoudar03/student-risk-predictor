@@ -52,8 +52,8 @@ const syncStudentAlert = async (student) => {
                 // Update existing alert only if severity escalates or changes
                 if (todayAlert.severity !== newSeverity) {
                     todayAlert.severity = newSeverity;
-                    todayAlert.message = `Risk updated to ${newSeverity} (${riskScore}%)`;
-                    todayAlert.riskScore = riskScore; // Keep score current
+                    todayAlert.message = `Risk updated to ${newSeverity} (${Math.round(riskScore)}%)`;
+                    todayAlert.riskScore = riskScore; // Keep score current (float)
                     await todayAlert.save();
                     console.log(`[AlertService] Updated today's alert for ${name} -> ${newSeverity}`);
                 }
@@ -65,7 +65,7 @@ const syncStudentAlert = async (student) => {
                     mentorId: assignedMentorId, 
                     department: course,
                     severity: newSeverity,
-                    message: `Risk Level is ${newSeverity} (${riskScore}%)`,
+                    message: `Risk Level is ${newSeverity} (${Math.round(riskScore)}%)`,
                     riskScore: riskScore,
                     status: 'Active',
                     date: new Date(),
@@ -78,7 +78,7 @@ const syncStudentAlert = async (student) => {
             if (todayAlert) {
                 todayAlert.status = 'Resolved';
                 todayAlert.resolvedAt = new Date();
-                todayAlert.message = `Risk dropped to Low (${riskScore}%)`;
+                todayAlert.message = `Risk dropped to Low (${Math.round(riskScore)}%)`;
                 await todayAlert.save();
                 console.log(`[AlertService] Resolved today's alert for ${name}`);
             }

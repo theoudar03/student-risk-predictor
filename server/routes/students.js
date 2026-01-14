@@ -30,7 +30,17 @@ router.get('/', async (req, res) => {
         // Admin sees all (filter remains empty)
         
         const students = await Student.find(filter).sort({ riskScore: -1 });
-        res.json(students);
+        
+        // Presentation Mapping: Round Risk Scores for UI
+        const presentationStudents = students.map(s => {
+            const obj = s.toObject();
+            if (obj.riskScore !== null && obj.riskScore !== undefined) {
+                obj.riskScore = Math.round(obj.riskScore);
+            }
+            return obj;
+        });
+
+        res.json(presentationStudents);
 
     } catch (e) {
         console.error("Error fetching students:", e);
@@ -139,7 +149,12 @@ router.get('/:id', async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
         if (!student) return res.status(404).json({message: 'Not found'});
-        res.json(student);
+        
+        const obj = student.toObject();
+        if (obj.riskScore !== null && obj.riskScore !== undefined) {
+             obj.riskScore = Math.round(obj.riskScore);
+        }
+        res.json(obj);
     } catch (e) {
         // If ID is invalid ObjectId, findById throws error
         res.status(404).json({message: 'Not found'});
