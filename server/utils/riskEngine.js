@@ -4,10 +4,10 @@ const { syncStudentAlert } = require('./alertService');
 
 const ML_TIMEOUT_MS = 5000; // Hard SLA: 5 Seconds
 
-const calculateRisk = async (studentId) => {
+const calculateRisk = async (studentId, reason = 'RealtimeTrigger') => {
     // ... existing logic ...
     const startTime = Date.now();
-    console.log(`[RiskEngine] 🕒 Starting calculation for Student ID: ${studentId}`);
+    console.log(`[RiskEngine] 🕒 Starting calculation for Student ID: ${studentId} [Reason: ${reason}]`);
     
     try {
         const student = await Student.findById(studentId);
@@ -36,7 +36,7 @@ const calculateRisk = async (studentId) => {
         student.riskStatus = 'CALCULATED';
         student.riskModel = 'risk_calc_model';
         student.riskModelVersion = '1.0';
-        student.riskRecalculationReason = 'RealtimeTrigger';
+        student.riskRecalculationReason = reason; // Use the dynamic reason
         student.riskUpdatedAt = new Date();
         
         await student.save();

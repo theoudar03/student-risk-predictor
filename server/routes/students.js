@@ -161,4 +161,42 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Update Student & Trigger Event-Driven Risk Recalculation
+router.put('/:id', async (req, res) => {
+    try {
+        const { calculateRisk } = require('../utils/riskEngine');
+        const updates = req.body;
+        
+        // Prevent updating immutable fields or risk fields directly
+        delete updates.studentId;
+        delete updates.riskScore;
+        delete updates.riskLevel;
+        delete updates.riskFactors;
+        delete updates.riskStatus;
+
+        const student = await Student.findByIdAndUpdate(
+            req.params.id, 
+            { $set: updates },
+            { new: true, runValidators: true }
+        );
+
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
+        // ⚡ EVENT-DRIVEN TRIGGER: Recalculate Risk Immediately
+        // We do not await this, so the UI gets a fast response.
+        // The risk status will go to 'PROCESSING' -> 'CALCULATED' in background.
+        calculateRisk(student._id, 'StudentDataChange').catch(err => 
+            console.error(`[EventTrigger] Risk calc failed for ${student.name}:`, err)
+        );
+
+        const obj = student.toObject();
+        if (obj.riskScore !== null) obj.riskScore = Math.round(obj.riskScore);
+
+        res.json(obj);
+    } catch (e) {
+        console.error("Error updating student:", e);
+        res.status(500).json({ error: "Failed to update student" });
+    }
+});
+
 module.exports = router;
