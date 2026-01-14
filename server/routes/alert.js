@@ -25,6 +25,17 @@ router.get('/', authenticateToken, async (req, res) => {
         const deptStudents = await Student.find({ course: currentUser.department }, '_id');
         const deptStudentIds = deptStudents.map(s => s._id);
 
+        // 🧹 AUTO-CLEANUP: Hard delete/resolve legacy or stale alerts that shouldn't be here
+        // This acts as a failsafe to ensure the DB strictly reflects "Today's Risks Only"
+        await Alert.updateMany(
+            { 
+                studentId: { $in: deptStudentIds }, 
+                status: 'Active',
+                dateOnly: { $ne: todayStr } 
+            },
+            { $set: { status: 'Resolved', resolvedAt: new Date() } }
+        );
+
         const alerts = await Alert.find({
             studentId: { $in: deptStudentIds },
             status: 'Active',
