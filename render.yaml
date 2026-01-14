@@ -19,13 +19,12 @@ services:
           name: student-risk-ml-service
           property: url
 
-  # 2. Python ML Microservice
+  # 2. Python ML Microservice (Docker)
   - type: web
     name: student-risk-ml-service
-    env: python
+    env: docker
     plan: free
-    buildCommand: cd server/python_ml && pip install -r requirements.txt
-    startCommand: cd server/python_ml && uvicorn ml_api:app --host 0.0.0.0 --port 10000
+    dockerContext: server/python_ml
     envVars:
       - key: PORT
         value: 10000

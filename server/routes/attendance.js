@@ -276,9 +276,9 @@ router.post('/', async (req, res) => {
 
                         // Update Student
                         student.attendancePercentage = newPercentage;
-                        student.riskScore = analysis.score;
-                        student.riskLevel = analysis.level;
-                        student.riskFactors = analysis.factors;
+                        student.riskScore = analysis.riskScore;
+                        student.riskLevel = analysis.riskLevel;
+                        student.riskFactors = analysis.riskFactors;
                         await student.save();
                     } catch (mlErr) {
                          console.error(`ML Update Failed for ${record.name}:`, mlErr.message);

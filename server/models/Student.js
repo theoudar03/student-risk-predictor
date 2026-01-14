@@ -21,7 +21,9 @@ const StudentSchema = new mongoose.Schema({
   riskScore: { type: Number, default: null }, // 0-100
   riskLevel: { type: String, enum: ['Low', 'Medium', 'High', 'Pending', null], default: null },
   riskStatus: { type: String, enum: ['PENDING', 'PROCESSING', 'CALCULATED', 'FAILED'], default: 'PENDING' },
-  riskModel: { type: String, default: null },
+  riskModel: { type: String, default: null }, // To store model name/id
+  riskModelVersion: { type: String, default: '1.0' }, // To store version
+  riskRecalculationReason: { type: String, default: 'Manual' },
   riskUpdatedAt: { type: Date },
   riskFactors: [{ type: String }], // Explanations
   

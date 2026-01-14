@@ -23,19 +23,25 @@ const calculateRisk = async (studentId) => {
         const part = student.classParticipationScore ?? 0;
         const assign = student.assignmentsCompleted ?? 85;
 
+        // Call ML Service (Single)
         const analysis = await Promise.race([
             predictRisk(Number(att), Number(cgpa), Number(fee), Number(part), Number(assign)),
             new Promise((_, reject) => setTimeout(() => reject(new Error("ML_TIMEOUT_EXCEEDED")), ML_TIMEOUT_MS))
         ]);
 
-        student.riskScore = analysis.score;
-        student.riskLevel = analysis.level;
-        student.riskFactors = analysis.factors;
+        // STRICTLY use ML output
+        student.riskScore = analysis.riskScore;
+        student.riskLevel = analysis.riskLevel;
+        student.riskFactors = analysis.riskFactors;
         student.riskStatus = 'CALCULATED';
-        student.riskModel = 'extreme_dropout_v4';
+        student.riskModel = 'risk_calc_model';
+        student.riskModelVersion = '1.0';
+        student.riskRecalculationReason = 'RealtimeTrigger';
         student.riskUpdatedAt = new Date();
+        
         await student.save();
         await syncStudentAlert(student);
+        console.log(`[RiskEngine] ✅ Success for ${studentId}: Score ${student.riskScore} (${student.riskLevel})`);
 
     } catch (error) {
         console.error(`[RiskEngine] ❌ Failed ID ${studentId}:`, error.message);
@@ -52,38 +58,46 @@ const calculateAllRiskBatch = async () => {
         const students = await Student.find({});
         if (students.length === 0) return { processed: 0, durationMs: 0 };
 
-        // 2. Call ML Batch API
+        // 2. Call ML Batch API (Concurrent calls via mlService with chunks)
         console.log(`[RiskEngine] Sending ${students.length} students to Python ML...`);
-        const predictions = await predictRiskBatch(students);
+        const results = await predictRiskBatch(students);
         
         // 3. Prepare Bulk Writes
-        // We need to map predictions back to student IDs. 
-        // Order is preserved in Python list, so index i corresponds to students[i]
+        const bulkOps = [];
         
-        const bulkOps = students.map((student, i) => {
-            const pred = predictions[i];
-            const factors = [];
-            // Re-generate factors locally or trust updated logic. Keeping heuristic explanation logic here for UI consistency
-            const att = student.attendancePercentage;
-            if (att < 75) factors.push(`Low Attendance (${att}%)`);
-            if (student.cgpa < 6.0) factors.push(`Low CGPA (${student.cgpa})`);
-            if (student.feeDelayDays > 15) factors.push(`Fee Payment Overdue (${student.feeDelayDays} days)`);
-
-            return {
-                updateOne: {
-                    filter: { _id: student._id },
-                    update: {
-                        $set: {
-                            riskScore: pred.riskScore,
-                            riskLevel: pred.riskLevel,
-                            riskStatus: 'CALCULATED',
-                            riskModel: 'extreme_dropout_v4_batch',
-                            riskUpdatedAt: new Date(),
-                            riskFactors: factors
+        results.forEach((result) => {
+            if (result.success) {
+                const { riskScore, riskLevel, riskFactors } = result.data;
+                
+                bulkOps.push({
+                    updateOne: {
+                        filter: { _id: result.studentId },
+                        update: {
+                            $set: {
+                                riskScore: riskScore,
+                                riskLevel: riskLevel,
+                                riskFactors: riskFactors, // DIRECTLY FROM ML
+                                riskStatus: 'CALCULATED',
+                                riskModel: 'risk_calc_model_batch',
+                                riskModelVersion: '1.0',
+                                riskRecalculationReason: 'BatchScheduler',
+                                riskUpdatedAt: new Date()
+                            }
                         }
                     }
-                }
-            };
+                });
+            } else {
+                 // Handle individual failures in batch
+                 console.error(`[RiskEngine] Batch item failed for ${result.studentId}: ${result.error}`);
+                 bulkOps.push({
+                    updateOne: {
+                        filter: { _id: result.studentId },
+                        update: {
+                            $set: { riskStatus: 'FAILED', riskUpdatedAt: new Date() }
+                        }
+                    }
+                });
+            }
         });
 
         // 4. Execute Bulk Write
@@ -92,7 +106,7 @@ const calculateAllRiskBatch = async () => {
         }
 
         const duration = Date.now() - startTime;
-        console.log(`[RiskEngine] ✅ Batch Success in ${duration}ms | Count: ${students.length}`);
+        console.log(`[RiskEngine] ✅ Batch Processed in ${duration}ms | Count: ${students.length}`);
         
         return {
             processed: students.length,
@@ -102,9 +116,10 @@ const calculateAllRiskBatch = async () => {
 
     } catch (error) {
         const duration = Date.now() - startTime;
-        console.error(`[RiskEngine] ❌ Batch Failed after ${duration}ms:`, error.message);
+        console.error(`[RiskEngine] ❌ Batch System Failed after ${duration}ms:`, error.message);
         throw error;
     }
 };
 
 module.exports = { calculateRisk, calculateAllRiskBatch };
+

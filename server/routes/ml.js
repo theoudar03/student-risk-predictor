@@ -5,19 +5,20 @@ const router = express.Router();
 // Direct Proxy to Python ML Service
 router.post('/', async (req, res) => {
     try {
-        // Forward the entire body to the Python Microservice
         const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8001';
+        
+        // Forward to the correct FastAPI endpoint
         const response = await axios.post(
-            `${mlServiceUrl}/predict-risk`,
-            req.body
+            `${mlServiceUrl}/api/ml/calculate-risk`,
+            req.body,
+            { timeout: 5000 }
         );
 
         res.json(response.data);
     } catch (error) {
-        console.error("ML Microservice Error:", error.message);
-        // Fallback or Error
-        res.status(500).json({ 
-            error: "ML service unavailable", 
+        console.error("ML Microservice Proxy Error:", error.message);
+        res.status(502).json({ 
+            error: "ML service unavailable or failed", 
             details: error.message 
         });
     }
