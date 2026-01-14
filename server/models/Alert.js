@@ -7,6 +7,7 @@ const AlertSchema = new mongoose.Schema({
   message: { type: String, required: true },
   status: { type: String, enum: ['Active', 'Resolved'], default: 'Active' },
   date: { type: Date, default: Date.now }, // Maps to 'date' in JSON
+  dateOnly: { type: String, required: true, index: true }, // Format YYYY-MM-DD for strict day scoping
   resolvedAt: { type: Date }
 }, { timestamps: true });
 
