@@ -4,7 +4,7 @@ services:
     name: student-risk-backend
     env: docker
     plan: free
-    dockerContext: server
+    dockerContext: .
     dockerFilePath: server/Dockerfile
     envVars:
       - key: PORT
