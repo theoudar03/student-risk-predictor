@@ -39,12 +39,11 @@ const TopBar = ({ user, onToggleSidebar }) => {
     const fetchAlerts = async () => {
         try {
             // ✅ Fix: Fetch ONLY Active alerts from DB source
-            const res = await axios.get('/api/students/data/alerts?status=Active');
+            // ✅ FIX: Use Correct API Source (Alerts Collection)
+            const res = await axios.get('/api/alerts');
             if (Array.isArray(res.data)) {
-                // Double check status client-side just in case
-                const active = res.data.filter(a => a.status === 'Active');
-                console.log("Bell Alerts Rendered:", active); // 🔍 Mandatory Debug Log
-                setAlerts(active);
+                console.log("Bell Alerts Rendered:", res.data);
+                setAlerts(res.data);
             }
         } catch (error) {
             console.error(error);
@@ -72,7 +71,7 @@ const TopBar = ({ user, onToggleSidebar }) => {
             </div>
             
             <div className="d-flex align-items-center gap-3">
-                {user?.role === 'mentor' && (
+                {(user?.role === 'mentor' || user?.role === 'admin') && (
                     <Dropdown align="end">
                         <Dropdown.Toggle as="div" className="position-relative cursor-pointer p-2 rounded-circle hover-bg-light" style={{ cursor: 'pointer', transition: '0.2s' }}>
                             <FaBell size={22} className="text-secondary" />
@@ -122,7 +121,7 @@ const TopBar = ({ user, onToggleSidebar }) => {
                                                 <p className="mb-1 fw-bold small text-dark">{alert.studentName}</p>
                                                 <p className="mb-1 small text-muted lh-sm">{alert.message}</p>
                                                 <small className="text-muted" style={{ fontSize: '0.7rem' }}>
-                                                    {new Date(alert.date).toLocaleDateString()}
+                                                    {new Date(alert.lastUpdatedAt || alert.createdAt).toLocaleDateString()}
                                                 </small>
                                             </div>
                                         </div>

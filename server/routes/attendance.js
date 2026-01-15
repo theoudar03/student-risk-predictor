@@ -253,6 +253,9 @@ router.post('/', async (req, res) => {
         res.status(201).json({ success: true, message: "Attendance saved successfully" });
 
         // 4. Async: Update Student Risk Scores based on new attendance
+        // 4. Async: Update Student Risk Scores based on new attendance
+        const { calculateRisk } = require('../utils/riskEngine');
+
         records.forEach(async (record) => {
             try {
                 // Get Total & Present Counts
@@ -261,33 +264,15 @@ router.post('/', async (req, res) => {
                 
                 const newPercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
 
-                const student = await Student.findById(record.studentId);
-                if (student) {
-                    // Call Python ML Service
-                    // We must handle the error if ML is down, but since we already sent response, just log it.
-                    try {
-                        const analysis = await predictRisk(
-                            newPercentage, // Use NEW attendance
-                            Number(student.cgpa || 0),
-                            Number(student.feeDelayDays || 0),
-                            Number(student.classParticipationScore || 0),
-                            Number(student.assignmentsCompleted || 85)
-                        );
+                const student = await Student.findByIdAndUpdate(record.studentId, {
+                    attendancePercentage: newPercentage
+                }, { new: true });
 
-                        // Update Student
-                        student.attendancePercentage = newPercentage;
-                        student.riskScore = analysis.riskScore;
-                        student.riskLevel = analysis.riskLevel;
-                        student.riskFactors = analysis.riskFactors;
-                        await student.save();
-                    } catch (mlErr) {
-                         console.error(`ML Update Failed for ${record.name}:`, mlErr.message);
-                         // Still update attendance % even if ML fails? 
-                         // User said "Node.js must fail gracefully". 
-                         // Here we are in background. Best to update stats at least.
-                         student.attendancePercentage = newPercentage;
-                         await student.save();
-                    }
+                if (student) {
+                    // Trigger Standardized Risk Calculation
+                    calculateRisk(student._id, 'AttendanceUpdate').catch(err => 
+                        console.error(`[Attendance] Risk recalc failed for ${student.name}:`, err)
+                    );
                 }
             } catch (err) {
                 console.error("Background Risk Update Error:", err);
