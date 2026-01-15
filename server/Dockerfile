@@ -18,7 +18,7 @@ COPY . .
 
 # 4. Train Model (Ensure it exists)
 WORKDIR /app/python_ml
-RUN python train_model.py
+RUN python retrain_model.py
 WORKDIR /app
 
 # 5. Build/Prep (if needed)

@@ -1,20 +1,16 @@
 services:
-  # Monolithic Docker Service (Node Backend + Python ML)
+  # Monolithic Service: Node.js Backend + Python ML (Docker)
   - type: web
-    name: stayontrack-backend
+    name: student-risk-backend
     env: docker
-    plan: free # Change to starter/standard if needed
-    rootDir: server # Points to folder with Dockerfile
+    plan: free
+    rootDir: server
     envVars:
       - key: PORT
         value: 5000
       - key: MONGO_URI
-        sync: false # User will be prompted to enter this in dashboard
-      - key: JWT_SECRET
         sync: false
       - key: NODE_ENV
         value: production
       - key: ML_SERVICE_URL
         value: http://127.0.0.1:8001
-      - key: CLIENT_URL
-        sync: false
