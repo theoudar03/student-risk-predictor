@@ -4,7 +4,7 @@ const axios = require('axios');
 const getMlUrl = () => {
     const url = process.env.ML_SERVICE_URL;
     if (process.env.NODE_ENV === 'production' && !url) {
-        console.error("🚨 CRITICAL: ML_SERVICE_URL is not set in production!");
+        console.error("CRITICAL: ML_SERVICE_URL is not set in production!");
         throw new Error("CONFIGURATION_ERROR: ML_SERVICE_URL missing");
     }
     return url || 'http://127.0.0.1:8001';
@@ -34,7 +34,7 @@ const predictRisk = async (attendance, cgpa, feeDelay, participation, assignment
         const makeRequest = async (retries = 1) => {
             try {
                 return await axios.post(`${mlUrl}/api/ml/calculate-risk`, payload, {
-                    timeout: 4000 // 4s timeout (Requirement: 3-5s)
+                    timeout: 8000 // Increased to 8s for batch stability
                 });
             } catch (err) {
                 if (retries > 0 && (!err.response || err.response.status >= 500)) {
@@ -112,6 +112,11 @@ const predictRiskBatch = async (students) => {
         try {
             const chunkResults = await processChunk(chunk);
             allResults.push(...chunkResults);
+
+             // Short breathing room for ML service
+            if (i + BATCH_SIZE < students.length) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
         } catch (e) {
             console.error(`[ML Service] Chunk failed massively:`, e);
             // Fallback for catastrophic payload failure (unlikely given individual catch)
