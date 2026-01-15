@@ -49,54 +49,61 @@ const syncStudentAlert = async (student) => {
         // ------------------------------------------
         if (riskLevel === 'Medium' || riskLevel === 'High') {
             
-            // B1. No active alert -> CREATE
-            if (!activeAlert) {
-                if (!assignedMentorId) {
-                    console.log(`[AlertService] ⚠️ Cannot create alert for ${name}: No mentor assigned.`);
-                    return;
-                }
+            // Resolve Mentor (Best Effort)
+            let mentorObjectId = null;
+            if (assignedMentorId) {
+                 const mentorUser = await User.findOne({ mentorId: assignedMentorId });
+                 if (mentorUser) {
+                     mentorObjectId = mentorUser._id;
+                 } else {
+                     console.warn(`[AlertService] ⚠️ Mentor ID ${assignedMentorId} not found for student ${name}. Alert will be unassigned.`);
+                 }
+            }
 
-                // Resolve Mentor ObjectId from String ID
-                const mentorUser = await User.findOne({ mentorId: assignedMentorId });
-                if (!mentorUser) {
-                     console.log(`[AlertService] ⚠️ Mentor not found for ID: ${assignedMentorId}`);
-                     return;
-                }
+            // B1. No active RISK alert -> CREATE
+            // We specifically look for alertType 'RISK' to differentiate from others
+            const activeRiskAlert = activeAlert && activeAlert.alertType === 'RISK' ? activeAlert : null;
 
+            if (!activeRiskAlert) {
                 await Alert.create({
                     studentId: _id,
                     studentName: name,
-                    mentorId: mentorUser._id, // Use ObjectId
+                    mentorId: mentorObjectId, // Can be null now
                     riskLevel: riskLevel,
                     riskScore: riskScore,
                     message: `Risk is ${riskLevel} (${Math.round(riskScore)}%)`,
+                    alertType: 'RISK',
                     active: true,
                     createdAt: new Date(),
-                    lastEvaluatedAt: new Date()
+                    lastEvaluatedAt: new Date(),
+                    lastUpdatedAt: new Date()
                 });
                 console.log(`[AlertService] 🔔 Created NEW ${riskLevel} alert for ${name}`);
                 return;
             }
 
             // B2. Active alert exists -> CHECK FOR CHANGE
-            if (activeAlert) {
-                const oldLevel = activeAlert.riskLevel;
+            if (activeRiskAlert) {
+                const oldLevel = activeRiskAlert.riskLevel;
                 
                 // Update timestamp to show we checked it
-                activeAlert.lastEvaluatedAt = new Date();
-                activeAlert.riskScore = riskScore; // Keep score fresh
+                activeRiskAlert.lastEvaluatedAt = new Date();
+                activeRiskAlert.riskScore = riskScore; // Keep score fresh
 
                 // Logic: If Level Changed (e.g. Medium -> High), update it.
                 if (oldLevel !== riskLevel) {
-                    activeAlert.riskLevel = riskLevel;
-                    activeAlert.message = `Risk changed to ${riskLevel} (${Math.round(riskScore)}%)`;
+                    activeRiskAlert.riskLevel = riskLevel;
+                    activeRiskAlert.message = `Risk changed to ${riskLevel} (${Math.round(riskScore)}%)`;
+                    activeRiskAlert.lastUpdatedAt = new Date(); // Only update this on meaningful change
                     console.log(`[AlertService] 🔄 Updated alert for ${name}: ${oldLevel} -> ${riskLevel}`);
-                } else {
-                    // Start throttling: Do nothing if level is same
-                    // console.log(`[AlertService] 💤 IDLE: Risk level same (${riskLevel})`);
                 }
                 
-                await activeAlert.save();
+                // Ensure mentor is linked if previously missing but now available
+                if (!activeRiskAlert.mentorId && mentorObjectId) {
+                    activeRiskAlert.mentorId = mentorObjectId;
+                }
+
+                await activeRiskAlert.save();
             }
         }
 

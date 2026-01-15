@@ -16,7 +16,7 @@ router.get('/stats', async (req, res) => {
         const totalStudents = await Student.countDocuments();
         const totalMentors = await User.countDocuments({ role: 'mentor' });
         const highRiskCount = await Student.countDocuments({ riskLevel: 'High' });
-        const activeAlerts = await Alert.countDocuments({ status: 'Active' });
+        const activeAlerts = await Alert.countDocuments({ active: true, alertType: 'RISK' });
 
         const stats = {
             totalStudents,

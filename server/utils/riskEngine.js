@@ -101,8 +101,14 @@ const calculateAllRiskBatch = async (reason = 'BatchScheduler') => {
             }
         });
         
+        // 3a. EXECUTE BULK WRITE FIRST (Crucial for Alert Accuracy)
+        // We update the DB first so that specific student lookups in syncStudentAlert get FRESH data.
+        if (bulkOps.length > 0) {
+            await Student.bulkWrite(bulkOps);
+            console.log(`[RiskEngine] 💾 Bulk Write Complete for ${bulkOps.length} updates.`);
+        }
+
         // 4. SYNC ALERTS (Critical Requirement: Update trigger at midnight)
-        // We do this AFTER processing to ensure student state is final.
         console.log(`[RiskEngine] 🔄 Syncing alerts for ${results.length} students...`);
         let alertCount = 0;
         
@@ -110,8 +116,6 @@ const calculateAllRiskBatch = async (reason = 'BatchScheduler') => {
         for (const result of results) {
             if (result.success) {
                 // Fetch the FULL updated student document to ensure alert service has context (mentorId, etc)
-                // Note: result.data only has ML output.
-                // We could optimize by passing student obj, but finding by ID guarantees freshness.
                  try {
                      const updatedStudent = await Student.findById(result.studentId);
                      if (updatedStudent) {
@@ -124,9 +128,6 @@ const calculateAllRiskBatch = async (reason = 'BatchScheduler') => {
             }
         }
         console.log(`[RiskEngine] ✅ Alerts Synced: ${alertCount}`);
-        if (bulkOps.length > 0) {
-            await Student.bulkWrite(bulkOps);
-        }
 
         const duration = Date.now() - startTime;
         console.log(`[RiskEngine] ✅ Batch Processed in ${duration}ms | Count: ${students.length}`);
