@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 
 const AlertSchema = new mongoose.Schema({
   studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
-  studentName: { type: String }, // Snapshot of name at alert time
-  severity: { type: String, enum: ['High', 'Medium', 'Low'], required: true },
-  message: { type: String, required: true },
-  status: { type: String, enum: ['Active', 'Resolved'], default: 'Active' },
-  date: { type: Date, default: Date.now }, // Maps to 'date' in JSON
-  dateOnly: { type: String, required: true, index: true }, // Format YYYY-MM-DD for strict day scoping
-  resolvedAt: { type: Date }
-}, { timestamps: true });
+  mentorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Linked to mentor
+  studentName: { type: String }, // Optional snapshot
+  riskLevel: { type: String, enum: ['Medium', 'High'], required: true },
+  riskScore: { type: Number }, // Store score for context
+  message: { type: String }, // Human readable reason
+  active: { type: Boolean, default: true, index: true },
+  lastEvaluatedAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now }
+}, { collection: 'riskAlerts', timestamps: true });
 
-module.exports = mongoose.model('Alert', AlertSchema);
+AlertSchema.index({ studentId: 1, mentorId: 1 }, { unique: false }); // Allow history, but app logic enforces singular active
+
+module.exports = mongoose.model('RiskAlert', AlertSchema);

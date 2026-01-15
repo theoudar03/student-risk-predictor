@@ -1,86 +1,102 @@
 const Alert = require('../models/Alert');
+// Alert model is now 'RiskAlert' based on previous edit, but requiring file returns the model
 const Student = require('../models/Student');
-const moment = require('moment'); // Timezone safe string handling
+const User = require('../models/User');
 
 /**
- * 🟢 Centralized Alert Management
- * Ensures alerts are generated STRICTLY for the current day.
- * Old alerts are automatically deactivated to prevent staleness.
+ * 🟢 Centralized RISK-BASED Alert Management
+ * 
+ * Logic (Idempotent & State-Based):
+ * 1. Low Risk -> Resolve any active alert.
+ * 2. Medium/High Risk:
+ *    - If no active alert -> Create NEW.
+ *    - If active alert exists:
+ *      - If risk level changed -> Update alert.
+ *      - If risk level same -> Do nothing (Throttle).
+ *    - Update lastEvaluatedAt.
  */
-
-// Define thresholds based on strict ML logic (v4.0)
-const RISK_THRESHOLDS = {
-    HIGH: 50,
-    MEDIUM: 25
-};
-
-const getTodayStr = () => moment().format('YYYY-MM-DD');
 
 const syncStudentAlert = async (student) => {
     try {
-        const { riskScore, _id, name, assignedMentorId, course } = student;
-        const todayStr = getTodayStr();
+        const { riskScore, _id, name, assignedMentorId, course, riskLevel } = student;
+        
+        console.log(`[AlertService] Syncing for ${name} (Lvl: ${riskLevel}, Score: ${riskScore})`);
 
-        console.log(`[AlertService] Syncing for ${name} (Score: ${riskScore}) on ${todayStr}`);
-
-        // 1. CLEANUP: Deactivate ALL active alerts for this student that are NOT from today
-        // This ensures the bell icon never shows "yesterday's news"
-        await Alert.updateMany(
-            { 
-                studentId: _id, 
-                status: 'Active',
-                dateOnly: { $ne: todayStr } 
-            },
-            { $set: { status: 'Resolved', resolvedAt: new Date() } }
-        );
-
-        // 2. Determine Current Risk Level
-        let newSeverity = null;
-        if (riskScore > RISK_THRESHOLDS.HIGH) newSeverity = 'High';
-        else if (riskScore > RISK_THRESHOLDS.MEDIUM) newSeverity = 'Medium';
-
-        // 3. Check for TODAY'S Active Alert
-        const todayAlert = await Alert.findOne({ 
-            studentId: _id, 
-            status: 'Active',
-            dateOnly: todayStr
+        // 1. Find ACTIVE alert for this student
+        const activeAlert = await Alert.findOne({
+            studentId: _id,
+            active: true
         });
 
-        if (newSeverity) {
-            // RISK EXISTS (Medium/High)
-            if (todayAlert) {
-                // Update existing alert only if severity escalates or changes
-                if (todayAlert.severity !== newSeverity) {
-                    todayAlert.severity = newSeverity;
-                    todayAlert.message = `Risk updated to ${newSeverity} (${Math.round(riskScore)}%)`;
-                    todayAlert.riskScore = riskScore; // Keep score current (float)
-                    await todayAlert.save();
-                    console.log(`[AlertService] Updated today's alert for ${name} -> ${newSeverity}`);
+        // ------------------------------------------
+        // SCENARIO A: Student is LOW Risk
+        // Action: Resolve existing alert if found
+        // ------------------------------------------
+        if (riskLevel === 'Low') {
+            if (activeAlert) {
+                activeAlert.active = false;
+                activeAlert.message = `Risk resolved (Score: ${Math.round(riskScore)}%)`;
+                activeAlert.lastEvaluatedAt = new Date();
+                await activeAlert.save();
+                console.log(`[AlertService] 🟢 Resolved alert for ${name}`);
+            }
+            return;
+        }
+
+        // ------------------------------------------
+        // SCENARIO B: Student is MEDIUM or HIGH Risk
+        // Action: Create or Update based on state change
+        // ------------------------------------------
+        if (riskLevel === 'Medium' || riskLevel === 'High') {
+            
+            // B1. No active alert -> CREATE
+            if (!activeAlert) {
+                if (!assignedMentorId) {
+                    console.log(`[AlertService] ⚠️ Cannot create alert for ${name}: No mentor assigned.`);
+                    return;
                 }
-            } else {
-                // CREATE FRESH ALERT FOR TODAY
+
+                // Resolve Mentor ObjectId from String ID
+                const mentorUser = await User.findOne({ mentorId: assignedMentorId });
+                if (!mentorUser) {
+                     console.log(`[AlertService] ⚠️ Mentor not found for ID: ${assignedMentorId}`);
+                     return;
+                }
+
                 await Alert.create({
                     studentId: _id,
                     studentName: name,
-                    mentorId: assignedMentorId, 
-                    department: course,
-                    severity: newSeverity,
-                    message: `Risk Level is ${newSeverity} (${Math.round(riskScore)}%)`,
+                    mentorId: mentorUser._id, // Use ObjectId
+                    riskLevel: riskLevel,
                     riskScore: riskScore,
-                    status: 'Active',
-                    date: new Date(),
-                    dateOnly: todayStr // Partition Key
+                    message: `Risk is ${riskLevel} (${Math.round(riskScore)}%)`,
+                    active: true,
+                    createdAt: new Date(),
+                    lastEvaluatedAt: new Date()
                 });
-                console.log(`[AlertService] Created fresh alert for ${name} (${todayStr})`);
+                console.log(`[AlertService] 🔔 Created NEW ${riskLevel} alert for ${name}`);
+                return;
             }
-        } else {
-            // LOW RISK implies no alert needed
-            if (todayAlert) {
-                todayAlert.status = 'Resolved';
-                todayAlert.resolvedAt = new Date();
-                todayAlert.message = `Risk dropped to Low (${Math.round(riskScore)}%)`;
-                await todayAlert.save();
-                console.log(`[AlertService] Resolved today's alert for ${name}`);
+
+            // B2. Active alert exists -> CHECK FOR CHANGE
+            if (activeAlert) {
+                const oldLevel = activeAlert.riskLevel;
+                
+                // Update timestamp to show we checked it
+                activeAlert.lastEvaluatedAt = new Date();
+                activeAlert.riskScore = riskScore; // Keep score fresh
+
+                // Logic: If Level Changed (e.g. Medium -> High), update it.
+                if (oldLevel !== riskLevel) {
+                    activeAlert.riskLevel = riskLevel;
+                    activeAlert.message = `Risk changed to ${riskLevel} (${Math.round(riskScore)}%)`;
+                    console.log(`[AlertService] 🔄 Updated alert for ${name}: ${oldLevel} -> ${riskLevel}`);
+                } else {
+                    // Start throttling: Do nothing if level is same
+                    // console.log(`[AlertService] 💤 IDLE: Risk level same (${riskLevel})`);
+                }
+                
+                await activeAlert.save();
             }
         }
 

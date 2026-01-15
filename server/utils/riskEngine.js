@@ -49,7 +49,7 @@ const calculateRisk = async (studentId, reason = 'RealtimeTrigger') => {
     }
 };
 
-const calculateAllRiskBatch = async () => {
+const calculateAllRiskBatch = async (reason = 'BatchScheduler') => {
     const startTime = Date.now();
     console.log(`[RiskEngine] 🚀 Starting BATCH calculation for ALL students`);
 
@@ -80,7 +80,8 @@ const calculateAllRiskBatch = async () => {
                                 riskStatus: 'CALCULATED',
                                 riskModel: 'risk_calc_model_batch',
                                 riskModelVersion: '1.0',
-                                riskRecalculationReason: 'BatchScheduler',
+                                riskModelVersion: '1.0',
+                                riskRecalculationReason: reason,
                                 riskUpdatedAt: new Date()
                             }
                         }
@@ -99,8 +100,30 @@ const calculateAllRiskBatch = async () => {
                 });
             }
         });
-
-        // 4. Execute Bulk Write
+        
+        // 4. SYNC ALERTS (Critical Requirement: Update trigger at midnight)
+        // We do this AFTER processing to ensure student state is final.
+        console.log(`[RiskEngine] 🔄 Syncing alerts for ${results.length} students...`);
+        let alertCount = 0;
+        
+        // This simple iteration is fine for ~1-5k students.
+        for (const result of results) {
+            if (result.success) {
+                // Fetch the FULL updated student document to ensure alert service has context (mentorId, etc)
+                // Note: result.data only has ML output.
+                // We could optimize by passing student obj, but finding by ID guarantees freshness.
+                 try {
+                     const updatedStudent = await Student.findById(result.studentId);
+                     if (updatedStudent) {
+                         await syncStudentAlert(updatedStudent);
+                         alertCount++;
+                     }
+                 } catch (err) {
+                     console.error(`[RiskEngine] Alert sync failed for ${result.studentId}`, err);
+                 }
+            }
+        }
+        console.log(`[RiskEngine] ✅ Alerts Synced: ${alertCount}`);
         if (bulkOps.length > 0) {
             await Student.bulkWrite(bulkOps);
         }

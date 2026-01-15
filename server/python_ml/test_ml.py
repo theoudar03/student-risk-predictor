@@ -1,6 +1,6 @@
 import joblib
-import numpy as np
 import os
+import pandas as pd
 
 # -------------------------------
 # LOAD MODEL
@@ -70,9 +70,22 @@ assignments = get_float("Assignments % (0–100): ", 0, 100)
 engagement = get_float("Engagement (0–10): ", 0, 10)
 
 # -------------------------------
-# ML PREDICTION
+# ML PREDICTION (FIXED)
 # -------------------------------
-X = np.array([[attendance, cgpa, fee_delay, assignments, engagement]])
+X = pd.DataFrame([{
+    "attendance": attendance,
+    "cgpa": cgpa,
+    "fee_delay": fee_delay,
+    "assignments": assignments,
+    "engagement": engagement
+}])
+
+# Safety check (prevents silent bugs)
+EXPECTED_FEATURES = [
+    "attendance", "cgpa", "fee_delay", "assignments", "engagement"
+]
+assert list(X.columns) == EXPECTED_FEATURES, "❌ Feature mismatch!"
+
 risk_score = float(model.predict(X)[0])
 risk_score = round(max(0, min(100, risk_score)), 2)
 

@@ -46,27 +46,56 @@ const generateStudentId = async () => {
 };
 
 // Bulk Recalculate Risk (Admin Trigger)
-router.post('/risk-recalc', async (req, res) => {
-    // Legacy endpoint: Redirect to new batch optimized engine
-    if (req.user.role !== 'admin') {
-         return res.status(403).json({ error: "Access denied. Admin rights required." });
-    }
-
+router.post('/risk-recalculate', async (req, res) => {
     try {
-        console.log("Redirecting legacy bulk recalc to Batch Engine...");
+        console.log("[Admin] 🔄 Manually triggering batch risk recalculation...");
         const { calculateAllRiskBatch } = require('../utils/riskEngine');
-        const result = await calculateAllRiskBatch();
+        
+        // Blocking call to ensure UI waits for completion, per requirements
+        const result = await calculateAllRiskBatch('AdminManualTrigger');
         
         res.json({
             success: true,
-            message: `Recalculation complete. Processed: ${result.processed}`,
-            total: result.processed
+            message: `Batch Recalculation Complete. Processed: ${result.processed}`,
+            processed: result.processed,
+            durationMs: result.durationMs
         });
     } catch (e) {
         console.error("Bulk Recalc Error:", e);
         res.status(500).json({ error: "Server Error during recalculation" });
     }
-});// Add Student (Admin Only)
+});
+
+// Admin: Get All Students (with Sorting)
+router.get('/students', async (req, res) => {
+    try {
+        const { sortBy = 'updatedAt', sortOrder = 'desc' } = req.query;
+        
+        // Allowed sort fields whitelist
+        const validSortFields = ['name', 'studentId', 'course', 'riskScore', 'riskLevel', 'updatedAt', 'attendancePercentage', 'cgpa'];
+        const sortField = validSortFields.includes(sortBy) ? sortBy : 'updatedAt';
+        const sortDir = sortOrder === 'asc' ? 1 : -1;
+
+        const students = await Student.find({})
+            .sort({ [sortField]: sortDir })
+            .lean(); // Faster query
+
+        // Presentation Mapping
+        const presentationStudents = students.map(s => {
+            if (s.riskScore !== null && s.riskScore !== undefined) {
+                s.riskScore = Math.round(s.riskScore);
+            }
+            return s;
+        });
+
+        res.json(presentationStudents);
+    } catch (e) {
+        console.error("Admin Fetch Students Error:", e);
+        res.status(500).json({ error: "Server Error" });
+    }
+});
+
+// Add Student (Admin Only)
 router.post('/students', async (req, res) => {
     try {
         const { name, email, course, attendancePercentage, cgpa, feeDelayDays, classParticipationScore, assignmentsCompleted, mentorId, studentId } = req.body;

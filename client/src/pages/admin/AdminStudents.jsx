@@ -19,14 +19,20 @@ const AdminStudents = () => {
         attendancePercentage: 75, cgpa: 7.5, feeDelayDays: 0, classParticipationScore: 5
     });
 
+    const [sortConfig, setSortConfig] = useState({ key: 'updatedAt', direction: 'desc' });
+
     useEffect(() => {
         fetchStudents();
         fetchMentors();
         
         // Auto-refresh for async risk updates
-        const interval = setInterval(fetchStudents, 5000);
+        // We keep this, but it will respect current sort order
+        const interval = setInterval(() => {
+             // Only if not editing modal
+             if (!showModal && !globalProcessing) fetchStudents();
+        }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [sortConfig]); // Refetch when sort changes
 
     const fetchMentors = async () => {
         try {
@@ -39,14 +45,27 @@ const AdminStudents = () => {
 
     const fetchStudents = async () => {
         try {
-            // Admin sees all students, reuse the main endpoint which allows admins
-            const res = await axios.get(`/api/students`);
+            // Use Admin-specific endpoint with Backend Sorting
+            const res = await axios.get(`/api/admin/students`, {
+                params: {
+                    sortBy: sortConfig.key,
+                    sortOrder: sortConfig.direction
+                }
+            });
             setStudents(res.data);
         } catch (e) {
             console.error(e);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
     };
 
     const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -92,13 +111,11 @@ const AdminStudents = () => {
         } catch(e) { alert("Failed to delete"); }
     };
 
-    const [sortType, setSortType] = useState('name');
-
-    // ... existing derived vars ...
     const courseMentors = mentors.filter(m => m.department === formData.course);
     
-    // Filter & Sort Logic
-    const filtered = students.filter(s => {
+    // Client-side Filter Only (Search)
+    // Sorting is now 100% Backend
+    const filteredStudents = students.filter(s => {
         const term = search.toLowerCase();
         return (
             (s.name || "").toLowerCase().includes(term) ||
@@ -106,14 +123,6 @@ const AdminStudents = () => {
             (s.course || "").toLowerCase().includes(term)
         );
     });
-    
-    const sorted = [...filtered].sort((a, b) => {
-        if (sortType === 'name') return a.name.localeCompare(b.name);
-        if (sortType === 'course') return (a.course || "").localeCompare(b.course || "");
-        if (sortType === 'risk') return (b.riskScore || 0) - (a.riskScore || 0); // High to Low
-        return 0;
-    });
-
 
     const [globalProcessing, setGlobalProcessing] = useState(false);
 
@@ -122,10 +131,13 @@ const AdminStudents = () => {
         
         setGlobalProcessing(true);
         try {
-            const res = await axios.post('/api/risk/recalculate-all');
+            // New Admin Endpoint
+            const res = await axios.post('/api/admin/risk-recalculate');
             const { processed, durationMs } = res.data;
             alert(`✅ Batch Recalculation Complete!\n\nProcessed: ${processed} students\nTime: ${durationMs}ms`);
-            fetchStudents(); // Refresh data
+            
+            // Force immediate refresh to show results
+            fetchStudents(); 
         } catch (e) {
             console.error("Batch Failed:", e);
             alert("❌ Batch Recalculation Failed. Please try again.");
@@ -134,33 +146,14 @@ const AdminStudents = () => {
         }
     };
 
-    const handleRetryRisk = async (id) => {
-        try {
-            await axios.post(`/api/risk/calculate/${id}`);
-            // Optimistic update to show status in row if strictly needed, 
-            // but requirements say "Never show calculating in rows".
-            // So we just toast or fetch data.
-            fetchStudents();
-        } catch (e) {
-            console.error("Retry failed", e);
-            alert("Retry failed.");
-        }
+    const getRiskBadge = (s) => {
+        const level = s.riskLevel || 'Low'; 
+        return <Badge bg={level === 'High' ? 'danger' : level === 'Medium' ? 'warning' : 'success'}>{level}</Badge>;
     };
 
-    const getRiskBadge = (s) => {
-        // Requirement: "Risk Level Column Must ONLY show Low | Medium | High"
-        // Requirement: "Must never show Pending | Calculating | Failed"
-        // Requirement: "Always display the last successfully calculated ML result"
-        
-        const level = s.riskLevel || 'Low'; // Fallback to 'Low' if null/pending to keep UI clean, or maybe 'Unknown' but user said Low/Med/High specific. 
-        // Actually, if it's strictly PENDING new student, we probably don't have a level.
-        // But user said: "Low / Medium / High risk always visible".
-        // Use logic: if riskLevel is null, maybe show "Low" (default safe) or "-" ?
-        // User instruction: "Always display the last successfully calculated ML result".
-        // If s.riskLevel exists, show it.
-        // If it's pure null (fresh student), showing "Low" is safer than "Pending".
-        
-        return <Badge bg={level === 'High' ? 'danger' : level === 'Medium' ? 'warning' : 'success'}>{level}</Badge>;
+    const SortIcon = ({ column }) => {
+        if (sortConfig.key !== column) return <span className="text-muted ms-1" style={{fontSize: '0.8em'}}>↕</span>;
+        return <span className="ms-1">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>;
     };
 
     return (
@@ -193,31 +186,37 @@ const AdminStudents = () => {
                     <InputGroup.Text><FaSearch /></InputGroup.Text>
                     <Form.Control placeholder="Search students..." value={search} onChange={e => setSearch(e.target.value)} />
                 </InputGroup>
-                <Form.Select style={{ maxWidth: '200px' }} value={sortType} onChange={e => setSortType(e.target.value)}>
-                    <option value="name">Sort by Name (A-Z)</option>
-                    <option value="course">Sort by Course</option>
-                    <option value="risk">Sort by Risk (High-Low)</option>
-                </Form.Select>
+                
+                 {/* Replaced legacy SELECT dropdown with explicit instructions or just rely on table headers */}
+                 <div className="text-muted d-flex align-items-center text-nowrap">
+                    <small>Click table headers to sort</small>
+                 </div>
             </div>
 
             <Table hover responsive className="bg-white shadow-sm rounded">
                 <thead className="bg-light">
                     <tr>
-                        <th className="ps-3">Name / ID</th>
-                        <th>Department (Course)</th>
-                        <th>Risk Level</th>
+                        <th className="ps-3 pointer" onClick={() => handleSort('name')}>
+                            Name / ID <SortIcon column="name" />
+                        </th>
+                        <th className="pointer" onClick={() => handleSort('course')}>
+                            Department <SortIcon column="course" />
+                        </th>
+                        <th className="pointer" onClick={() => handleSort('riskScore')}>
+                            Risk Level <SortIcon column="riskScore" />
+                        </th>
                         <th className="text-end pe-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sorted.map(s => (
+                    {filteredStudents.map(s => (
                         <tr key={s._id}>
                             <td className="ps-3">
                                 <div className="fw-bold">{s.name}</div>
                                 <small className="text-muted">{s.studentId}</small>
                             </td>
                             <td><Badge bg="light" text="dark" className="border">{s.course}</Badge></td>
-                            <td>{getRiskBadge(s)}</td>
+                            <td>{getRiskBadge(s)} <small className="text-muted ms-1">({s.riskScore ?? 0}%)</small></td>
                             <td className="text-end pe-3">
                                 <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEdit(s)}><FaEdit /></Button>
                                 <Button size="sm" variant="outline-danger" onClick={() => handleDelete(s._id)}><FaTrash /></Button>

@@ -18,37 +18,25 @@ router.get('/', authenticateToken, async (req, res) => {
             return res.json([]);
         }
 
-        // Rule: Show ONLY alerts created/updated TODAY
-        const todayStr = moment().format('YYYY-MM-DD');
-
+        // Rule: Show Active Alerts for Mentor's Students
+        
         // Find students in mentor's department
         const deptStudents = await Student.find({ course: currentUser.department }, '_id');
         const deptStudentIds = deptStudents.map(s => s._id);
 
-        // 🧹 AUTO-CLEANUP: Hard delete/resolve legacy or stale alerts that shouldn't be here
-        // This acts as a failsafe to ensure the DB strictly reflects "Today's Risks Only"
-        await Alert.updateMany(
-            { 
-                studentId: { $in: deptStudentIds }, 
-                status: 'Active',
-                dateOnly: { $ne: todayStr } 
-            },
-            { $set: { status: 'Resolved', resolvedAt: new Date() } }
-        );
-
         const alerts = await Alert.find({
             studentId: { $in: deptStudentIds },
-            status: 'Active',
-            dateOnly: todayStr // STRICT DATE FILTER
-        }).sort({ severity: 1, date: -1 }); // 'High' before 'Medium' (alphabetical h < m? No. High=H, Medium=M. H comes before M? Yes. Wait. 'High' vs 'Medium'. H is 8th, M is 13th. So 'High' comes first in ascending string sort. Wait, context says High/Medium logic.)
+            active: true // STATE-BASED
+        }).sort({ createdAt: -1 }); // Newest first
         // Actually, let's trust the FE to sort or sort clearly here.
         // Severity Enum: High, Medium, Low. 
         // We want High first.
         
         // Let's sort manually in JS to be safe
+        // Sort: High > Medium
         const sortedAlerts = alerts.sort((a, b) => {
-             const priorities = { 'High': 2, 'Medium': 1, 'Low': 0 };
-             return priorities[b.severity] - priorities[a.severity];
+             const priorities = { 'High': 2, 'Medium': 1 };
+             return (priorities[b.riskLevel] || 0) - (priorities[a.riskLevel] || 0);
         });
 
         // Presentation Mapping: Round Risk Score in Alert Object

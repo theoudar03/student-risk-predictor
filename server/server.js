@@ -54,7 +54,7 @@ const { calculateAllRiskBatch } = require('./utils/riskEngine');
 cron.schedule('0 0 * * *', async () => {
     console.log('[SCHEDULER] 🕛 Starting Daily Midnight Risk Recalculation...');
     try {
-        const result = await calculateAllRiskBatch();
+        const result = await calculateAllRiskBatch('BatchScheduler');
         console.log(`[SCHEDULER] ✅ Daily Recalculation Complete. Processed: ${result.processed}`);
     } catch (err) {
         console.error('[SCHEDULER] ❌ Daily Recalculation Failed:', err);
