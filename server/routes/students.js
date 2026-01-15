@@ -72,7 +72,8 @@ router.get('/stats', async (req, res) => {
         const studentIds = students.map(s => s._id);
         const activeAlertsCount = await Alert.countDocuments({ 
             studentId: { $in: studentIds },
-            status: 'Active'
+            active: true,
+            alertType: 'RISK'
         });
 
         const stats = {
