@@ -1,6 +1,6 @@
 const Student = require('../models/Student');
 const { predictRisk, predictRiskBatch } = require('./mlService');
-const { syncStudentAlert } = require('./alertService');
+const { syncStudentAlert, syncAlertsBatch } = require('./alertService');
 
 const ML_TIMEOUT_MS = 5000; // Hard SLA: 5 Seconds
 
@@ -108,25 +108,19 @@ const calculateAllRiskBatch = async (reason = 'BatchScheduler') => {
             console.log(`[RiskEngine] 💾 Bulk Write Complete for ${bulkOps.length} updates.`);
         }
 
-        // 4. SYNC ALERTS (Critical Requirement: Update trigger at midnight)
-        console.log(`[RiskEngine] 🔄 Syncing alerts for ${results.length} students...`);
-        let alertCount = 0;
+        // 4. SYNC ALERTS (Optimized Batch)
+        console.log(`[RiskEngine] 🔄 Syncing alerts for ${results.length} students (Batch Mode)...`);
         
-        // This simple iteration is fine for ~1-5k students.
-        for (const result of results) {
-            if (result.success) {
-                // Fetch the FULL updated student document to ensure alert service has context (mentorId, etc)
-                 try {
-                     const updatedStudent = await Student.findById(result.studentId);
-                     if (updatedStudent) {
-                         await syncStudentAlert(updatedStudent);
-                         alertCount++;
-                     }
-                 } catch (err) {
-                     console.error(`[RiskEngine] Alert sync failed for ${result.studentId}`, err);
-                 }
+        // Map results for quick lookup: StudentID -> ResultData
+        const riskResultMap = new Map();
+        results.forEach(r => {
+            if (r.success) {
+                riskResultMap.set(r.studentId.toString(), r.data);
             }
-        }
+        });
+
+        // Use new optimized batch alert sync
+        const alertCount = await syncAlertsBatch(students, riskResultMap);
         console.log(`[RiskEngine] ✅ Alerts Synced: ${alertCount}`);
 
         const duration = Date.now() - startTime;
