@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Dropdown, Badge, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaBell, FaExclamationTriangle, FaCheckCircle, FaBars } from 'react-icons/fa';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,8 @@ const TopBar = ({ user, onToggleSidebar }) => {
     const [alerts, setAlerts] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [attendanceReminder, setAttendanceReminder] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         fetchAlerts();
@@ -17,12 +18,19 @@ const TopBar = ({ user, onToggleSidebar }) => {
             checkAttendance();
         }, 30000);
 
-        // Listen for instant updates from Attendance page
         window.addEventListener('attendanceUpdated', checkAttendance);
+
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
             clearInterval(interval);
             window.removeEventListener('attendanceUpdated', checkAttendance);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
@@ -38,11 +46,8 @@ const TopBar = ({ user, onToggleSidebar }) => {
 
     const fetchAlerts = async () => {
         try {
-            // ✅ Fix: Fetch ONLY Active alerts from DB source
-            // ✅ FIX: Use Correct API Source (Alerts Collection)
             const res = await axios.get('/api/alerts');
             if (Array.isArray(res.data)) {
-                console.log("Bell Alerts Rendered:", res.data);
                 setAlerts(res.data);
             }
         } catch (error) {
@@ -50,94 +55,116 @@ const TopBar = ({ user, onToggleSidebar }) => {
         }
     };
 
-    // Unified Unread Count Logic
     useEffect(() => {
         const count = alerts.length + (attendanceReminder ? 1 : 0);
         setUnreadCount(count);
     }, [alerts, attendanceReminder]);
 
     return (
-        <div className="d-flex justify-content-between align-items-center mb-4 pb-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-            <div className="d-flex align-items-center">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-200 w-full gap-4">
+            <div className="flex items-center min-w-0">
                 {/* Mobile Menu Button */}
-                <Button variant="link" className="d-md-none me-2 p-0 text-dark" onClick={onToggleSidebar}>
+                <button 
+                    className="md:hidden mr-4 p-2 text-gray-800 focus:outline-none" 
+                    onClick={onToggleSidebar}
+                >
                     <FaBars size={24} />
-                </Button>
+                </button>
 
-                <div>
-                    <h4 className="fw-bold mb-0 text-dark">Welcome, {user?.name || 'Mentor'}</h4>
-                    <small className="text-muted">{user?.department || 'Department'} Dashboard</small>
+                <div className="flex-1 overflow-hidden">
+                    <h4 className="font-bold text-lg md:text-xl text-gray-800 m-0 truncate">Welcome, {user?.name || 'Mentor'}</h4>
+                    <p className="text-xs md:text-sm text-gray-500 m-0 truncate">{user?.department || 'Department'} Dashboard</p>
                 </div>
             </div>
             
-            <div className="d-flex align-items-center gap-3">
+            <div className="flex items-center gap-4">
                 {(user?.role === 'mentor' || user?.role === 'admin') && (
-                    <Dropdown align="end">
-                        <Dropdown.Toggle as="div" className="position-relative cursor-pointer p-2 rounded-circle hover-bg-light" style={{ cursor: 'pointer', transition: '0.2s' }}>
-                            <FaBell size={22} className="text-secondary" />
+                    <div className="relative" ref={dropdownRef}>
+                        <button 
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none"
+                        >
+                            <FaBell size={22} className="text-gray-600" />
                             {unreadCount > 0 && (
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style={{ fontSize: '0.6rem', border: '2px solid white' }}>
+                                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-red-600 border-2 border-white rounded-full translate-x-1/4 -translate-y-1/4">
                                     {unreadCount}
-                                    <span className="visually-hidden">unread messages</span>
                                 </span>
                             )}
-                        </Dropdown.Toggle>
+                        </button>
 
-                        <Dropdown.Menu className="shadow-lg border-0 p-0" style={{ width: 320, maxHeight: 400, overflowY: 'auto' }}>
-                            <div className="p-3 border-bottom bg-light">
-                                <h6 className="fw-bold mb-0">Notifications</h6>
-                                <small className="text-muted">{unreadCount} Notifications</small>
-                            </div>
-                            
-                            {/* Attendance Reminder */}
-                            {attendanceReminder && (
-                                <Dropdown.Item as={Link} to="/mentor/attendance" className="p-3 border-bottom bg-light-danger" style={{ whiteSpace: 'normal', backgroundColor: '#fff5f5' }}>
-                                    <div className="d-flex align-items-start gap-2">
-                                        <div className="mt-1 text-warning">
-                                            <FaExclamationTriangle />
-                                        </div>
-                                        <div>
-                                            <p className="mb-1 fw-bold small text-dark">Action Required: Attendance</p>
-                                            <p className="mb-1 small text-muted lh-sm">You haven't marked attendance for today yet.</p>
-                                            <small className="text-primary fw-bold" style={{ fontSize: '0.7rem' }}>Mark Now</small>
-                                        </div>
-                                    </div>
-                                </Dropdown.Item>
-                            )}
-
-                            {alerts.length === 0 && !attendanceReminder ? (
-                                <div className="p-4 text-center text-muted">
-                                    <FaCheckCircle className="mb-2 text-success" size={24} />
-                                    <p className="mb-0 small">No active risk alerts.</p>
+                        {isDropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-72 md:w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden max-h-[400px] flex flex-col">
+                                <div className="p-4 border-b border-gray-100 bg-gray-50">
+                                    <h6 className="font-bold text-gray-800 m-0 text-sm">Notifications</h6>
+                                    <p className="text-xs text-gray-500 m-0">{unreadCount} Notifications</p>
                                 </div>
-                            ) : (
-                                alerts.map(alert => (
-                                    <Dropdown.Item key={alert._id} as={Link} to={`/mentor/students/${alert.studentId || ''}`} className="p-3 border-bottom" style={{ whiteSpace: 'normal' }}>
-                                        <div className="d-flex align-items-start gap-2">
-                                            <div className="mt-1 text-danger">
-                                                <FaExclamationTriangle />
+                                
+                                <div className="overflow-y-auto flex-1">
+                                    {attendanceReminder && (
+                                        <Link 
+                                            to="/mentor/attendance" 
+                                            className="block p-4 border-b border-red-100 bg-red-50 hover:bg-red-100 transition-colors"
+                                            onClick={() => setIsDropdownOpen(false)}
+                                        >
+                                            <div className="flex items-start gap-3">
+                                                <div className="mt-1 text-yellow-500">
+                                                    <FaExclamationTriangle size={16} />
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-sm text-gray-800 m-0">Action Required: Attendance</p>
+                                                    <p className="text-xs text-gray-600 mt-1 mb-2 leading-tight">You haven't marked attendance for today yet.</p>
+                                                    <span className="text-blue-600 font-bold text-xs">Mark Now</span>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="mb-1 fw-bold small text-dark">{alert.studentName}</p>
-                                                <p className="mb-1 small text-muted lh-sm">{alert.message}</p>
-                                                <small className="text-muted" style={{ fontSize: '0.7rem' }}>
-                                                    {new Date(alert.lastUpdatedAt || alert.createdAt).toLocaleDateString()}
-                                                </small>
-                                            </div>
+                                        </Link>
+                                    )}
+
+                                    {alerts.length === 0 && !attendanceReminder ? (
+                                        <div className="p-6 text-center text-gray-500">
+                                            <FaCheckCircle className="mx-auto mb-2 text-green-500" size={24} />
+                                            <p className="text-sm m-0">No active risk alerts.</p>
                                         </div>
-                                    </Dropdown.Item>
-                                ))
-                            )}
-                            <div className="p-2 text-center bg-light border-top">
-                                <Link to="/mentor/alerts" className="text-decoration-none small fw-bold">View All Alerts</Link>
+                                    ) : (
+                                        alerts.map(alert => (
+                                            <Link 
+                                                key={alert._id} 
+                                                to={`/mentor/students/${alert.studentId || ''}`} 
+                                                className="block p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                                                onClick={() => setIsDropdownOpen(false)}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className="mt-1 text-red-500">
+                                                        <FaExclamationTriangle size={16} />
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-bold text-sm text-gray-800 m-0">{alert.studentName}</p>
+                                                        <p className="text-xs text-gray-600 mt-1 mb-1 leading-tight">{alert.message}</p>
+                                                        <span className="text-gray-400 text-[10px]">
+                                                            {new Date(alert.lastUpdatedAt || alert.createdAt).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))
+                                    )}
+                                </div>
+                                <div className="p-3 text-center bg-gray-50 border-t border-gray-100">
+                                    <Link 
+                                        to="/mentor/alerts" 
+                                        className="text-sm font-bold text-blue-600 hover:text-blue-800"
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    >
+                                        View All Alerts
+                                    </Link>
+                                </div>
                             </div>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                        )}
+                    </div>
                 )}
                 
-                <div className="d-none d-md-block text-end">
-                    <div className="fw-bold small">{user?.name}</div>
-                    <div className="text-muted small" style={{fontSize: 10}}>{user?.role}</div>
+                <div className="hidden md:block text-right">
+                    <div className="font-bold text-sm text-gray-800">{user?.name}</div>
+                    <div className="text-gray-500 text-[10px] uppercase tracking-wider">{user?.role}</div>
                 </div>
             </div>
         </div>

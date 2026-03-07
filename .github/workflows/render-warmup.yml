@@ -1,0 +1,14 @@
+name: Keep Render Backend Warm
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: # Allows manual trigger from UI
+
+jobs:
+  ping-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Backend
+        run: |
+          curl -s https://student-risk-backend-soc7.onrender.com/health

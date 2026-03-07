@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Row, Col, Button } from "react-bootstrap";
 import {
   PieChart,
   Pie,
@@ -73,29 +72,19 @@ const Dashboard = () => {
 
   const StatCard = ({ title, value, icon, color, bg, onClick }) => (
     <div
-      className="glass-card h-100"
+      className={`bg-white/90 backdrop-blur-md border border-gray-100 rounded-2xl p-6 shadow-sm h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
       onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "default" }}
     >
-      <div className="d-flex justify-content-between align-items-start">
+      <div className="flex justify-between items-start">
         <div>
-          <p className="text-muted small fw-bold text-uppercase mb-1">
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">
             {title}
           </p>
-          <h2 className="fw-bold mb-0">{value}</h2>
+          <h2 className="text-3xl font-bold text-gray-800 m-0">{value}</h2>
         </div>
         <div
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: 14,
-            background: bg,
-            color: color,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 22,
-          }}
+          className="w-12 h-12 rounded-xl flex items-center justify-center text-[22px]"
+          style={{ background: bg, color: color }}
         >
           {icon}
         </div>
@@ -104,74 +93,65 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="fade-in">
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div className="animate-fade-in">
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
         <div>
-          <h2 className="fw-bold fs-3 mb-1">Overview</h2>
-          <p className="text-muted mb-0">Welcome back, Admin</p>
+          <h2 className="font-bold text-2xl text-gray-800 mb-1">Overview</h2>
+          <p className="text-gray-500 m-0 text-sm">Welcome back, Admin</p>
         </div>
-        <Button
-          variant="outline-primary"
+        <button
+          className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
           onClick={() => window.location.reload()}
-          size="sm"
         >
-          <FaChartLine className="me-2" /> Refresh Dashboard
-        </Button>
+          <FaChartLine /> Refresh Dashboard
+        </button>
       </div>
 
-      <Row className="g-3">
-        <Col xs={12} sm={6} lg={3}>
-          <StatCard
-            title="Total Students"
-            value={stats.total}
-            icon={<FaUserGraduate />}
-            color="#4361EE"
-            bg="rgba(67, 97, 238, 0.1)"
-          />
-        </Col>
-        <Col xs={12} sm={6} lg={3}>
-          <StatCard
-            title="Active Alerts"
-            value={stats.activeAlerts}
-            icon={<FaBell />}
-            color="#F72585"
-            bg="rgba(247, 37, 133, 0.1)"
-            onClick={() => navigate("/alerts")}
-          />
-        </Col>
-        <Col xs={12} sm={6} lg={3}>
-          <StatCard
-            title="High Risk"
-            value={stats.highRisk}
-            icon={<FaExclamationCircle />}
-            color="#D00000"
-            bg="rgba(208, 0, 0, 0.1)"
-          />
-        </Col>
-        <Col xs={12} sm={6} lg={3}>
-          <StatCard
-            title="Safe Zone"
-            value={stats.lowRisk}
-            icon={<FaShieldAlt />}
-            color="#4BA258"
-            bg="rgba(75, 162, 88, 0.1)"
-          />
-        </Col>
-      </Row>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <StatCard
+          title="Total Students"
+          value={stats.total}
+          icon={<FaUserGraduate />}
+          color="#4361EE"
+          bg="rgba(67, 97, 238, 0.1)"
+        />
+        <StatCard
+          title="Active Alerts"
+          value={stats.activeAlerts}
+          icon={<FaBell />}
+          color="#F72585"
+          bg="rgba(247, 37, 133, 0.1)"
+          onClick={() => navigate("/alerts")}
+        />
+        <StatCard
+          title="High Risk"
+          value={stats.highRisk}
+          icon={<FaExclamationCircle />}
+          color="#D00000"
+          bg="rgba(208, 0, 0, 0.1)"
+        />
+        <StatCard
+          title="Safe Zone"
+          value={stats.lowRisk}
+          icon={<FaShieldAlt />}
+          color="#4BA258"
+          bg="rgba(75, 162, 88, 0.1)"
+        />
+      </div>
 
-      <Row className="mt-2 g-3">
-        <Col xs={12} lg={7}>
-          <div className="glass-card h-100">
-            <h5 className="mb-4 fw-bold">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-2">
+        <div className="lg:col-span-7">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-100 p-6 h-full flex flex-col">
+            <h5 className="font-bold text-gray-800 text-lg mb-6">
               Avg Attendance Trend -{" "}
               {new Date().toLocaleString("default", {
                 month: "long",
                 year: "numeric",
               })}
             </h5>
-            <div style={{ height: 300, width: "100%" }}>
+            <div className="h-[300px] w-full mt-auto">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={graphData}>
+                <AreaChart data={graphData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#4361EE" stopOpacity={0.3} />
@@ -181,27 +161,28 @@ const Dashboard = () => {
                   <CartesianGrid
                     strokeDasharray="3 3"
                     vertical={false}
-                    stroke="#eee"
+                    stroke="#f1f5f9"
                   />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: '#64748b' }}
                     interval="preserveStartEnd"
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
                     domain={[0, 100]}
-                    tick={{ fontSize: 12 }}
-                    width={30}
+                    tick={{ fontSize: 12, fill: '#64748b' }}
+                    width={40}
                   />
                   <Tooltip
                     contentStyle={{
-                      borderRadius: 10,
+                      borderRadius: '12px',
                       border: "none",
-                      boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+                      boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)",
+                      backgroundColor: 'white'
                     }}
                   />
                   <Area
@@ -216,11 +197,12 @@ const Dashboard = () => {
               </ResponsiveContainer>
             </div>
           </div>
-        </Col>
-        <Col xs={12} lg={5}>
-          <div className="glass-card h-100">
-            <h5 className="mb-4 fw-bold">Risk Distribution</h5>
-            <div style={{ height: 250, width: "100%" }}>
+        </div>
+        
+        <div className="lg:col-span-5">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-100 p-6 h-full flex flex-col">
+            <h5 className="font-bold text-gray-800 text-lg mb-6">Risk Distribution</h5>
+            <div className="h-[250px] w-full m-auto flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -235,18 +217,24 @@ const Dashboard = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{
+                      borderRadius: '8px',
+                      border: "none",
+                      boxShadow: "0 4px 15px -3px rgba(0,0,0,0.1)"
+                    }}
+                  />
                   <Legend
                     verticalAlign="bottom"
                     height={36}
-                    wrapperStyle={{ fontSize: "12px" }}
+                    wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

@@ -15,6 +15,7 @@ const messageRoutes = require('./routes/messages');
 const portalRoutes = require('./routes/portal');
 const exportRoutes = require('./routes/export');
 const alertRoutes = require('./routes/alert');
+const healthRoute = require('./routes/health');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/portal', portalRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/alerts', alertRoutes); // New Alerts Route
+app.use('/', healthRoute); // Lightweight Health Ping Route
 
 // Scheduled Jobs
 const cron = require('node-cron');
@@ -71,4 +73,5 @@ app.get('/', (req, res) => {
 // Start Server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`[LIFECYCLE] Server started at: ${new Date().toISOString()}`); // Track cold starts
 });

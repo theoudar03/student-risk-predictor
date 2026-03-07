@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { FaUserGraduate, FaLock, FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 
@@ -31,12 +30,10 @@ const Login = ({ onLogin }) => {
         setError('');
 
         try {
-            // Using relative path, assuming baseURL is set in App.jsx
             const response = await axios.post('/api/auth/login', credentials);
             const data = response.data;
             
             if (data.success) {
-                // Pass full data including token and user
                 onLogin(data);
             } else {
                 setError(data.message || 'Login failed');
@@ -50,82 +47,92 @@ const Login = ({ onLogin }) => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #4361EE 0%, #3046B1 100%)' }}>
-            <Container style={{ maxWidth: 450 }}>
-                <div className="glass-card border-0 shadow-lg p-4 p-md-5">
-                    <div className="text-center mb-5">
-                        <div className="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-primary shadow-sm" style={{ width: 80, height: 80, fontSize: 32 }}>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800">
+            <div className="w-full max-w-md p-4">
+                <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8 mb-6 border border-white/20">
+                    <div className="text-center mb-8">
+                        <div className="bg-white rounded-full inline-flex items-center justify-center mb-4 text-blue-600 shadow-sm w-20 h-20 text-3xl">
                             <FaUserGraduate />
                         </div>
-                        <h2 className="fw-bold mb-1">Welcome Back</h2>
-                        <p className="text-secondary opacity-75">Sign in to access student analytics</p>
+                        <h2 className="font-bold text-2xl text-gray-800 m-0 mb-2">Welcome Back</h2>
+                        <p className="text-gray-500 text-sm m-0">Sign in to access student analytics</p>
                     </div>
 
-                    {error && <Alert variant="danger" className="text-center small py-2">{error}</Alert>}
+                    {error && <div className="p-3 mb-6 bg-red-100 text-red-700 rounded-lg text-sm text-center border border-red-200">{error}</div>}
 
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-4">
-                            <div className="input-group">
-                                <span className="input-group-text bg-light border-end-0"><FaUser className="text-muted" /></span>
-                                <Form.Control 
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-5">
+                            <div className="flex bg-gray-50 border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
+                                <span className="flex items-center px-4 text-gray-400 bg-gray-50 border-r border-gray-200">
+                                    <FaUser />
+                                </span>
+                                <input 
                                     type="text" 
                                     name="username" 
                                     placeholder="Username" 
-                                    className="bg-light border-start-0 py-3" 
+                                    className="w-full py-3 px-3 outline-none border-none text-gray-800 bg-gray-50 text-sm" 
                                     value={credentials.username}
                                     onChange={handleChange}
                                     required 
                                 />
                             </div>
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group className="mb-4">
-                             <div className="input-group">
-                                <span className="input-group-text bg-light border-end-0"><FaLock className="text-muted" /></span>
-                                <Form.Control 
+                        <div className="mb-6">
+                             <div className="flex bg-gray-50 border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
+                                <span className="flex items-center px-4 text-gray-400 bg-gray-50 border-r border-gray-200">
+                                    <FaLock />
+                                </span>
+                                <input 
                                     type={showPassword ? "text" : "password"} 
                                     name="password" 
                                     placeholder="Password" 
-                                    className="bg-light border-start-0 border-end-0 py-3" 
+                                    className="w-full py-3 px-3 outline-none border-none text-gray-800 bg-gray-50 text-sm" 
                                     value={credentials.password}
                                     onChange={handleChange}
                                     required 
                                 />
                                 <span 
-                                    className="input-group-text bg-light border-start-0" 
+                                    className="flex items-center px-4 text-gray-400 bg-gray-50 border-l border-gray-200 cursor-pointer hover:text-gray-600 transition-colors" 
                                     onClick={() => setShowPassword(!showPassword)} 
-                                    style={{ cursor: 'pointer' }}
                                 >
-                                    {showPassword ? <FaEyeSlash className="text-muted" /> : <FaEye className="text-muted" />}
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </span>
                             </div>
-                        </Form.Group>
-
-                        <div className="d-flex justify-content-between mb-4 small">
-                            <Form.Check type="checkbox" label="Remember me" />
-                            <a href="#" className="text-decoration-none">Forgot Password?</a>
                         </div>
 
-                        <Button variant="primary" type="submit" className="w-100 py-3 fw-bold shadow-sm" disabled={loading}>
+                        <div className="flex justify-between items-center mb-6 text-sm">
+                            <label className="flex items-center text-gray-600 cursor-pointer">
+                                <input type="checkbox" className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                                Remember me
+                            </label>
+                            <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors font-medium">Forgot Password?</a>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold shadow-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed" 
+                            disabled={loading}
+                        >
                             {loading ? 'Authenticating...' : 'Sign In'}
-                        </Button>
+                        </button>
                         
                         {isTakingLong && (
-                            <div className="text-center mt-3 small text-muted fade-in">
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <div className="text-center mt-4 text-sm text-gray-500 animate-fade-in flex items-center justify-center">
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
                                 Waking up secure server... this may take a moment.
                             </div>
                         )}
-                    </Form>
-                    
-
-
+                    </form>
                 </div>
-                <div className="text-center mt-3 text-white">
-                    <small style={{ opacity: 0.8 }}>Demo Credentials:</small><br/>
-                    <small className="fw-bold">Username & Password: M24101</small>
+                <div className="text-center text-white/80 text-sm">
+                    <span className="block mb-1">Demo Credentials:</span>
+                    <span className="font-bold">Username & Password: M24101</span>
                 </div>
-            </Container>
+            </div>
         </div>
     );
 };

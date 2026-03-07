@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, ProgressBar, Button, Form, Alert, Badge } from 'react-bootstrap';
 import { FaUserGraduate, FaChartLine, FaClipboardList, FaLightbulb, FaCheckCircle } from 'react-icons/fa';
 import axios from 'axios';
 
@@ -7,8 +6,10 @@ const StudentDashboard = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [survey, setSurvey] = useState({ stressLevel: 5, learningDifficulty: 5, motivation: 5, notes: '' });
+    const [survey, setSurvey] = useState({ stressLevel: 5, learningDifficulty: 5, motivation: 5, notes: '', mentorId: '' });
     const [surveyStatus, setSurveyStatus] = useState(null);
+    const [canTakeAssessment, setCanTakeAssessment] = useState(true);
+    const [timeRemaining, setTimeRemaining] = useState(null);
 
     const [mentors, setMentors] = useState([]);
 
@@ -38,12 +39,47 @@ const StudentDashboard = () => {
         }
     };
 
+    useEffect(() => {
+        if (profile?.lastAssessmentDate) {
+            const lastDate = new Date(profile.lastAssessmentDate);
+            const nextDate = new Date(lastDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days later
+            
+            const calculateTime = () => {
+                const now = new Date();
+                const diff = nextDate - now;
+                
+                if (diff <= 0) {
+                    setCanTakeAssessment(true);
+                    setTimeRemaining(null);
+                } else {
+                    setCanTakeAssessment(false);
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((diff / 1000 / 60) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+                    setTimeRemaining(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+                }
+            };
+            
+            calculateTime();
+            const interval = setInterval(calculateTime, 1000);
+            return () => clearInterval(interval);
+        } else {
+            setCanTakeAssessment(true);
+            setTimeRemaining(null);
+        }
+    }, [profile]);
+
     const handleSurveySubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.post(`/api/portal/student/survey`, survey);
             setSurveyStatus('success');
             setSurvey({ stressLevel: 5, learningDifficulty: 5, motivation: 5, notes: '', mentorId: '' }); // Reset Form
+            
+            // Re-fetch profile to lock the self-assessment
+            fetchProfile();
+
             setTimeout(() => setSurveyStatus(null), 5000);
         } catch (err) {
             setSurveyStatus('error');
@@ -51,178 +87,195 @@ const StudentDashboard = () => {
         }
     };
 
-    if (loading) return <div className="p-5 text-center">Loading your dashboard...</div>;
-    if (error) return <Alert variant="danger" className="m-4">{error}</Alert>;
-    if (!profile) return <div className="p-5 text-center">No student profile data available.</div>;
+    if (loading) return <div className="p-12 text-center text-gray-500">Loading your dashboard...</div>;
+    if (error) return <div className="m-6 p-4 bg-red-100 text-red-700 rounded-lg">{error}</div>;
+    if (!profile) return <div className="p-12 text-center text-gray-500">No student profile data available.</div>;
 
     return (
-        <Container fluid className="p-4">
-            <h2 className="mb-4 fw-bold text-dark">My Dashboard</h2>
+        <div className="w-full pb-8">
+            <h2 className="mb-6 font-bold text-2xl text-gray-800">My Dashboard</h2>
 
-            {/* Overview Section */}
-            <Row className="mb-4">
-                <Col md={8}>
-                    <Card className="shadow-sm border-0 h-100">
-                        <Card.Body>
-                            <h5 className="mb-4 d-flex align-items-center"><FaUserGraduate className="me-2 text-primary" /> Academic Overview</h5>
-                            <Row>
-                                <Col md={6} className="mb-4">
-                                    <div className="p-3 bg-light rounded">
-                                        <small className="text-muted text-uppercase fw-bold">Attendance</small>
-                                        <div className="d-flex align-items-end justify-content-between mb-2">
-                                            <h3 className="mb-0 fw-bold">{profile.attendancePercentage}%</h3>
-                                            <Badge bg={profile.attendancePercentage >= 75 ? 'success' : 'warning'}>
-                                                {profile.attendancePercentage >= 75 ? 'On Track' : 'Attention'}
-                                            </Badge>
-                                        </div>
-                                        <ProgressBar now={profile.attendancePercentage} variant={profile.attendancePercentage >= 75 ? 'success' : 'warning'} style={{height: 6}} />
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-4">
-                                    <div className="p-3 bg-light rounded">
-                                        <small className="text-muted text-uppercase fw-bold">CGPA</small>
-                                        <div className="d-flex align-items-end justify-content-between mb-2">
-                                            <h3 className="mb-0 fw-bold">{profile.cgpa}</h3>
-                                            <small className="text-muted">Current</small>
-                                        </div>
-                                        <ProgressBar now={profile.cgpa * 10} variant="info" style={{height: 6}} />
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-4">
-                                    <div className="p-3 bg-light rounded">
-                                        <small className="text-muted text-uppercase fw-bold">Assignments</small>
-                                        <div className="d-flex align-items-end justify-content-between mb-2">
-                                            <h3 className="mb-0 fw-bold">{profile.assignmentsCompleted}%</h3>
-                                            <small className="text-muted">Completion</small>
-                                        </div>
-                                        <ProgressBar now={profile.assignmentsCompleted} variant={profile.assignmentsCompleted > 80 ? 'primary' : 'warning'} style={{height: 6}} />
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-4">
-                                    <div className="p-3 bg-light rounded">
-                                        <small className="text-muted text-uppercase fw-bold">Participation</small>
-                                        <div className="d-flex align-items-end justify-content-between mb-2">
-                                            <h3 className="mb-0 fw-bold">{profile.classParticipationScore}/100</h3>
-                                        </div>
-                                         <ProgressBar now={profile.classParticipationScore} variant="secondary" style={{height: 6}} />
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                    </Card>
-                </Col>
-
-                {/* Insights Panel */}
-                <Col md={4}>
-                    <Card className="shadow-sm border-0 h-100 bg-primary text-white">
-                        <Card.Body>
-                            <h5 className="mb-4 d-flex align-items-center"><FaLightbulb className="me-2 text-warning" /> Improvement Insights</h5>
-                            
-                            <div className="vstack gap-3">
-                                {profile.recommendations && profile.recommendations.length > 0 ? (
-                                    profile.recommendations.map((rec, idx) => (
-                                        <div key={idx} className="p-3 bg-white bg-opacity-25 rounded border border-white border-opacity-25">
-                                            <p className="mb-0 small">{rec}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="text-center p-3">
-                                        <FaCheckCircle size={32} className="mb-2 opacity-75" />
-                                        <p className="mb-0 small">Great job! You are on the right track.</p>
-                                    </div>
-                                )}
-                            </div>
-                            
-                            <h6 className="mt-4 mb-2 small fw-bold opacity-75">Key Observations:</h6>
-                            <ul className="small ps-3 mb-0">
-                                {profile.insights && profile.insights.map((insight, idx) => (
-                                    <li key={idx} className="mb-1">{insight}</li>
-                                ))}
-                            </ul>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-
-            {/* Self-Assessment Survey */}
-            <Row>
-                <Col md={12}>
-                    <Card className="shadow-sm border-0">
-                        <Card.Body>
-                            <h5 className="mb-4 d-flex align-items-center"><FaClipboardList className="me-2 text-info" /> Weekly Self-Assessment</h5>
-                            <p className="text-muted small mb-4">Help us understand how you're feeling. This data is private and helps improve your specific support plan.</p>
-                            
-                            {surveyStatus === 'success' && <Alert variant="success">Survey submitted successfully! Thank you.</Alert>}
-                            {surveyStatus === 'error' && <Alert variant="danger">Failed to submit survey. Try again.</Alert>}
-
-                            <Form onSubmit={handleSurveySubmit}>
-                                <Row>
-                                    <Col md={12} className="mb-3">
-                                        <Form.Label className="small fw-bold">Select Mentor for Review</Form.Label>
-                                        <Form.Select 
-                                            onChange={e => setSurvey({...survey, mentorId: e.target.value})}
-                                            required
-                                        >
-                                            <option value="">-- Choose a Mentor --</option>
-                                            {mentors.map(m => (
-                                                <option key={m.id} value={m.id}>{m.name} ({m.department})</option>
-                                            ))}
-                                        </Form.Select>
-                                        <Form.Text className="text-muted">Only this mentor will see your assessment.</Form.Text>
-                                    </Col>
-                                    <Col md={4} className="mb-3">
-                                        <Form.Label className="small fw-bold">Stress Level (1-10)</Form.Label>
-                                        <div className="d-flex align-items-center gap-2">
-                                            <Form.Range 
-                                                min={1} max={10} 
-                                                value={survey.stressLevel} 
-                                                onChange={e => setSurvey({...survey, stressLevel: e.target.value})} 
-                                            />
-                                            <span className="fw-bold text-primary">{survey.stressLevel}</span>
-                                        </div>
-                                    </Col>
-                                    <Col md={4} className="mb-3">
-                                        <Form.Label className="small fw-bold">Learning Difficulty (1-10)</Form.Label>
-                                        <div className="d-flex align-items-center gap-2">
-                                            <Form.Range 
-                                                min={1} max={10} 
-                                                value={survey.learningDifficulty} 
-                                                onChange={e => setSurvey({...survey, learningDifficulty: e.target.value})} 
-                                            />
-                                            <span className="fw-bold text-primary">{survey.learningDifficulty}</span>
-                                        </div>
-                                    </Col>
-                                    <Col md={4} className="mb-3">
-                                        <Form.Label className="small fw-bold">Motivation (1-10)</Form.Label>
-                                        <div className="d-flex align-items-center gap-2">
-                                            <Form.Range 
-                                                min={1} max={10} 
-                                                value={survey.motivation} 
-                                                onChange={e => setSurvey({...survey, motivation: e.target.value})} 
-                                            />
-                                            <span className="fw-bold text-primary">{survey.motivation}</span>
-                                        </div>
-                                    </Col>
-                                    <Col md={12} className="mb-3">
-                                        <Form.Label className="small fw-bold">Additional Notes (Optional)</Form.Label>
-                                        <Form.Control 
-                                            as="textarea" 
-                                            rows={2} 
-                                            placeholder="Any specific challenges this week?" 
-                                            value={survey.notes}
-                                            onChange={e => setSurvey({...survey, notes: e.target.value})}
-                                        />
-                                    </Col>
-                                </Row>
-                                <div className="text-end">
-                                    <Button type="submit" variant="primary">Submit Assessment</Button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div className="lg:col-span-2">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 h-full overflow-hidden flex flex-col p-6">
+                        <h5 className="mb-6 font-bold text-lg text-gray-800 flex items-center">
+                            <FaUserGraduate className="mr-3 text-blue-600" /> Academic Overview
+                        </h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                            <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between">
+                                <div className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Attendance</div>
+                                <div className="flex items-end justify-between mb-4">
+                                    <h3 className="text-3xl font-bold m-0 text-gray-800">{profile.attendancePercentage}%</h3>
+                                    <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase ${profile.attendancePercentage >= 75 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                        {profile.attendancePercentage >= 75 ? 'On Track' : 'Attention'}
+                                    </span>
                                 </div>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+                                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div className={`${profile.attendancePercentage >= 75 ? 'bg-green-500' : 'bg-yellow-500'} h-1.5 rounded-full`} style={{ width: `${profile.attendancePercentage}%` }}></div>
+                                </div>
+                            </div>
+                            <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between">
+                                <div className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">CGPA</div>
+                                <div className="flex items-end justify-between mb-4">
+                                    <h3 className="text-3xl font-bold m-0 text-gray-800">{profile.cgpa}</h3>
+                                    <span className="text-gray-400 text-xs">Current</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div className="bg-sky-500 h-1.5 rounded-full" style={{ width: `${profile.cgpa * 10}%` }}></div>
+                                </div>
+                            </div>
+                            <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between">
+                                <div className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Assignments</div>
+                                <div className="flex items-end justify-between mb-4">
+                                    <h3 className="text-3xl font-bold m-0 text-gray-800">{profile.assignmentsCompleted}%</h3>
+                                    <span className="text-gray-400 text-xs">Completion</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div className={`${profile.assignmentsCompleted > 80 ? 'bg-blue-600' : 'bg-yellow-500'} h-1.5 rounded-full`} style={{ width: `${profile.assignmentsCompleted}%` }}></div>
+                                </div>
+                            </div>
+                            <div className="p-5 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between">
+                                <div className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Participation</div>
+                                <div className="flex items-end justify-between mb-4">
+                                    <h3 className="text-3xl font-bold m-0 text-gray-800">{profile.classParticipationScore}/100</h3>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div className="bg-gray-500 h-1.5 rounded-full" style={{ width: `${profile.classParticipationScore}%` }}></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-1">
+                    <div className="bg-blue-600 text-white rounded-2xl shadow-sm h-full flex flex-col p-6">
+                        <h5 className="mb-6 font-bold text-lg flex items-center">
+                            <FaLightbulb className="mr-3 text-yellow-300" /> Improvement Insights
+                        </h5>
+                        
+                        <div className="flex flex-col gap-3 flex-1 overflow-y-auto">
+                            {profile.recommendations && profile.recommendations.length > 0 ? (
+                                profile.recommendations.map((rec, idx) => (
+                                    <div key={idx} className="p-4 bg-white/20 rounded-xl border border-white/30 backdrop-blur-sm">
+                                        <p className="m-0 text-sm leading-relaxed">{rec}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center p-6 flex flex-col items-center justify-center h-full opacity-80">
+                                    <FaCheckCircle size={40} className="mb-4 text-white/50" />
+                                    <p className="m-0 text-sm">Great job! You are on the right track.</p>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <h6 className="mt-8 mb-3 text-xs font-bold uppercase tracking-wider text-white/70">Key Observations:</h6>
+                        <ul className="text-sm pl-5 m-0 space-y-2 text-blue-100">
+                            {profile.insights && profile.insights.map((insight, idx) => (
+                                <li key={idx} className="leading-snug">{insight}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                    <h5 className="mb-3 font-bold text-lg text-gray-800 flex items-center">
+                        <FaClipboardList className="mr-3 text-sky-500" /> Weekly Self-Assessment
+                    </h5>
+                    <p className="text-gray-500 text-sm mb-6 max-w-2xl">Help us understand how you're feeling. This data is private and helps improve your specific support plan.</p>
+                    
+                    {surveyStatus === 'success' && <div className="p-4 mb-6 bg-green-100 text-green-800 rounded-lg">Survey submitted successfully! Thank you.</div>}
+                    {surveyStatus === 'error' && <div className="p-4 mb-6 bg-red-100 text-red-800 rounded-lg">Failed to submit survey. Try again.</div>}
+
+                    {!canTakeAssessment ? (
+                        <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-8 text-center max-w-4xl">
+                            <FaCheckCircle className="mx-auto text-blue-400 text-5xl mb-4" />
+                            <h4 className="text-xl font-bold text-gray-800 mb-2">You're all caught up!</h4>
+                            <p className="text-sm text-gray-500 mb-6">You've already submitted your weekly self-assessment.</p>
+                            <div className="bg-white rounded-lg p-4 inline-block border border-gray-200 shadow-sm mx-auto w-full sm:w-auto sm:min-w-[300px]">
+                                <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Next Assessment Available In</p>
+                                <div className="text-xl font-bold text-blue-600 font-mono tracking-wider bg-gray-50 py-2 rounded border border-gray-100">{timeRemaining}</div>
+                            </div>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSurveySubmit} className="max-w-4xl border border-gray-100 bg-gray-50/50 p-6 rounded-xl">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 relative">
+                                <div className="md:col-span-12 mb-2">
+                                    <label className="block font-bold text-gray-700 text-sm mb-2">Select Mentor for Review</label>
+                                    <select 
+                                        className="w-full md:max-w-md px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm"
+                                        onChange={e => setSurvey({...survey, mentorId: e.target.value})}
+                                        required
+                                        value={survey.mentorId}
+                                    >
+                                        <option value="">-- Choose a Mentor --</option>
+                                        {mentors.map(m => (
+                                            <option key={m.id} value={m.id}>{m.name} ({m.department})</option>
+                                        ))}
+                                    </select>
+                                    <p className="text-xs text-gray-400 mt-2">Only this mentor will see your assessment.</p>
+                                </div>
+                                <div className="md:col-span-4">
+                                    <label className="block font-bold text-gray-700 text-sm mb-2">Stress Level (1-10)</label>
+                                    <div className="flex items-center gap-4">
+                                        <input 
+                                            type="range"
+                                            min={1} max={10} 
+                                            value={survey.stressLevel} 
+                                            onChange={e => setSurvey({...survey, stressLevel: e.target.value})} 
+                                            className="flex-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                        />
+                                        <span className="font-bold text-blue-600 text-lg w-6 text-center">{survey.stressLevel}</span>
+                                    </div>
+                                </div>
+                                <div className="md:col-span-4">
+                                    <label className="block font-bold text-gray-700 text-sm mb-2">Learning Difficulty (1-10)</label>
+                                    <div className="flex items-center gap-4">
+                                        <input 
+                                            type="range"
+                                            min={1} max={10} 
+                                            value={survey.learningDifficulty} 
+                                            onChange={e => setSurvey({...survey, learningDifficulty: e.target.value})}
+                                            className="flex-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" 
+                                        />
+                                        <span className="font-bold text-blue-600 text-lg w-6 text-center">{survey.learningDifficulty}</span>
+                                    </div>
+                                </div>
+                                <div className="md:col-span-4">
+                                    <label className="block font-bold text-gray-700 text-sm mb-2">Motivation (1-10)</label>
+                                    <div className="flex items-center gap-4">
+                                        <input 
+                                            type="range"
+                                            min={1} max={10} 
+                                            value={survey.motivation} 
+                                            onChange={e => setSurvey({...survey, motivation: e.target.value})} 
+                                            className="flex-1 w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                        />
+                                        <span className="font-bold text-blue-600 text-lg w-6 text-center">{survey.motivation}</span>
+                                    </div>
+                                </div>
+                                <div className="md:col-span-12 mt-2">
+                                    <label className="block font-bold text-gray-700 text-sm mb-2">Additional Notes (Optional)</label>
+                                    <textarea 
+                                        rows={3} 
+                                        placeholder="Any specific challenges this week?" 
+                                        value={survey.notes}
+                                        onChange={e => setSurvey({...survey, notes: e.target.value})}
+                                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm resize-y"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div className="text-right mt-6">
+                                <button type="submit" className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 w-full sm:w-auto">
+                                    Submit Assessment
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
 

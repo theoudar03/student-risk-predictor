@@ -72,6 +72,8 @@ router.get('/student/profile', authorizeRole('student'), async (req, res) => {
 
         const { insights, recommendations } = getInsightsAndRecommendations(student);
 
+        const lastSurvey = await Survey.findOne({ studentId: query.studentId || studentId }).sort({ createdAt: -1 });
+
         const safeProfile = {
             name: student.name,
             department: student.course || 'General',
@@ -80,7 +82,8 @@ router.get('/student/profile', authorizeRole('student'), async (req, res) => {
             assignmentsCompleted: student.assignmentsCompleted,
             classParticipationScore: student.classParticipationScore,
             insights,
-            recommendations
+            recommendations,
+            lastAssessmentDate: lastSurvey ? lastSurvey.createdAt : null
         };
 
         res.json(safeProfile);

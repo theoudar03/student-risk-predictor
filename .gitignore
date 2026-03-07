@@ -1,40 +1,53 @@
-# Dependencies
-node_modules
+# Node
+node_modules/
+dist/
+build/
 .pnp
 .pnp.js
 
-# Testing
-coverage
-.firebase
-
-# Production
-build
-dist
-
-# Misc
-.DS_Store
+# Environment
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 
 # Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Data
-server/data
-functions/data
-*.sqlite
-*.db
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Secrets
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Cache
+.cache/
+coverage/
+.pytest_cache/
+
+# Misc
+*.db
+*.sqlite
 serviceAccountKey.json
 **/serviceAccountKey.json
 
-# ML Data
+# Data
+server/data
+functions/data
 ml/*.json
 ml/*.csv
 server/python_ml/*.json

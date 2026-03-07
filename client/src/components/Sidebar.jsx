@@ -1,7 +1,21 @@
 import React from 'react';
-import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaUserGraduate, FaChartPie, FaExclamationTriangle, FaCog, FaClipboardList, FaSignOutAlt, FaEnvelope, FaChalkboardTeacher } from 'react-icons/fa';
+
+const NavItem = ({ to, icon: Icon, children, active, onClick }) => (
+  <Link
+    to={to}
+    onClick={onClick}
+    className={`flex items-center px-4 py-3 mb-2 rounded-xl font-medium transition-all duration-200 ${
+      active
+        ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-500/30'
+        : 'text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:translate-x-1'
+    }`}
+  >
+    <Icon className="mr-3 text-lg" />
+    {children}
+  </Link>
+);
 
 const Sidebar = ({ onLogout, user, mobileOpen, setMobileOpen }) => {
   const location = useLocation();
@@ -12,149 +26,112 @@ const Sidebar = ({ onLogout, user, mobileOpen, setMobileOpen }) => {
   };
 
   return (
-    <>
-    <div 
-        className="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar shadow-sm" 
-        style={{ 
-            width: '260px', 
-            height: '100vh', 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            zIndex: 1000, 
-            overflowY: 'auto',
-            transition: 'transform 0.3s ease-in-out',
-            transform: mobileOpen ? 'translateX(0)' : 'translateX(-100%)', // Logic handled via CSS media query below for Desktop override
-        }}
+    <div
+      className={`flex flex-col shrink-0 p-4 bg-white shadow-md border-r border-gray-100 w-[260px] h-screen fixed top-0 left-0 z-50 overflow-y-auto transition-transform duration-300 ease-in-out md:translate-x-0 ${
+        mobileOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
     >
-      <style>{`
-        @media (min-width: 768px) {
-            .sidebar { transform: translateX(0) !important; }
-        }
-      `}</style>
-
-      <div className="d-flex align-items-center justify-content-between mb-4 px-2">
-        <Link to="/" className="d-flex align-items-center link-dark text-decoration-none">
-            <img src="/logo.jpg" alt="EduRiskAI Logo" className="img-fluid" style={{ maxHeight: '60px', width: 'auto', objectFit: 'contain' }} />
+      <div className="flex items-center justify-between mb-8 px-2">
+        <Link to="/" className="flex items-center text-gray-800 no-underline">
+            <img src="/logo.jpg" alt="EduRiskAI Logo" className="max-h-[60px] w-auto object-contain" />
         </Link>
         {/* Mobile Close Button */}
-        <button className="btn btn-link link-dark d-md-none p-0" onClick={() => setMobileOpen(false)}>
-            <FaSignOutAlt style={{ transform: 'rotate(180deg)' }} /> 
+        <button 
+            className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors" 
+            onClick={() => setMobileOpen(false)}
+        >
+            <FaSignOutAlt className="rotate-180" size={20} /> 
         </button>
       </div>
 
-      <hr />
-      <Nav className="flex-column mb-auto">
+      <hr className="border-gray-100 mb-4" />
+      
+      <div className="flex flex-col mb-auto">
         {user?.role === 'admin' && (
             <>
-                <Nav.Item>
-                  <Link to="/admin/dashboard" className={`nav-link ${isActive('/admin/dashboard') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaHome className="me-3" /> Dashboard
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/admin/students" className={`nav-link ${isActive('/admin/students') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaUserGraduate className="me-3" /> Students
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/admin/mentors" className={`nav-link ${isActive('/admin/mentors') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaChalkboardTeacher className="me-3" /> Mentors
-                  </Link>
-                </Nav.Item>
+                <NavItem to="/admin/dashboard" icon={FaHome} active={isActive('/admin/dashboard')} onClick={() => setMobileOpen(false)}>
+                    Dashboard
+                </NavItem>
+                <NavItem to="/admin/students" icon={FaUserGraduate} active={isActive('/admin/students')} onClick={() => setMobileOpen(false)}>
+                    Students
+                </NavItem>
+                <NavItem to="/admin/mentors" icon={FaChalkboardTeacher} active={isActive('/admin/mentors')} onClick={() => setMobileOpen(false)}>
+                    Mentors
+                </NavItem>
             </>
         )}
 
         {user?.role === 'mentor' && (
             <>
-                <Nav.Item>
-                  <Link to="/mentor/dashboard" className={`nav-link ${isActive('/mentor/dashboard') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaHome className="me-3" /> Dashboard
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/students" className={`nav-link ${isActive('/mentor/students') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaUserGraduate className="me-3" /> Students
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/attendance" className={`nav-link ${isActive('/mentor/attendance') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaClipboardList className="me-3" /> Attendance
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/messages" className={`nav-link ${isActive('/mentor/messages') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaEnvelope className="me-3" /> Messages
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/assessments" className={`nav-link ${isActive('/mentor/assessments') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaClipboardList className="me-3" /> Assessment Inbox
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/risk" className={`nav-link ${isActive('/mentor/risk') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaChartPie className="me-3" /> Risk Analysis
-                  </Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Link to="/mentor/alerts" className={`nav-link ${isActive('/mentor/alerts') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaExclamationTriangle className="me-3" /> Alerts
-                  </Link>
-                </Nav.Item>
-                 <Nav.Item className="mt-4">
-                     <div className="text-muted small fw-bold px-3 mb-2 text-uppercase">System</div>
-                </Nav.Item>
-                <Nav.Item>
-                    <Link to="/mentor/settings" className={`nav-link ${isActive('/mentor/settings') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                        <FaCog className="me-3" /> Settings
-                    </Link>
-                </Nav.Item>
+                <NavItem to="/mentor/dashboard" icon={FaHome} active={isActive('/mentor/dashboard')} onClick={() => setMobileOpen(false)}>
+                    Dashboard
+                </NavItem>
+                <NavItem to="/mentor/students" icon={FaUserGraduate} active={isActive('/mentor/students')} onClick={() => setMobileOpen(false)}>
+                    Students
+                </NavItem>
+                <NavItem to="/mentor/attendance" icon={FaClipboardList} active={isActive('/mentor/attendance')} onClick={() => setMobileOpen(false)}>
+                    Attendance
+                </NavItem>
+                <NavItem to="/mentor/messages" icon={FaEnvelope} active={isActive('/mentor/messages')} onClick={() => setMobileOpen(false)}>
+                    Messages
+                </NavItem>
+                <NavItem to="/mentor/assessments" icon={FaClipboardList} active={isActive('/mentor/assessments')} onClick={() => setMobileOpen(false)}>
+                    Assessment Inbox
+                </NavItem>
+                <NavItem to="/mentor/risk" icon={FaChartPie} active={isActive('/mentor/risk')} onClick={() => setMobileOpen(false)}>
+                    Risk Analysis
+                </NavItem>
+                <NavItem to="/mentor/alerts" icon={FaExclamationTriangle} active={isActive('/mentor/alerts')} onClick={() => setMobileOpen(false)}>
+                    Alerts
+                </NavItem>
+                
+                <div className="mt-6 mb-2">
+                    <div className="text-gray-400 text-xs font-bold px-4 uppercase tracking-wider">System</div>
+                </div>
+                
+                <NavItem to="/mentor/settings" icon={FaCog} active={isActive('/mentor/settings')} onClick={() => setMobileOpen(false)}>
+                    Settings
+                </NavItem>
             </>
         )}
 
         {user?.role === 'student' && (
-            <Nav.Item>
-                <Link to="/student/dashboard" className={`nav-link ${isActive('/student/dashboard') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaUserGraduate className="me-3" /> My Dashboard
-                </Link>
-            </Nav.Item>
+            <NavItem to="/student/dashboard" icon={FaUserGraduate} active={isActive('/student/dashboard')} onClick={() => setMobileOpen(false)}>
+                My Dashboard
+            </NavItem>
         )}
 
         {user?.role === 'parent' && (
-            <Nav.Item>
-                <Link to="/parent/dashboard" className={`nav-link ${isActive('/parent/dashboard') ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                    <FaUserGraduate className="me-3" /> Parent View
-                </Link>
-            </Nav.Item>
+            <NavItem to="/parent/dashboard" icon={FaUserGraduate} active={isActive('/parent/dashboard')} onClick={() => setMobileOpen(false)}>
+                Parent View
+            </NavItem>
         )}
-      </Nav>
+      </div>
       
-      <div className="mt-auto p-3 glass-card bg-light border-0">
-          <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center">
-                  <div style={{width: 32, height: 32, background: '#4361EE', borderRadius: '50%', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 10, fontSize: 14}}>
+      <div className="mt-8 p-4 bg-gray-50 rounded-2xl border border-gray-100/50 relative overflow-hidden group hover:shadow-lg transition-all duration-300">
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <div className="flex items-center justify-between relative z-10">
+              <div className="flex items-center">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full text-white flex items-center justify-center mr-3 font-bold shadow-md">
                       {user?.name?.charAt(0) || 'U'}
                   </div>
-                  <div style={{lineHeight: 1.2}}>
-                      <div className="fw-bold small" style={{maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                  <div className="leading-tight">
+                      <div className="font-bold text-sm text-gray-800 max-w-[100px] truncate">
                           {user?.name || 'User'}
                       </div>
-                      <div className="text-muted" style={{fontSize: 10}}>{user?.role || 'Mentor'}</div>
+                      <div className="text-gray-500 text-[10px] uppercase tracking-wider mt-1">{user?.role || 'Mentor'}</div>
                   </div>
               </div>
               <button 
                 onClick={onLogout} 
-                className="btn btn-link text-danger p-0" 
+                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors focus:outline-none" 
                 title="Logout"
-                style={{ fontSize: 18 }}
               >
-                  <FaSignOutAlt />
+                  <FaSignOutAlt size={18} />
               </button>
           </div>
       </div>
     </div>
-    </>
   );
 };
 
