@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const compression = require('compression');
+
+const { connectDB, isDbConnected } = require('./utils/db');
 
 // Import Routes
 const authRoutes = require('./routes/auth');
@@ -21,17 +24,25 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(compression());
 app.use(express.json());
 app.use(cors());
 
+
 // Database Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/stayontrack')
-    .then(() => console.log("✅ MongoDB Connected"))
-    .catch(err => {
-        console.error("❌ MongoDB Connection Error:", err.message);
-        // Only exit in production to allow retry logic by orchestrator, 
-        // but for now logging is enough.
-    });
+connectDB();
+
+// Database Readiness Guard Middleware
+app.use('/api', (req, res, next) => {
+    if (!isDbConnected()) {
+        return res.status(503).json({
+            success: false,
+            message: 'Database connection is currently unavailable. Please verify MONGO_URI configuration in MongoDB Atlas / Render settings.',
+            code: 'DB_DISCONNECTED'
+        });
+    }
+    next();
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -70,8 +81,33 @@ app.get('/', (req, res) => {
     res.send('Student Risk Predictor API Running');
 });
 
+// Global Process Protection (Prevents Server Crashes & Shutdowns)
+process.on('uncaughtException', (err) => {
+    console.error('❌ [CRASH GUARD] Uncaught Exception caught:', err.message);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ [CRASH GUARD] Unhandled Promise Rejection caught:', reason);
+});
+
+// Anti-Sleep Keep-Alive Ping (Prevents free cloud host shutdowns e.g. Render/Railway)
+const axios = require('axios');
+const externalUrl = process.env.RENDER_EXTERNAL_URL || process.env.SERVER_URL;
+if (externalUrl) {
+    console.log(`[KEEP-ALIVE] Enabling keep-alive ping for ${externalUrl}`);
+    setInterval(async () => {
+        try {
+            await axios.get(`${externalUrl}/health`);
+            console.log(`[KEEP-ALIVE] Automated ping to ${externalUrl}/health successful`);
+        } catch (err) {
+            console.warn('[KEEP-ALIVE] Ping attempt failed, will retry next cycle...');
+        }
+    }, 14 * 60 * 1000); // Every 14 minutes
+}
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`[LIFECYCLE] Server started at: ${new Date().toISOString()}`); // Track cold starts
 });
+

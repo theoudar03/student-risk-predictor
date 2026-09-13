@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Student = require('../models/Student');
+const cacheService = require('../utils/cache');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_production';
 
@@ -13,28 +14,39 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        // Optimization: Execute queries in parallel to reduce latency
-        // 1. User Query (Admin/Mentor)
-        const userPromise = User.findOne({
-            $or: [{ username: username }, { mentorId: username }]
-        });
+        // Check Cache for User Record
+        const cacheKey = `auth_user:${username}`;
+        let cachedAuth = await cacheService.get(cacheKey);
 
-        // 2. Student Query
-        const studentPromise = Student.findOne({ studentId: username });
+        let user = cachedAuth?.user || null;
+        let student = cachedAuth?.student || null;
+        let targetStudent = cachedAuth?.targetStudent || null;
 
-        // 3. Parent Query (Conditional)
-        let parentStudentPromise = Promise.resolve(null);
-        if (username.startsWith('p_')) {
-            const targetStudentId = username.substring(2);
-            parentStudentPromise = Student.findOne({ studentId: targetStudentId });
+        if (!cachedAuth) {
+            // Parallel DB queries with .lean() for maximum performance
+            const userPromise = User.findOne({
+                $or: [{ username: username }, { mentorId: username }]
+            }).lean();
+
+            const studentPromise = Student.findOne({ studentId: username }).lean();
+
+            let parentStudentPromise = Promise.resolve(null);
+            if (username.startsWith('p_')) {
+                const targetStudentId = username.substring(2);
+                parentStudentPromise = Student.findOne({ studentId: targetStudentId }).lean();
+            }
+
+            [user, student, targetStudent] = await Promise.all([
+                userPromise, 
+                studentPromise, 
+                parentStudentPromise
+            ]);
+
+            if (user || student || targetStudent) {
+                await cacheService.set(cacheKey, { user, student, targetStudent }, 300); // 5 min TTL
+            }
         }
 
-        // Await all DB operations simultaneously
-        const [user, student, targetStudent] = await Promise.all([
-            userPromise, 
-            studentPromise, 
-            parentStudentPromise
-        ]);
 
         console.log(`Debug: UserFound: ${!!user}, StudentFound: ${!!student}, ParentTargetFound: ${!!targetStudent}`);
 

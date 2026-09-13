@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
+const isDbConnected = () => {
+    return mongoose.connection.readyState === 1;
+};
+
 const connectDB = async () => {
     try {
         // Check if we already have a connection
-        if (mongoose.connection.readyState === 1) {
+        if (isDbConnected()) {
             console.log("✅ Using existing MongoDB connection");
-            return;
+            return true;
         }
 
         console.log("Attempting to connect to MongoDB...");
@@ -19,24 +23,28 @@ const connectDB = async () => {
             console.error("   Please add MONGO_URI to your Render Environment Variables.");
         }
 
-        // Use Env Var or Fallback (only for local dev)
+        // Use Env Var or Fallback (for local dev)
         const dbUri = uri || 'mongodb://127.0.0.1:27017/student-risk-predictor';
         
         const conn = await mongoose.connect(dbUri, {
-            // Optimization: Connection Pooling
-            maxPoolSize: 10,      // Maintain up to 10 socket connections
-            minPoolSize: 1,       // Keep at least 1 socket open
-            serverSelectionTimeoutMS: 5000, // Timeout faster if DB is unreachable
-            socketTimeoutMS: 45000, // Close sockets after inactivity
+            // Connection Options
+            maxPoolSize: 10,
+            minPoolSize: 1,
+            serverSelectionTimeoutMS: 5000, // Fast fail if host unreachable
+            socketTimeoutMS: 45000,
         });
         console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+        return true;
     } catch (error) {
         console.error(`❌ MongoDB Connection Error: ${error.message}`);
-        // Do not exit process immediately in dev, but in prod it's fatal
-        if (process.env.NODE_ENV === 'production') {
-            process.exit(1);
+        if (error.message.includes('ENOTFOUND') || error.message.includes('querySrv')) {
+            console.error("⚠️ DIAGNOSTIC HINT: MongoDB SRV DNS lookup failed.");
+            console.error("   1. Verify your MONGO_URI hostname in Atlas/Render (e.g. cluster.xxxx.mongodb.net).");
+            console.error("   2. Check if your MongoDB Atlas cluster is active and IP Access List includes 0.0.0.0/0.");
         }
+        return false;
     }
 };
 
-module.exports = connectDB;
+module.exports = { connectDB, isDbConnected };
+

@@ -1,0 +1,7 @@
+1) Remember me button in login.
+2) Database redesign and Sorted order.
+3) enhanced Admin controls and dashboard.
+4) Attendance page implementing log sheet design.
+5) Student data problem upon admin changes.
+6) Last Check-in of student to show in mentor page
+7) Enhance Chat features in mentor page

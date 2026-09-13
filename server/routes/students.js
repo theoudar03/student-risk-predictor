@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
         let filter = {};
 
         if (req.user.role === 'mentor') {
-            const currentUser = await User.findOne({ email: req.user.email });
+            const currentUser = await User.findOne({ email: req.user.email }).lean();
             
             if (currentUser && currentUser.department) {
                 // Filter students by course matching mentor's department
@@ -29,11 +29,10 @@ router.get('/', async (req, res) => {
 
         // Admin sees all (filter remains empty)
         
-        const students = await Student.find(filter).sort({ riskScore: -1 });
+        const students = await Student.find(filter).sort({ riskScore: -1 }).lean();
         
         // Presentation Mapping: Round Risk Scores for UI
-        const presentationStudents = students.map(s => {
-            const obj = s.toObject();
+        const presentationStudents = students.map(obj => {
             if (obj.riskScore !== null && obj.riskScore !== undefined) {
                 obj.riskScore = Math.round(obj.riskScore);
             }

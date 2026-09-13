@@ -1,26 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
-import Dashboard from './pages/Dashboard';
-import Students from './pages/Students';
-import StudentProfile from './pages/StudentProfile';
-import RiskAnalysis from './pages/RiskAnalysis';
-import Alerts from './pages/Alerts';
-import Settings from './pages/Settings';
-import Attendance from './pages/Attendance';
-import Login from './pages/Login';
-import Messages from './pages/Messages';
-import AssessmentInbox from './pages/AssessmentInbox';
-import StudentDashboard from './pages/StudentDashboard';
-import ParentDashboard from './pages/ParentDashboard';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminStudents from './pages/admin/AdminStudents';
-import AdminMentors from './pages/admin/AdminMentors';
+
+// Lazy-loaded Page Components for Optimized Code-Splitting
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Students = lazy(() => import('./pages/Students'));
+const StudentProfile = lazy(() => import('./pages/StudentProfile'));
+const RiskAnalysis = lazy(() => import('./pages/RiskAnalysis'));
+const Alerts = lazy(() => import('./pages/Alerts'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Attendance = lazy(() => import('./pages/Attendance'));
+const Login = lazy(() => import('./pages/Login'));
+const Messages = lazy(() => import('./pages/Messages'));
+const AssessmentInbox = lazy(() => import('./pages/AssessmentInbox'));
+const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
+const ParentDashboard = lazy(() => import('./pages/ParentDashboard'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminStudents = lazy(() => import('./pages/admin/AdminStudents'));
+const AdminMentors = lazy(() => import('./pages/admin/AdminMentors'));
+
+// Lightweight Suspense Loader Component
+const PageLoader = () => (
+    <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm font-medium text-gray-500 animate-pulse">Loading module...</p>
+    </div>
+);
 
 // Set global base URL for Axios
-// Production-Ready: Always use environment variable or fallback to relative path
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || '/';
 
 console.log(`API Base URL: ${axios.defaults.baseURL}`);
@@ -30,8 +39,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
-  // Check Local Storage for session
-  // Check Session Storage for session (Persists on refresh, clears on tab close)
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
     const token = sessionStorage.getItem('token');
@@ -61,9 +68,11 @@ function App() {
   if (!isAuthenticated) {
       return (
           <Router>
-              <Routes>
-                  <Route path="*" element={<Login onLogin={handleLogin} />} />
-              </Routes>
+              <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                      <Route path="*" element={<Login onLogin={handleLogin} />} />
+                  </Routes>
+              </Suspense>
           </Router>
       );
   }
@@ -130,7 +139,9 @@ function App() {
           <div className="p-4 md:p-6 lg:p-8">
             <TopBar user={user} onToggleSidebar={() => setShowMobileSidebar(!showMobileSidebar)} />
             <main>
-              {getRoutes()}
+              <Suspense fallback={<PageLoader />}>
+                {getRoutes()}
+              </Suspense>
             </main>
           </div>
         </div>
@@ -148,3 +159,4 @@ function App() {
 }
 
 export default App;
+
